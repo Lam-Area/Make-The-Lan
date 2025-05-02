@@ -20,13 +20,13 @@ export default function Header() {
         </div>
 
         <div className="flex items-center pl-4 pr-12 gap-10 justify-end flex-1">
-          <Link href="/login" className="hover:underline">
+          <Link href="/register" className="hover:underline">
             Inscription
           </Link>
           <Link href="/login" className="hover:underline">
             Connexion
           </Link>
-          <Link href="/cart" className="hover:underline">
+          <Link href="/panier" className="hover:underline">
             Panier
           </Link>
         </div>

@@ -1,0 +1,75 @@
+import React, { useState } from 'react';
+import MainLayout from '@/Layouts/MainLayout';
+import Info from '@/Components/Profil/Info';
+import Panier from '@/Pages/Panier';
+import Order from '@/Components/Profil/OrderHistory';
+import Wishlist from '@/Components/Profil/Wishlist';
+import Message from '@/Components/Profil/Message';
+import Help from '@/Components/Profil/Help';
+
+const sections = {
+  info: 'Informations personnelles',
+  messages: 'Mes messages',
+  panier : 'Mon panier',
+  historique: "Historique d'achat",
+  souhaits: 'Liste de souhaits',
+  aide: 'Aide',
+  preferences: 'Préférences',
+};
+
+export default function Profile() {
+  const [selected, setSelected] = useState('panier'); // default
+
+  return (
+    <MainLayout>
+      <div className="flex min-h-screen">
+
+        <div className="w-64 bg-gray-100 border-r p-4">
+          <h2 className="text-lg font-semibold mb-4">Username</h2>
+          <ul className="space-y-2">
+            {Object.entries(sections).map(([key, label]) => (
+              <li key={key}>
+                <button
+                  onClick={() => setSelected(key)}
+                  className={`w-full text-left px-3 py-2 rounded hover:bg-gray-200 ${
+                    selected === key ? 'bg-gray-300 font-semibold' : ''
+                  }`}
+                >
+                  {label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="flex-1 p-6">
+          <h1 className="text-2xl font-bold mb-4">{sections[selected]}</h1>
+          <div className="bg-white p-4 rounded shadow">
+            {renderSectionContent(selected)}
+          </div>
+        </div>
+      </div>
+    </MainLayout>
+  );
+}
+
+function renderSectionContent(section) {
+  switch (section) {
+    case 'info':
+      return <Info />;
+    case 'messages':
+      return <Message />;
+    case 'panier':
+      return <Panier />;
+    case 'historique':
+      return <Order />;
+    case 'souhaits':
+      return <Wishlist />;
+    case 'aide':
+      return <Help />;
+    case 'preferences':
+      return <p>Réglages du compte.</p>;
+    default:
+      return <p>Section inconnue.</p>;
+  }
+}
