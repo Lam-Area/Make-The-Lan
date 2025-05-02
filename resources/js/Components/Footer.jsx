@@ -12,6 +12,7 @@ export default function Footer() {
 
         <div className="flex flex-wrap gap-4 text-sm justify-center">
           <a href="/legal" className="hover:underline">Informations légales</a>
+          <a href="/terms" className="hover:underline">conditions générales</a>
           <a href="/preferences" className="hover:underline">Gérer mes préférences</a>
         </div>
         

@@ -25,6 +25,14 @@ Route::get('/panier', function () {
     return Inertia::render('Panier');
 });
 
+Route::get('/legal', function () {
+    return Inertia::render('Legal');
+});
+
+Route::get('/terms', function () {
+    return Inertia::render('Terms');
+});
+
 Route::fallback(function () {
     return Inertia::render('Page404');
 });
