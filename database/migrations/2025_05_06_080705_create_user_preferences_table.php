@@ -7,12 +7,13 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('logs', function (Blueprint $table) {
+        Schema::create('user_preferences', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->text('action');
-            $table->string('ip_address', 45);
-            $table->dateTime('created_at');
+            $table->boolean('dark_mode');
+            $table->string('language', 10);
+            $table->boolean('notification_email');
+            $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
@@ -20,6 +21,6 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('logs');
+        Schema::dropIfExists('user_preferences');
     }
 };
