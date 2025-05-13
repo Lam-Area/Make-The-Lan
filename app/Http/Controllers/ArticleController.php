@@ -65,4 +65,11 @@ class ArticleController extends Controller
         $article->delete();
         return redirect()->route('articles.index')->with('success', 'Article supprimé.');
     }
+
+    public function show(Article $article)
+    {
+        return Inertia::render('Articles/Show', [
+            'article' => $article
+        ]);
+    }
 }

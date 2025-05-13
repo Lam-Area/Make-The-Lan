@@ -27,11 +27,11 @@ export default function OrderHistorySection() {
           {purchases.map((item) => (
             <div
               key={item.id}
-              className="flex justify-between items-center border p-4 rounded shadow-sm bg-white"
+              className="flex justify-between items-center p-4 rounded shadow-sm bg-[#272e33] hover:bg-gray-700 transition"
             >
               <div>
                 <p className="font-medium text-lg">{item.name}</p>
-                <p className="text-sm text-gray-500">Acheté le : {item.date}</p>
+                <p className="text-sm text-gray-400">Acheté le : {item.date}</p>
               </div>
               <p className="font-semibold text-right">{item.price.toFixed(2)} €</p>
             </div>

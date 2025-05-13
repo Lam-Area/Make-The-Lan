@@ -17,14 +17,14 @@ export default function HelpSection() {
   ];
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
+    <div className="max-w-3xl bg-[#1E1E21] text-white mx-auto p-6">
       <h2 className="text-2xl font-bold mb-6">Centre d’aide</h2>
 
       <div className="space-y-6">
         {faq.map((item, idx) => (
           <div key={idx}>
-            <p className="font-semibold text-gray-800">{item.question}</p>
-            <p className="text-sm text-gray-600 mt-1">{item.answer}</p>
+            <p className="font-semibold">{item.question}</p>
+            <p className="text-sm mt-1">{item.answer}</p>
           </div>
         ))}
       </div>

@@ -23,7 +23,7 @@ export default function MessagesSection() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="bg-[#1E1E21] text-white max-w-4xl mx-auto p-6">
       <h2 className="text-2xl font-bold mb-6">Mes messages</h2>
 
       {messages.length === 0 ? (
@@ -33,12 +33,12 @@ export default function MessagesSection() {
           {messages.map((msg) => (
             <div
               key={msg.id}
-              className="border rounded p-4 shadow-sm bg-white hover:bg-gray-50 transition"
+              className="rounded p-4 shadow-sm bg-[#272e33] hover:bg-gray-700 transition"
             >
               <div className="flex justify-between items-center mb-2">
                 <div>
                   <p className="font-semibold">{msg.subject}</p>
-                  <p className="text-sm text-gray-500">De : {msg.from} · {msg.date}</p>
+                  <p className="text-sm text-gray-400">De : {msg.from} · {msg.date}</p>
                 </div>
                 <button
                   onClick={() => deleteMessage(msg.id)}
@@ -47,7 +47,7 @@ export default function MessagesSection() {
                   Supprimer
                 </button>
               </div>
-              <p className="text-gray-700 text-sm">{msg.content}</p>
+              <p className="text-white text-sm">{msg.content}</p>
             </div>
           ))}
         </div>

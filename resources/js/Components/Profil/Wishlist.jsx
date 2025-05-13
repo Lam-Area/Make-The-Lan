@@ -21,11 +21,11 @@ export default function WishlistSection() {
           {wishlist.map((item) => (
             <div
               key={item.id}
-              className="flex justify-between items-center border p-4 rounded shadow-sm bg-white"
+              className="flex justify-between items-center p-4 rounded shadow-sm bg-[#272e33] hover:bg-gray-700 transition"
             >
               <div>
                 <p className="font-medium text-lg">{item.name}</p>
-                <p className="text-sm text-gray-500">{item.price.toFixed(2)} €</p>
+                <p className="text-sm text-gray-400">{item.price.toFixed(2)} €</p>
               </div>
 
               <div className="flex gap-2">

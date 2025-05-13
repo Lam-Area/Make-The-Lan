@@ -22,17 +22,17 @@ export default function Profile() {
 
   return (
     <MainLayout>
-      <div className="flex min-h-screen">
+      <div className="flex w-full min-h-full text-white">
 
-        <div className="w-64 bg-gray-100 border-r p-4">
+        <div className="w-64 bg-[#1e1e21] p-4">
           <h2 className="text-lg font-semibold mb-4">Username</h2>
           <ul className="space-y-2">
             {Object.entries(sections).map(([key, label]) => (
               <li key={key}>
                 <button
                   onClick={() => setSelected(key)}
-                  className={`w-full text-left px-3 py-2 rounded hover:bg-gray-200 ${
-                    selected === key ? 'bg-gray-300 font-semibold' : ''
+                  className={`w-full text-left px-3 py-2 rounded hover:bg-gray-700 ${
+                    selected === key ? 'bg-[#272e33] font-semibold' : ''
                   }`}
                 >
                   {label}
@@ -44,7 +44,7 @@ export default function Profile() {
 
         <div className="flex-1 p-6">
           <h1 className="text-2xl font-bold mb-4">{sections[selected]}</h1>
-          <div className="bg-white p-4 rounded shadow">
+          <div className="bg-[#1E1E21] p-4 rounded shadow">
             {renderSectionContent(selected)}
           </div>
         </div>
