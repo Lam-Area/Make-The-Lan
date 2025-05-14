@@ -62,4 +62,11 @@ class CartItemController extends Controller
         $cartItem->delete();
         return redirect()->route('cartitems.index')->with('success', 'Article supprimé du panier.');
     }
+
+    public function show(CartItem $cartItem)
+    {
+        return Inertia::render('CartItems/Show', [
+            'cartItem' => $cartItem->load(['user', 'article']),
+        ]);
+    }
 }

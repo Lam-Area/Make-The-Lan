@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MainLayout from '@/Layouts/MainLayout';
 import Info from '@/Components/Profil/Info';
-import Panier from '@/Pages/Panier';
+import Panier from '@/Components/Profil/Panier';
 import Order from '@/Components/Profil/OrderHistory';
 import Wishlist from '@/Components/Profil/Wishlist';
 import Message from '@/Components/Profil/Message';
