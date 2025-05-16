@@ -13,7 +13,7 @@ class User extends Authenticatable
         'role',
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $casts = [
         'created_at' => 'datetime',

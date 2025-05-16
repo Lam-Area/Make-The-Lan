@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\MessageController;
@@ -26,6 +27,14 @@ Route::resource('sessions', SessionController::class);
 Route::resource('users', UserController::class);
 Route::resource('userlogs', UserLogController::class);
 Route::resource('userpreferences', UserPreferenceController::class);
+
+
+Route::post('/register', [AuthController::class, 'register']);
+
+
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
 
 
