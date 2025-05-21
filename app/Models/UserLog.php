@@ -14,7 +14,7 @@ class UserLog extends Model
         'ip_address',
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $casts = [
         'created_at' => 'datetime',

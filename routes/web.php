@@ -46,10 +46,6 @@ Route::get('/register', function () {
     return Inertia::render('Register');
 });
 
-Route::get('/login', function () {
-    return Inertia::render('Login');
-});
-
 Route::get('/profile', function () {
     return Inertia::render('Profile');
 });
