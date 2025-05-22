@@ -10,6 +10,7 @@ class UserLog extends Model
 
     protected $fillable = [
         'user_id',
+        'name',
         'action',
         'ip_address',
     ];

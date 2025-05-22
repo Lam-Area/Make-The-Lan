@@ -15,7 +15,6 @@ export default function Footer() {
           <a href="/terms" className="hover:underline">conditions générales</a>
           <a href="/preferences" className="hover:underline">Gérer mes préférences</a>
         </div>
-        
       </div>
     </footer>
   );

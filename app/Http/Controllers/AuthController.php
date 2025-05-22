@@ -31,6 +31,7 @@ class AuthController extends Controller
 
         UserLog::create([
             'user_id' => $user->id,
+            'name' => Auth::user()->name,
             'action' => 'Inscription réussie',
             'ip_address' => $request->ip(),
             'created_at' => now(),
@@ -56,6 +57,7 @@ class AuthController extends Controller
 
             UserLog::create([
                 'user_id' => Auth::id(),
+                'name' => Auth::user()->name,
                 'action' => 'Connexion réussie',
                 'ip_address' => $request->ip(),
             ]);
@@ -73,6 +75,7 @@ class AuthController extends Controller
         if (Auth::check()) {
             UserLog::create([
                 'user_id' => Auth::id(),
+                'name' => Auth::user()->name,
                 'action' => 'Déconnexion',
                 'ip_address' => $request->ip(),
             ]);

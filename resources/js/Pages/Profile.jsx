@@ -6,6 +6,9 @@ import Order from '@/Components/Profil/OrderHistory';
 import Wishlist from '@/Components/Profil/Wishlist';
 import Message from '@/Components/Profil/Message';
 import Help from '@/Components/Profil/Help';
+import UserList from '@/Components/Profil/UserList';
+import UserLogs from '@/Components/Profil/UserLogs';
+import ArticleAdmin from '@/Components/Profil/ArticleAdmin';
 
 const sections = {
   info: 'Informations personnelles',
@@ -15,6 +18,9 @@ const sections = {
   souhaits: 'Liste de souhaits',
   aide: 'Aide',
   preferences: 'Préférences',
+  userlist: 'Voir la liste des utilisateurs',
+  userlogs: "Voir les logs d'un utilisateur",
+  managearticles: 'Modifier/supprimer un article'
 };
 
 export default function Profile() {
@@ -55,21 +61,16 @@ export default function Profile() {
 
 function renderSectionContent(section) {
   switch (section) {
-    case 'info':
-      return <Info />;
-    case 'messages':
-      return <Message />;
-    case 'panier':
-      return <Panier />;
-    case 'historique':
-      return <Order />;
-    case 'souhaits':
-      return <Wishlist />;
-    case 'aide':
-      return <Help />;
-    case 'preferences':
-      return <p>Réglages du compte.</p>;
-    default:
-      return <p>Section inconnue.</p>;
+    case 'info': return <Info />;
+    case 'messages': return <Message />;
+    case 'panier': return <Panier />;
+    case 'historique': return <Order />;
+    case 'souhaits': return <Wishlist />;
+    case 'aide': return <Help />;
+    case 'preferences': return <p>Réglages du compte.</p>;
+    case 'userlist': return <UserList />;
+    case 'userlogs': return <UserLogs />;
+    case 'managearticles': return <ArticleAdmin />;
+    default: return <p>Section inconnue.</p>;
   }
 }

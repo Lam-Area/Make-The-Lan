@@ -10,6 +10,7 @@ return new class extends Migration {
         Schema::create('user_logs', function (Blueprint $table) {
         $table->id();
         $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+        $table->string('name', 100);
         $table->text('action');
         $table->string('ip_address', 45);
         $table->timestamps();

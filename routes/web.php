@@ -37,6 +37,33 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
 
+Route::resource('cartitems', CartItemController::class)
+    ->only(['create', 'store', 'edit', 'update', 'destroy']);
+
+Route::resource('favorites', FavoriteController::class)
+    ->only(['create', 'store', 'destroy']);
+
+Route::resource('messages', MessageController::class)
+    ->only(['create', 'store']);
+
+Route::resource('orders', OrderController::class)
+    ->only(['create', 'store']);
+
+Route::resource('orderitems', OrderItemController::class)
+    ->only(['create', 'store']);
+
+Route::resource('sessions', SessionController::class)
+    ->only(['create', 'store']);
+
+Route::resource('userlogs', UserLogController::class)
+    ->only(['index', 'destroy']);
+
+Route::resource('userpreferences', UserPreferenceController::class)
+    ->only(['index', 'edit', 'update']);
+
+Route::resource('users', UserController::class)
+    ->only(['create', 'store', 'edit', 'update', 'destroy']);
+
 
 Route::get('/', function () {
     return Inertia::render('Home');
