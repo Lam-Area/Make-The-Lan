@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { usePage } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
 import Info from '@/Components/Profil/Info';
 import Panier from '@/Components/Profil/Panier';
@@ -9,21 +10,37 @@ import Help from '@/Components/Profil/Help';
 import UserList from '@/Components/Profil/UserList';
 import UserLogs from '@/Components/Profil/UserLogs';
 import ArticleAdmin from '@/Components/Profil/ArticleAdmin';
+import RecentUserPurchases from '@/Components/Profil/RecentUserPurchases';
+import ManageArticles from '@/Components/Profil/ManageOwnArticles';
 
-const sections = {
+const allSections = {
   info: 'Informations personnelles',
   messages: 'Mes messages',
-  panier : 'Mon panier',
+  panier: 'Mon panier',
   historique: "Historique d'achat",
   souhaits: 'Liste de souhaits',
   aide: 'Aide',
   preferences: 'Préférences',
   userlist: 'Voir la liste des utilisateurs',
   userlogs: "Voir les logs d'un utilisateur",
-  managearticles: 'Modifier/supprimer un article'
+  managearticles: 'Modifier/supprimer un article',
+  recentpurchases: "Achats récents d'utilisateurs",
+  articlemanagement: "Gérer mes articles"
 };
 
 export default function Profile() {
+  const { auth } = usePage().props;
+  const isAdmin = auth?.isAdmin;
+  const isVendeur = auth?.isVendeur;
+
+  const visibleSections = Object.entries(allSections).filter(([key]) => {
+    const adminOnly = ['userlist', 'userlogs', 'managearticles'];
+    const vendeurOnly = ['recentpurchases', 'articlemanagement'];
+    if (adminOnly.includes(key)) return isAdmin;
+    if (vendeurOnly.includes(key)) return isVendeur;
+    return true;
+  });
+
   const [selected, setSelected] = useState('panier'); // default
 
   return (
@@ -33,7 +50,7 @@ export default function Profile() {
         <div className="w-64 bg-[#1e1e21] p-4">
           <h2 className="text-lg font-semibold mb-4">Username</h2>
           <ul className="space-y-2">
-            {Object.entries(sections).map(([key, label]) => (
+            {visibleSections.map(([key, label]) => (
               <li key={key}>
                 <button
                   onClick={() => setSelected(key)}
@@ -49,7 +66,7 @@ export default function Profile() {
         </div>
 
         <div className="flex-1 p-6">
-          <h1 className="text-2xl font-bold mb-4">{sections[selected]}</h1>
+          <h1 className="text-2xl font-bold mb-4">{allSections[selected]}</h1>
           <div className="bg-[#1E1E21] p-4 rounded shadow">
             {renderSectionContent(selected)}
           </div>
@@ -71,6 +88,8 @@ function renderSectionContent(section) {
     case 'userlist': return <UserList />;
     case 'userlogs': return <UserLogs />;
     case 'managearticles': return <ArticleAdmin />;
+    case 'recentpurchases': return <RecentUserPurchases />;
+    case 'articlemanagement': return <ManageArticles />;
     default: return <p>Section inconnue.</p>;
   }
 }
