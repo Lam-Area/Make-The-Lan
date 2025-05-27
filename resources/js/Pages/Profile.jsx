@@ -5,7 +5,6 @@ import Info from '@/Components/Profil/Info';
 import Panier from '@/Components/Profil/Panier';
 import Order from '@/Components/Profil/OrderHistory';
 import Wishlist from '@/Components/Profil/Wishlist';
-import Message from '@/Components/Profil/Message';
 import Help from '@/Components/Profil/Help';
 import UserList from '@/Components/Profil/UserList';
 import UserLogs from '@/Components/Profil/UserLogs';
@@ -15,7 +14,6 @@ import ManageArticles from '@/Components/Profil/ManageOwnArticles';
 
 const allSections = {
   info: 'Informations personnelles',
-  messages: 'Mes messages',
   panier: 'Mon panier',
   historique: "Historique d'achat",
   souhaits: 'Liste de souhaits',
@@ -32,14 +30,29 @@ export default function Profile() {
   const { auth } = usePage().props;
   const isAdmin = auth?.isAdmin;
   const isVendeur = auth?.isVendeur;
+  const isUser = auth?.isUser;
 
-  const visibleSections = Object.entries(allSections).filter(([key]) => {
-    const adminOnly = ['userlist', 'userlogs', 'managearticles'];
-    const vendeurOnly = ['recentpurchases', 'articlemanagement'];
-    if (adminOnly.includes(key)) return isAdmin;
+  let visibleSections = Object.entries(allSections).filter(([key]) => {
+    const vendeurOnly = ['info', 'recentpurchases', 'articlemanagement', 'preferences'];
     if (vendeurOnly.includes(key)) return isVendeur;
-    return true;
+    return false;
   });
+
+  if (isAdmin) {
+    visibleSections = Object.entries(allSections).filter(([key]) => {
+    const adminOnly = ['info', 'userlist', 'userlogs', 'managearticles', 'preferences'];
+    if (adminOnly.includes(key)) return isAdmin;
+    return false;
+  });
+  }
+
+  else if (isUser) {
+    visibleSections = Object.entries(allSections).filter(([key]) => {
+    const userOnly = ['info', 'panier', 'historique', 'souhaits', 'aide', 'preferences'];
+    if (userOnly.includes(key)) return isUser;
+    return false;
+  });
+  }
 
   const [selected, setSelected] = useState('panier'); // default
 
@@ -79,7 +92,6 @@ export default function Profile() {
 function renderSectionContent(section) {
   switch (section) {
     case 'info': return <Info />;
-    case 'messages': return <Message />;
     case 'panier': return <Panier />;
     case 'historique': return <Order />;
     case 'souhaits': return <Wishlist />;

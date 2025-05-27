@@ -13,6 +13,7 @@ class Article extends Model
         'file_path',
         'code_preview',
         'vendeur_id',
+        'slug',
     ];
 
     public $timestamps = false;

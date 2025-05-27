@@ -46,10 +46,12 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(Request $request, User $user)
+    public function updateInfo(Request $request)
     {
+        $user = $request->user();
+
         $validated = $request->validate([
-            'name' => 'required|string|max:150',
+            'name' => 'required|string|max:100',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:6',
         ]);
@@ -62,7 +64,7 @@ class UserController extends Controller
 
         $user->update($validated);
 
-        return redirect()->route('users.index')->with('success', 'Utilisateur modifié.');
+        return back()->with('success', 'Informations mises à jour.');
     }
 
     public function destroy(User $user)

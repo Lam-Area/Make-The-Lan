@@ -2,7 +2,8 @@ import React from 'react';
 import { useForm, Link, usePage } from '@inertiajs/react';
 
 export default function Create() {
-  const { errors } = usePage().props;
+  const { errors, auth } = usePage().props;
+  const vendeurId = auth?.user?.id || '';
 
   const { data, setData, post, processing } = useForm({
     title: '',
@@ -10,12 +11,12 @@ export default function Create() {
     price: '',
     file_path: '',
     code_preview: '',
-    vendeur_id: '',
+    vendeur_id: vendeurId,
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    post('/articles'); // utilise store() du controller
+    post('/articles');
   };
 
   return (
@@ -75,17 +76,6 @@ export default function Create() {
           />
         </div>
 
-        <div>
-          <label className="block font-medium">Vendeur ID</label>
-          <input
-            type="number"
-            value={data.vendeur_id}
-            onChange={(e) => setData('vendeur_id', e.target.value)}
-            className="w-full border p-2 rounded"
-          />
-          {errors.vendeur_id && <div className="text-red-500">{errors.vendeur_id}</div>}
-        </div>
-
         <div className="flex items-center gap-4 mt-6">
           <button
             type="submit"
@@ -94,10 +84,7 @@ export default function Create() {
           >
             Créer
           </button>
-          <Link
-            href="/articles"
-            className="text-gray-700 hover:underline"
-          >
+          <Link href="/articles" className="text-gray-700 hover:underline">
             Annuler
           </Link>
         </div>
