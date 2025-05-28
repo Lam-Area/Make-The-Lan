@@ -16,7 +16,7 @@ class Article extends Model
         'slug',
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $casts = [
         'price' => 'decimal:2',

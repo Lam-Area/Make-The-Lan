@@ -15,9 +15,7 @@ return new class extends Migration {
             $table->string('file_path', 255);
             $table->text('code_preview')->nullable();
             $table->unsignedBigInteger('vendeur_id');
-
-            $table->dateTime('created_at');
-            $table->dateTime('updated_at');
+            $table->timestamps();
 
             $table->foreign('vendeur_id')->references('id')->on('users')->onDelete('cascade');
         });

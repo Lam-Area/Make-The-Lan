@@ -16,7 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(LogsSeeder::class);
         $this->call(UserPreferencesSeeder::class);
-        $this->call(MessagesSeeder::class);
         $this->call(ArticlesSeeder::class);
         $this->call(FavoritesSeeder::class);
         $this->call(CartItemsSeeder::class);

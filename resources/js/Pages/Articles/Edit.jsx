@@ -1,68 +1,106 @@
-import React from 'react';
+import React from 'react'; 
 import { useForm, usePage, Link } from '@inertiajs/react';
 
 export default function Edit() {
   const { article, errors } = usePage().props;
 
   const { data, setData, put, processing } = useForm({
-    title: article.title,
-    description: article.description,
-    price: article.price,
-    file_path: article.file_path,
-    code_preview: article.code_preview,
+    title: article.title || '',
+    description: article.description || '',
+    price: article.price || '',
+    file_path: article.file_path || '',
+    code_preview: article.code_preview || '',
+    vendeur_id: article.vendeur_id || '',
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('Données soumises :', data); // debug
     put(`/articles/${article.id}`);
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Modifier l'article</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <Input label="Titre" value={data.title} onChange={val => setData('title', val)} error={errors.title} />
-        <Textarea label="Description" value={data.description} onChange={val => setData('description', val)} />
-        <Input label="Prix" type="number" step="0.01" value={data.price} onChange={val => setData('price', val)} />
-        <Input label="Chemin du fichier" value={data.file_path} onChange={val => setData('file_path', val)} />
-        <Input label="Code Preview" value={data.code_preview} onChange={val => setData('code_preview', val)} />
+    <div className="min-h-screen bg-[#1e1e21]">
+      <div className="p-6 max-w-3xl mx-auto">
+        <h1 className="text-2xl text-white font-bold mb-6">Modifier l'article</h1>
 
-        <div className="flex items-center gap-4 mt-6">
-          <button type="submit" disabled={processing} className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">
-            Modifier
-          </button>
-          <Link href="/articles" className="text-gray-700 hover:underline">Annuler</Link>
-        </div>
-      </form>
-    </div>
-  );
-}
+        <form onSubmit={handleSubmit} className="space-y-4">
 
-function Input({ label, value, onChange, type = "text", step, error }) {
-  return (
-    <div>
-      <label className="block font-medium">{label}</label>
-      <input
-        type={type}
-        step={step}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full border p-2 rounded"
-      />
-      {error && <div className="text-red-500">{error}</div>}
-    </div>
-  );
-}
+          <div>
+            <label className="block text-white font-medium">Titre</label>
+            <input
+              type="text"
+              value={data.title}
+              onChange={(e) => setData('title', e.target.value)}
+              className="w-full border p-2 rounded"
+            />
+            {errors.title && <div className="text-red-500">{errors.title}</div>}
+          </div>
 
-function Textarea({ label, value, onChange }) {
-  return (
-    <div>
-      <label className="block font-medium">{label}</label>
-      <textarea
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full border p-2 rounded"
-      />
+          <div>
+            <label className="block text-white font-medium">Description</label>
+            <textarea
+              value={data.description}
+              onChange={(e) => setData('description', e.target.value)}
+              className="w-full border p-2 rounded"
+            />
+            {errors.description && <div className="text-red-500">{errors.description}</div>}
+          </div>
+
+          <div>
+            <label className="block text-white font-medium">Prix</label>
+            <input
+              type="number"
+              step="0.01"
+              value={data.price}
+              onChange={(e) => setData('price', e.target.value)}
+              className="w-full border p-2 rounded"
+            />
+            {errors.price && <div className="text-red-500">{errors.price}</div>}
+          </div>
+
+          <div>
+            <label className="block text-white font-medium">Fichier (chemin)</label>
+            <input
+              type="text"
+              value={data.file_path}
+              onChange={(e) => setData('file_path', e.target.value)}
+              className="w-full border p-2 rounded"
+            />
+            {errors.file_path && <div className="text-red-500">{errors.file_path}</div>}
+          </div>
+
+          <div>
+            <label className="block text-white font-medium">Code Preview</label>
+            <input
+              type="text"
+              value={data.code_preview}
+              onChange={(e) => setData('code_preview', e.target.value)}
+              className="w-full border p-2 rounded"
+            />
+            {errors.code_preview && <div className="text-red-500">{errors.code_preview}</div>}
+          </div>
+
+          {/* vendeur_id hidden */}
+          <input type="hidden" name="vendeur_id" value={data.vendeur_id} />
+
+          <div className="flex items-center gap-4 mt-6">
+            <button
+              type="submit"
+              disabled={processing}
+              className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700"
+            >
+              Modifier
+            </button>
+            <Link
+              href="/articles"
+              className="text-gray-300 hover:underline"
+            >
+              Annuler
+            </Link>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
