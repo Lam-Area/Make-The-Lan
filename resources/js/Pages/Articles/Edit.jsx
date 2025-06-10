@@ -88,7 +88,7 @@ export default function Edit() {
             <button
               type="submit"
               disabled={processing}
-              className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
             >
               Modifier
             </button>

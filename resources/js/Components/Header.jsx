@@ -40,17 +40,23 @@ export default function Header() {
 
               {/* Rôle user */}
               {user?.role === 'user' && (
+                <Link href="/profile" className="hover:underline">profile</Link>
+              )}
+              {user?.role === 'user' && (
                 <Link href="/panier" className="hover:underline">Panier</Link>
               )}
 
               {/* Rôle vendeur */}
               {user?.role === 'vendeur' && (
-                <Link href="/articles/create" className="hover:underline">Ajouter un article</Link>
+                <Link href="/profile" className="hover:underline">profile</Link>
+              )}
+              {user?.role === 'vendeur' && (
+                <Link href="/articles" className="hover:underline">articles</Link>
               )}
 
               {/* Rôle admin */}
               {user?.role === 'admin' && (
-                <Link href="/dashboard" className="hover:underline">Admin</Link>
+                <Link href="/profile" className="hover:underline">profile/dashboard</Link>
               )}
 
               {/* Déconnexion */}

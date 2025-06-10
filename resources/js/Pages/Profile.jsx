@@ -57,7 +57,7 @@ export default function Profile() {
   const [selected, setSelected] = useState('panier'); // default
 
   return (
-    <MainLayout>
+    <MainLayout isfull>
       <div className="flex w-full min-h-full text-white">
 
         <div className="w-64 bg-[#1e1e21] p-4">

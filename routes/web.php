@@ -54,7 +54,10 @@ Route::get('/profile', function () {
 });
 
 Route::get('/', function () {
-    return Inertia::render('Home');
+    $articles = Article::orderBy('created_at', 'desc')->take(6)->get();
+    return Inertia::render('Home', [
+        'recentArticles' => $articles,
+    ]);
 });
 
 Route::get('/register', function () {

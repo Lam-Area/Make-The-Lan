@@ -54,7 +54,7 @@ export default function InfoSection() {
             name="password"
             value={data.password}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-sm border-gray-300 shadow-sm text-gray-700"
+            className="mt-1 block w-1/2 rounded-sm border-gray-300 shadow-sm text-gray-700"
           />
           {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
         </div>
