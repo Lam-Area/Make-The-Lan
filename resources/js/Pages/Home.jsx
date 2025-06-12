@@ -1,6 +1,8 @@
 import React from 'react';
 import { usePage, Link } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
+import BannerCarousel from '@/Components/BannerCarousel';
+import DiscordWidget from '@/Components/DiscordWidget';
 
 export default function Home() {
   const { recentArticles } = usePage().props;
@@ -9,7 +11,24 @@ export default function Home() {
     <MainLayout>
       <div className="min-h-screen bg-[#1e1e21] text-white p-6">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8 text-center">Nouveaux articles disponibles</h1>
+  
+  <h1 className="text-3xl font-bold mt-12 text-left">Nos partenaires</h1>
+
+  <div className="flex flex-col lg:flex-row justify-between gap-6 items-start">
+    
+    {/* Carousel à gauche */}
+    <div className="w-full lg:w-3/5 mt-14">
+      <BannerCarousel />
+    </div>
+
+    {/* Widget Discord à droite, bien contenu */}
+    <div className="w-full lg:w-[350px]">
+      <DiscordWidget />
+    </div>
+
+  </div>
+
+          <h1 className="text-3xl font-bold mb-8 text-left">Nouveaux articles disponibles</h1>
 
           {recentArticles.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
