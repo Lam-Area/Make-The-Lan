@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 flex flex-col md:flex-row justify-center items-center gap-6 md:gap-20">
         
         <div className="flex items-center gap-2">
-          <img src="images/logo.png" alt="Logo" className="w-6 h-6" />
+          <img src="/images/logo.png" alt="Logo" className="w-6 h-6" />
           <span className="text-sm">&copy; MyScript {new Date().getFullYear()}.</span>
         </div>
 

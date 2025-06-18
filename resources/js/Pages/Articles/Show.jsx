@@ -3,7 +3,9 @@ import { usePage, Link } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
 
 export default function Show() {
-  const { article } = usePage().props;
+  const { article, auth } = usePage().props;
+
+  const isVendeur = auth?.user?.role === 'vendeur';
 
   return (
     <MainLayout>
@@ -20,12 +22,21 @@ export default function Show() {
           </div>
 
           <div className="mt-6 text-right">
-            <Link
-              href="/articles"
-              className="text-gray-300 hover:underline"
-            >
-              ← Retour à la liste des articles
-            </Link>
+            {isVendeur ? (
+              <Link
+                href="/profile"
+                className="text-gray-300 hover:underline"
+              >
+                ← Retour au profil vendeur
+              </Link>
+            ) : (
+              <button
+                onClick={() => window.history.back()}
+                className="text-gray-300 hover:underline"
+              >
+                ← Retour
+              </button>
+            )}
           </div>
         </div>
       </div>
