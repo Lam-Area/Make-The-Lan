@@ -22,7 +22,7 @@ export default function RecentUserPurchases() {
   return (
     <div className="space-y-4">
       {purchases.map(p => (
-        <div key={p.id} className="p-4 bg-[#272e33] rounded shadow">
+        <div key={p.id} className="p-4 bg-[#272e33] bg-opacity-25 rounded shadow">
           <p><strong>Acheteur :</strong> {p.user}</p>
           <p><strong>Article :</strong> {p.article}</p>
           <p><strong>Prix :</strong> {p.price}</p>

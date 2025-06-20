@@ -14,7 +14,7 @@ export default function ManageOwnArticles() {
   const userArticles = articles.filter(article => article.vendeur_id === vendeurId);
 
   return (
-    <div className="min-h-screen bg-[#1e1e21] p-6 text-white">
+    <div className="min-h-screen bg-[#1e1e21] bg-opacity-25 p-6 text-white">
       {/* Header avec bouton vers /articles */}
       <div className="flex justify-between items-center mb-6">
         <h1></h1>

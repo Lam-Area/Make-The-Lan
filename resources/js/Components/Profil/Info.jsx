@@ -22,7 +22,7 @@ export default function InfoSection() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-[#1E1E21] p-4 rounded">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded">
         <div>
           <label className="block text-sm font-medium text-white">Nom</label>
           <input

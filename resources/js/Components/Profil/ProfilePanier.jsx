@@ -27,7 +27,7 @@ export default function CartSection() {
           {cart.map((item) => (
             <div
               key={item.id}
-              className="flex justify-between items-center p-4 rounded-lg shadow-sm bg-[#272e33] hover:bg-gray-700 transition"
+              className="flex justify-between items-center p-4 rounded-lg shadow-sm bg-[#272e33] bg-opacity-25 hover:bg-gray-700 transition"
             >
               <div>
                 <p className="font-semibold text-lg">{item.title}</p>

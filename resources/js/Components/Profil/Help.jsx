@@ -17,7 +17,7 @@ export default function HelpSection() {
   ];
 
   return (
-    <div className="max-w-3xl bg-[#1E1E21] text-white mx-auto p-6">
+    <div className="max-w-3xl bg-[#1E1E21] bg-opacity-25 text-white mx-auto p-6">
       <h2 className="text-2xl font-bold mb-6">Centre d’aide</h2>
 
       <div className="space-y-6">

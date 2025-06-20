@@ -11,7 +11,7 @@ export default function Home() {
 
   return (
     <MainLayout>
-      <div className="min-h-screen bg-[#1e1e21] text-white p-6">
+      <div className="min-h-screen text-white p-6">
         <div className="max-w-6xl mx-auto">
 
           <h1 className="text-3xl font-bold mt-12 text-left">Nos partenaires</h1>
@@ -32,7 +32,7 @@ export default function Home() {
               {recentArticles.map(article => (
                 <div
                   key={article.id}
-                  className="bg-[#272e33] p-4 rounded-lg shadow hover:shadow-lg transition flex flex-col justify-between"
+                  className="bg-[#16171A] bg-opacity-90 p-4 rounded-lg shadow hover:shadow-lg transition flex flex-col justify-between"
                 >
                   <div>
                     <h2 className="text-xl font-semibold mb-2 text-blue-400">{article.title}</h2>

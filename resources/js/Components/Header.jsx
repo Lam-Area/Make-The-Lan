@@ -10,7 +10,7 @@ export default function Header() {
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
   return (
-    <header className="bg-[#2a3740] text-white p-4 shadow-md">
+    <header className="bg-[#16171A] bg-opacity-95 text-white p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center relative">
         
         {/* Logo + Recherche */}
