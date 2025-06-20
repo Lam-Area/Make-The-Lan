@@ -7,7 +7,7 @@ export default function DiscordWidget() {
         <iframe
           src="https://discordapp.com/widget?id=1237554713323638814&theme=dark"
           width="100%"
-          height="80%"
+          height="100%"
           allowtransparency="true"
           sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
         ></iframe>

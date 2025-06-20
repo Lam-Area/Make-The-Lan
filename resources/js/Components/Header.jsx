@@ -15,7 +15,13 @@ export default function Header() {
         
         {/* Logo + Recherche */}
         <div className="flex items-center gap-4 flex-1 pl-4">
-          <img src="/images/logo.png" alt="Logo" className="h-10 w-10 object-contain" />
+          <Link href="/">
+            <img
+              src="/images/logo.png"
+              alt="Logo"
+              className="h-10 w-10 object-contain cursor-pointer"
+            />
+          </Link>
           <input
             type="text"
             placeholder="Rechercher..."
@@ -37,30 +43,28 @@ export default function Header() {
 
         {/* Navigation desktop */}
         <div className="hidden md:flex items-center gap-6 justify-end flex-1 pr-12">
-          {!user && (
+          {!user ? (
             <>
               <Link href="/register" className="hover:underline">Inscription</Link>
               <Link href="/login" className="hover:underline">Connexion</Link>
               <Link href="/panier" className="hover:underline">Panier</Link>
             </>
-          )}
-
-          {user && (
+          ) : (
             <>
               <span className="text-sm italic">Bienvenue, {user.name}</span>
-              {user?.role === 'user' && (
+              {user.role === 'user' && (
                 <>
                   <Link href="/profile" className="hover:underline">profile</Link>
                   <Link href="/panier" className="hover:underline">Panier</Link>
                 </>
               )}
-              {user?.role === 'vendeur' && (
+              {user.role === 'vendeur' && (
                 <>
                   <Link href="/profile" className="hover:underline">profile</Link>
                   <Link href="/articles" className="hover:underline">articles</Link>
                 </>
               )}
-              {user?.role === 'admin' && (
+              {user.role === 'admin' && (
                 <Link href="/profile" className="hover:underline">profile/dashboard</Link>
               )}
               <Link

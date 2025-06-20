@@ -17,6 +17,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserLogController;
 use App\Http\Controllers\UserPreferenceController;
 
+// 🔄 Routes RESTful
 Route::resource('articles', ArticleController::class);
 Route::resource('cartitems', CartItemController::class);
 Route::resource('favorites', FavoriteController::class);
@@ -27,23 +28,15 @@ Route::resource('users', UserController::class);
 Route::resource('userlogs', UserLogController::class);
 Route::resource('userpreferences', UserPreferenceController::class);
 
+// 🔐 Auth
 Route::post('/register', [AuthController::class, 'register']);
-
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
+// 👤 Profil utilisateur (vendeur)
 Route::put('/profile/info', [UserController::class, 'updateInfo'])->name('profile.update');
 
-Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
-Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
-Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
-Route::get('/articles/{article}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
-Route::put('/articles/{article}', [ArticleController::class, 'update'])->name('articles.update');
-Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('articles.destroy');
-Route::get('/articles/{slug}', [ArticleController::class, 'show'])->name('articles.show');
-
-// Route personnalisée vers le profil avec les articles du vendeur
 Route::get('/profile', function () {
     $user = Auth::user();
     $articles = Article::where('vendeur_id', $user->id)->get();
@@ -53,6 +46,7 @@ Route::get('/profile', function () {
     ]);
 });
 
+// 🏠 Accueil
 Route::get('/', function () {
     $articles = Article::orderBy('created_at', 'desc')->take(9)->get();
     return Inertia::render('Home', [
@@ -60,22 +54,15 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/register', function () {
-    return Inertia::render('Register');
-});
-
+// 🛒 Panier (offline + fusion login)
 Route::get('/panier', function () {
     return Inertia::render('Panier');
 });
 
-Route::get('/legal', function () {
-    return Inertia::render('Legal');
-});
+// 📄 Pages légales
+Route::get('/register', fn() => Inertia::render('Register'));
+Route::get('/legal', fn() => Inertia::render('Legal'));
+Route::get('/terms', fn() => Inertia::render('Terms'));
 
-Route::get('/terms', function () {
-    return Inertia::render('Terms');
-});
-
-Route::fallback(function () {
-    return Inertia::render('Page404');
-});
+// 🔚 Fallback
+Route::fallback(fn() => Inertia::render('Page404'));
