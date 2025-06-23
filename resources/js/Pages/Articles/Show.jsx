@@ -2,10 +2,12 @@ import React from 'react';
 import { usePage, Link, router } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
 import { useCart } from '@/Context/CartContext';
+import { useWishlist } from '@/Context/WishlistContext';
 
 export default function Show() {
   const { article, auth } = usePage().props;
   const { addToCart } = useCart();
+  const { addToWishlist } = useWishlist();
 
   const isVendeur = auth?.user?.role === 'vendeur';
 
@@ -16,6 +18,11 @@ export default function Show() {
     } else {
       router.visit('/panier');
     }
+  };
+
+  const handleAddToWishlist = () => {
+    addToWishlist(article);
+    router.visit('/wishlist'); // ✅ bonne redirection
   };
 
   return (
@@ -54,11 +61,19 @@ export default function Show() {
                 >
                   Ajouter au panier
                 </button>
+
                 <button
                   onClick={handleBuyNow}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
                 >
                   Acheter maintenant
+                </button>
+
+                <button
+                  onClick={handleAddToWishlist}
+                  className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded"
+                >
+                  Ajouter aux favoris
                 </button>
               </div>
             )}

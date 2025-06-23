@@ -48,6 +48,7 @@ export default function Header() {
               <Link href="/register" className="hover:underline">Inscription</Link>
               <Link href="/login" className="hover:underline">Connexion</Link>
               <Link href="/panier" className="hover:underline">Panier</Link>
+              <Link href="/wishlist" className="hover:underline">Souhaits</Link>
             </>
           ) : (
             <>
@@ -56,6 +57,7 @@ export default function Header() {
                 <>
                   <Link href="/profile" className="hover:underline">profile</Link>
                   <Link href="/panier" className="hover:underline">Panier</Link>
+                  <Link href="/wishlist" className="hover:underline">Souhaits</Link>
                 </>
               )}
               {user.role === 'vendeur' && (
@@ -88,6 +90,7 @@ export default function Header() {
                   <Link href="/register" className="hover:underline">Inscription</Link>
                   <Link href="/login" className="hover:underline">Connexion</Link>
                   <Link href="/panier" className="hover:underline">Panier</Link>
+                  <Link href="/wishlist" className="hover:underline">Souhaits</Link>
                 </>
               ) : (
                 <>
@@ -96,6 +99,7 @@ export default function Header() {
                     <>
                       <Link href="/profile" className="hover:underline">profile</Link>
                       <Link href="/panier" className="hover:underline">Panier</Link>
+                      <Link href="/wishlist" className="hover:underline">Souhaits</Link>
                     </>
                   )}
                   {user.role === 'vendeur' && (

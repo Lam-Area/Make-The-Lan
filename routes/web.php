@@ -5,22 +5,26 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 use App\Models\Article;
+use App\Http\Controllers\{
+    ArticleController,
+    AuthController,
+    CartItemController,
+    FavoriteController,
+    OrderController,
+    OrderItemController,
+    SessionController,
+    UserController,
+    UserLogController,
+    UserPreferenceController
+};
 
-use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CartItemController;
-use App\Http\Controllers\FavoriteController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\OrderItemController;
-use App\Http\Controllers\SessionController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\UserLogController;
-use App\Http\Controllers\UserPreferenceController;
-
-// 🔄 Routes RESTful
+/*
+|--------------------------------------------------------------------------
+| Routes RESTful (backend persistant)
+|--------------------------------------------------------------------------
+*/
 Route::resource('articles', ArticleController::class);
 Route::resource('cartitems', CartItemController::class);
-Route::resource('favorites', FavoriteController::class);
 Route::resource('orders', OrderController::class);
 Route::resource('orderitems', OrderItemController::class);
 Route::resource('sessions', SessionController::class);
@@ -28,25 +32,50 @@ Route::resource('users', UserController::class);
 Route::resource('userlogs', UserLogController::class);
 Route::resource('userpreferences', UserPreferenceController::class);
 
-// 🔐 Auth
+/*
+|------------------------------------------------------------------
+| Favoris  ➜  protégés : seulement disponibles une fois connecté
+| (les visiteurs utilisent localStorage + cookie, donc pas besoin
+|  de back avant authentification)
+|------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+    // index, store, destroy suffisent pour ta logique actuelle
+    Route::resource('favorites', FavoriteController::class)
+        ->only(['index', 'store', 'destroy']);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Auth
+|--------------------------------------------------------------------------
+*/
 Route::post('/register', [AuthController::class, 'register']);
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::get('/login',  [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
-// 👤 Profil utilisateur (vendeur)
+/*
+|--------------------------------------------------------------------------
+| Profil vendeur
+|--------------------------------------------------------------------------
+*/
 Route::put('/profile/info', [UserController::class, 'updateInfo'])->name('profile.update');
 
 Route::get('/profile', function () {
-    $user = Auth::user();
+    $user     = Auth::user();
     $articles = Article::where('vendeur_id', $user->id)->get();
 
     return Inertia::render('Profile', [
         'articles' => $articles,
     ]);
-});
+})->middleware('auth');
 
-// 🏠 Accueil
+/*
+|--------------------------------------------------------------------------
+| Pages visiteurs
+|--------------------------------------------------------------------------
+*/
 Route::get('/', function () {
     $articles = Article::orderBy('created_at', 'desc')->take(9)->get();
     return Inertia::render('Home', [
@@ -55,14 +84,23 @@ Route::get('/', function () {
 });
 
 // 🛒 Panier (offline + fusion login)
-Route::get('/panier', function () {
-    return Inertia::render('Panier');
-});
+Route::get('/panier', fn () => Inertia::render('Panier'));
 
-// 📄 Pages légales
-Route::get('/register', fn() => Inertia::render('Register'));
-Route::get('/legal', fn() => Inertia::render('Legal'));
-Route::get('/terms', fn() => Inertia::render('Terms'));
+// ⭐ Wishlist /offline (visiteur) : même principe que le panier
+Route::get('/wishlist', fn () => Inertia::render('Wish'));
 
-// 🔚 Fallback
-Route::fallback(fn() => Inertia::render('Page404'));
+/*
+|--------------------------------------------------------------------------
+| Pages légales & divers
+|--------------------------------------------------------------------------
+*/
+Route::get('/register', fn () => Inertia::render('Register'));
+Route::get('/legal',    fn () => Inertia::render('Legal'));
+Route::get('/terms',    fn () => Inertia::render('Terms'));
+
+/*
+|--------------------------------------------------------------------------
+| Fallback 404
+|--------------------------------------------------------------------------
+*/
+Route::fallback(fn () => Inertia::render('Page404'));

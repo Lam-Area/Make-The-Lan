@@ -12,12 +12,12 @@ class ArticlesSeeder extends Seeder
     {
         DB::table('articles')->insert([
             [
-                'title' => 'Script de scraping Python',
-                'description' => 'Un script efficace pour scraper les données d’un site.',
-                'price' => 19.99,
-                'file_path' => 'scripts/scraper.py',
+                'title' => "facilisation de la création d'un docker",
+                'description' => "très efficaces pour manage les ports d'un site",
+                'price' => 9.99,
+                'file_path' => 'docker/cont',
                 'code_preview' => 'import requests...',
-                'vendeur_id' => 2, // user.id
+                'vendeur_id' => 2,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],

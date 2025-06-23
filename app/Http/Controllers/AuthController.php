@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Models\UserLog;
+use App\Models\Favorite;
 
 class AuthController extends Controller
 {
@@ -61,6 +62,24 @@ class AuthController extends Controller
                 'action' => 'Connexion réussie',
                 'ip_address' => $request->ip(),
             ]);
+
+            // 🧠 Fusion des favoris (localStorage) avec la base
+            $wishlist = json_decode($request->cookie('wishlist_items'), true);
+            if (is_array($wishlist)) {
+                foreach ($wishlist as $item) {
+                    if (isset($item['id'])) {
+                        Favorite::firstOrCreate(
+                            [
+                                'user_id' => Auth::id(),
+                                'article_id' => $item['id'],
+                            ],
+                            [
+                                'created_at' => now(),
+                            ]
+                        );
+                    }
+                }
+            }
 
             return redirect()->intended('/');
         }
