@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use App\Models\UserPreference;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -35,6 +36,9 @@ class HandleInertiaRequests extends Middleware
                 'isAdmin' => fn () => $request->user()?->role === 'admin',
                 'isVendeur' => fn () => $request->user()?->role === 'vendeur',
             ],
+            'userPreference' => fn () => $request->user()
+                ? UserPreference::where('user_id', $request->user()->id)->first()
+                : null,
         ]);
     }
 }

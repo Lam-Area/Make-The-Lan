@@ -72,19 +72,23 @@ class UserPreferenceController extends Controller
     {
         $user = Auth::user();
 
-        $preference = UserPreference::firstOrCreate(
-            ['user_id' => $user->id],
-            [
-                'dark_mode' => $request->input('dark_mode'),
-                'language' => 'fr', // ✅ valeur par défaut (modifiable si besoin)
-                'notification_email' => true // ✅ valeur par défaut (modifiable aussi)
-            ]
-        );
+        $preference = UserPreference::where('user_id', $user->id)->first();
 
-        $preference->dark_mode = $request->input('dark_mode');
-        $preference->save();
+        if ($preference) {
+            $preference->dark_mode = $request->input('dark_mode');
+            $preference->save();
+        } else {
+            // On crée avec les champs requis
+            UserPreference::create([
+                'user_id' => $user->id,
+                'dark_mode' => $request->input('dark_mode'),
+                'language' => 'fr', // valeur par défaut
+                'notification_email' => true, // valeur par défaut
+            ]);
+        }
 
         return back();
     }
+
 
 }

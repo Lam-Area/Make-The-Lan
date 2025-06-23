@@ -1,10 +1,10 @@
 import React from 'react';
 import Header from '@/Components/Header';
 import Footer from '@/Components/Footer';
-import { useTheme } from '@/Context/ThemeContext';
+import { useTheme, ThemeProvider } from '@/Context/ThemeContext';
 
-export default function MainLayout({ children, isfull = false }) {
-  const { darkMode } = useTheme(); // ✅ on récupère depuis le context
+function LayoutContent({ children, isfull }) {
+  const { darkMode } = useTheme();
 
   const backgroundUrl = darkMode
     ? "/images/mainbg2.gif"
@@ -27,5 +27,15 @@ export default function MainLayout({ children, isfull = false }) {
       </main>
       <Footer />
     </div>
+  );
+}
+
+export default function MainLayout({ children, isfull = false }) {
+  return (
+    <ThemeProvider>
+      <LayoutContent isfull={isfull}>
+        {children}
+      </LayoutContent>
+    </ThemeProvider>
   );
 }

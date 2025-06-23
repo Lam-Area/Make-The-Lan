@@ -13,6 +13,7 @@ class UserPreference extends Model
         'notification_email',
     ];
 
+
     public $timestamps = false;
 
     protected $casts = [
