@@ -89,6 +89,9 @@ Route::get('/panier', fn () => Inertia::render('Panier'));
 // ⭐ Wishlist /offline (visiteur) : même principe que le panier
 Route::get('/wishlist', fn () => Inertia::render('Wish'));
 
+
+Route::post('/userpreferences/toggle', [UserPreferenceController::class, 'toggle'])->name('userpreferences.toggle');
+
 /*
 |--------------------------------------------------------------------------
 | Pages légales & divers

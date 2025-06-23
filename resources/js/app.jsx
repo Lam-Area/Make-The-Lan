@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import '../css/app.css';
 import { CartProvider } from '@/Context/CartContext';
 import { WishlistProvider } from '@/Context/WishlistContext';
+import { ThemeProvider } from '@/Context/ThemeContext';
 
 createInertiaApp({
   resolve: name => {
@@ -13,7 +14,9 @@ createInertiaApp({
     createRoot(el).render(
       <CartProvider>
         <WishlistProvider>
-            <App {...props} />
+            <ThemeProvider>
+              <App {...props} />
+            </ThemeProvider>
           </WishlistProvider>
       </CartProvider>
     );

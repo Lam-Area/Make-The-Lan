@@ -11,6 +11,7 @@ import UserLogs from '@/Components/Profil/UserLogs';
 import ArticleAdmin from '@/Components/Profil/ArticleAdmin';
 import RecentUserPurchases from '@/Components/Profil/RecentUserPurchases';
 import ManageArticles from '@/Components/Profil/ManageOwnArticles';
+import Preference from '@/Components/Profil/Preference';
 
 const allSections = {
   info: 'Informations personnelles',
@@ -18,7 +19,7 @@ const allSections = {
   historique: "Historique d'achat",
   souhaits: 'Liste de souhaits',
   aide: 'Aide',
-  preferences: 'Préférences',
+  preference: 'Préférence',
   userlist: 'Voir la liste des utilisateurs',
   userlogs: "Voir les logs d'un utilisateur",
   managearticles: 'Modifier/supprimer un article',
@@ -33,14 +34,14 @@ export default function Profile() {
   const isUser = auth?.isUser;
 
   let visibleSections = Object.entries(allSections).filter(([key]) => {
-    const vendeurOnly = ['info', 'recentpurchases', 'articlemanagement', 'preferences'];
+    const vendeurOnly = ['info', 'recentpurchases', 'articlemanagement', 'preference'];
     if (vendeurOnly.includes(key)) return isVendeur;
     return false;
   });
 
   if (isAdmin) {
     visibleSections = Object.entries(allSections).filter(([key]) => {
-    const adminOnly = ['info', 'userlist', 'userlogs', 'managearticles', 'preferences'];
+    const adminOnly = ['info', 'userlist', 'userlogs', 'managearticles', 'preference'];
     if (adminOnly.includes(key)) return isAdmin;
     return false;
   });
@@ -48,7 +49,7 @@ export default function Profile() {
 
   else if (isUser) {
     visibleSections = Object.entries(allSections).filter(([key]) => {
-    const userOnly = ['info', 'panier', 'historique', 'souhaits', 'aide', 'preferences'];
+    const userOnly = ['info', 'panier', 'historique', 'souhaits', 'aide', 'preference'];
     if (userOnly.includes(key)) return isUser;
     return false;
   });
@@ -96,7 +97,7 @@ function renderSectionContent(section) {
     case 'historique': return <Order />;
     case 'souhaits': return <Wishlist />;
     case 'aide': return <Help />;
-    case 'preferences': return <p>Réglages du compte.</p>;
+    case 'preference': return <Preference />;
     case 'userlist': return <UserList />;
     case 'userlogs': return <UserLogs />;
     case 'managearticles': return <ArticleAdmin />;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\UserPreference;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -66,4 +67,24 @@ class UserPreferenceController extends Controller
 
         return redirect()->route('userpreferences.index')->with('success', 'Préférences supprimées.');
     }
+
+    public function toggle(Request $request)
+    {
+        $user = Auth::user();
+
+        $preference = UserPreference::firstOrCreate(
+            ['user_id' => $user->id],
+            [
+                'dark_mode' => $request->input('dark_mode'),
+                'language' => 'fr', // ✅ valeur par défaut (modifiable si besoin)
+                'notification_email' => true // ✅ valeur par défaut (modifiable aussi)
+            ]
+        );
+
+        $preference->dark_mode = $request->input('dark_mode');
+        $preference->save();
+
+        return back();
+    }
+
 }
