@@ -37,7 +37,7 @@ export default function Wish() {
                           href={`/articles/${item.id}`}
                           className="text-green-400 hover:underline"
                         >
-                          Voir l'article
+                          Voir l'article :
                         </Link>
                         <button
                           onClick={() => handleMoveToCart(item)}
