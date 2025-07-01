@@ -4,28 +4,30 @@ import { useForm, usePage } from '@inertiajs/react';
 export default function InfoSection() {
   const { user } = usePage().props.auth;
 
-  const { data, setData, put, processing, errors, reset } = useForm({
-    name: user.name || '',
-    email: user.email || '',
+  const { data, setData, post, processing, errors, reset } = useForm({
+    name: user?.name || '',
+    email: user?.email || '',
     password: '',
-    avatar: user.avatar || null,
+    avatar: null,
   });
 
   const [preview, setPreview] = useState(null);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setData(name, value);
-  };
+    const { name, type, value, checked, files } = e.target;
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setData('avatar', file);
+    if (type === 'file') {
+      setData(name, files[0]);
+    } else if (type === 'checkbox') {
+      setData(name, checked);
+    } else {
+      setData(name, value);
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    put('/profile/info', {
+    post('/profile/info?_method=PUT', {
       forceFormData: true,
       preserveScroll: true,
       onSuccess: () => reset('password'),
@@ -33,18 +35,18 @@ export default function InfoSection() {
   };
 
   useEffect(() => {
-    if (data.avatar && typeof data.avatar !== 'string') {
+    if (data.avatar instanceof File) {
       const objectUrl = URL.createObjectURL(data.avatar);
       setPreview(objectUrl);
       return () => URL.revokeObjectURL(objectUrl);
     }
 
-    if (typeof data.avatar === 'string') {
-      setPreview(`/storage/${data.avatar}`);
+    if (typeof user.avatar === 'string') {
+      setPreview(`/storage/${user.avatar}`);
     } else {
       setPreview('/images/mainpdp.png');
     }
-  }, [data.avatar]);
+  }, [data.avatar, user.avatar]);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -91,8 +93,9 @@ export default function InfoSection() {
           <label className="block text-sm font-medium text-white">Photo de profil</label>
           <input
             type="file"
+            name="avatar"
             accept="image/*"
-            onChange={handleFileChange}
+            onChange={handleChange}
             className="mt-1 block w-1/2 text-gray-700"
           />
           {errors.avatar && <p className="text-red-500 text-sm">{errors.avatar}</p>}

@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -50,37 +51,37 @@ class UserController extends Controller
     {
         $user = $request->user();
 
+        // ✅ Validation
         $validated = $request->validate([
-            'name'     => 'nullable|string|max:100',
-            'email'    => 'nullable|email|unique:users,email,' . $user->id,
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|max:100|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:6',
-            'avatar'   => 'nullable|image|max:2048', // 2MB max
+            'avatar' => 'nullable|image|max:2048',
         ]);
 
-        // Avatar : upload si fichier présent
+        // ✅ Mise à jour des champs simples
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+
+        if (!empty($validated['password'])) {
+            $user->password = bcrypt($validated['password']);
+        }
+
+        // ✅ Avatar : suppression et upload si nouveau
         if ($request->hasFile('avatar')) {
-            $path = $request->file('avatar')->store('avatars', 'public');
-            $validated['avatar'] = $path;
-        } else {
-            unset($validated['avatar']);
-        }
-
-        // Nettoyage : on retire les champs vides
-        foreach (['name', 'email', 'password'] as $field) {
-            if (empty($validated[$field])) {
-                unset($validated[$field]);
+            if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+                Storage::disk('public')->delete($user->avatar);
             }
+
+            $path = $request->file('avatar')->store('avatars', 'public');
+            $user->avatar = $path;
         }
 
-        // Hash du mot de passe si présent
-        if (isset($validated['password'])) {
-            $validated['password'] = bcrypt($validated['password']);
-        }
-
-        $user->update($validated);
+        $user->save();
 
         return back()->with('success', 'Informations mises à jour.');
     }
+
 
     public function destroy(User $user)
     {

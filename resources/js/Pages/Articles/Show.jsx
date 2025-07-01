@@ -22,7 +22,7 @@ export default function Show() {
 
   const handleAddToWishlist = () => {
     addToWishlist(article);
-    router.visit('/wishlist'); // ✅ bonne redirection
+    router.visit('/wishlist');
   };
 
   return (
@@ -32,6 +32,19 @@ export default function Show() {
           <h1 className="text-3xl font-bold mb-6">{article.title}</h1>
 
           <div className="space-y-4 border border-gray-700 rounded p-6 bg-[#16171A] bg-opacity-95 shadow">
+            {article.vendeur && (
+              <div className="flex items-center gap-4 mt-2">
+              <img
+                  src={article.vendeur.avatar ? `/storage/${article.vendeur.avatar}` : '/images/mainpdp.png'}
+                  alt="Vendeur Avatar"
+                  className="w-10 h-10 rounded-full object-cover border"
+                />
+                <div>
+                  <p className="text-white font-medium">{article.vendeur.name}</p>
+                  <p className="text-gray-400 text-sm">Vendeur</p>
+                </div>
+              </div>
+            )}
             <Info label="Description" value={article.description} />
             <Info label="Prix" value={`${article.price} €`} />
             <Info label="Chemin du fichier" value={article.file_path} />

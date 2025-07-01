@@ -68,6 +68,8 @@ class ArticleController extends Controller
 
     public function show(Article $article)
     {
+        $article->load('vendeur'); // charge les infos du vendeur (relation définie dans Article)
+
         return Inertia::render('Articles/Show', [
             'article' => $article
         ]);
