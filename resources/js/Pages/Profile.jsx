@@ -28,7 +28,7 @@ const allSections = {
 };
 
 export default function Profile() {
-  const { auth } = usePage().props;
+  const { auth, users = [] } = usePage().props;
   const isAdmin = auth?.isAdmin;
   const isVendeur = auth?.isVendeur;
   const isUser = auth?.isUser;
@@ -41,18 +41,16 @@ export default function Profile() {
 
   if (isAdmin) {
     visibleSections = Object.entries(allSections).filter(([key]) => {
-    const adminOnly = ['info', 'userlist', 'userlogs', 'managearticles', 'preference'];
-    if (adminOnly.includes(key)) return isAdmin;
-    return false;
-  });
-  }
-
-  else if (isUser) {
+      const adminOnly = ['info', 'userlist', 'userlogs', 'managearticles', 'preference'];
+      if (adminOnly.includes(key)) return isAdmin;
+      return false;
+    });
+  } else if (isUser) {
     visibleSections = Object.entries(allSections).filter(([key]) => {
-    const userOnly = ['info', 'panier', 'historique', 'souhaits', 'aide', 'preference'];
-    if (userOnly.includes(key)) return isUser;
-    return false;
-  });
+      const userOnly = ['info', 'panier', 'historique', 'souhaits', 'aide', 'preference'];
+      if (userOnly.includes(key)) return isUser;
+      return false;
+    });
   }
 
   const [selected, setSelected] = useState('panier'); // default
@@ -60,7 +58,6 @@ export default function Profile() {
   return (
     <MainLayout isfull>
       <div className="flex w-full min-h-full text-white">
-
         <div className="w-64 bg-[#16171A] bg-opacity-70 p-4">
           <h2 className="text-lg font-semibold mb-4">Username</h2>
           <ul className="space-y-2">
@@ -82,7 +79,7 @@ export default function Profile() {
         <div className="flex-1 p-6">
           <h1 className="text-2xl font-bold mb-4">{allSections[selected]}</h1>
           <div className="bg-[#16171A] bg-opacity-70 p-4 rounded shadow">
-            {renderSectionContent(selected)}
+            {renderSectionContent(selected, users)}
           </div>
         </div>
       </div>
@@ -90,7 +87,8 @@ export default function Profile() {
   );
 }
 
-function renderSectionContent(section) {
+// ✅ Transmettre `users` à UserList si section = userlist
+function renderSectionContent(section, users) {
   switch (section) {
     case 'info': return <Info />;
     case 'panier': return <Panier />;
@@ -98,7 +96,7 @@ function renderSectionContent(section) {
     case 'souhaits': return <Wishlist />;
     case 'aide': return <Help />;
     case 'preference': return <Preference />;
-    case 'userlist': return <UserList />;
+    case 'userlist': return <UserList users={users} />;
     case 'userlogs': return <UserLogs />;
     case 'managearticles': return <ArticleAdmin />;
     case 'recentpurchases': return <RecentUserPurchases />;

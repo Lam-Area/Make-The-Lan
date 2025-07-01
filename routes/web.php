@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 use App\Models\Article;
+use App\Models\User;
 use App\Http\Controllers\{
     ArticleController,
     AuthController,
@@ -61,8 +62,19 @@ Route::middleware('auth')->group(function () {
         $user = Auth::user();
         $articles = Article::where('vendeur_id', $user->id)->get();
 
+        $users = $user->role === 'admin'
+            ? User::select('id', 'name', 'email', 'role')->get()
+            : [];
+
         return Inertia::render('Profile', [
             'articles' => $articles,
+            'users' => $users,
+            'auth' => [
+                'user' => $user, // ← ici !
+                'isAdmin' => $user->role === 'admin',
+                'isVendeur' => $user->role === 'vendeur',
+                'isUser' => $user->role === 'user',
+            ],
         ]);
     });
 

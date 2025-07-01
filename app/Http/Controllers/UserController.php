@@ -11,7 +11,9 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::select('id', 'name', 'email', 'role', 'avatar')
+            ->orderBy('id', 'desc')
+            ->paginate(10);
 
         return Inertia::render('Users/Index', [
             'users' => $users
@@ -29,8 +31,7 @@ class UserController extends Controller
             'name' => 'required|string|max:150',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
-            'created_at' => 'nullable|date',
-            'updated_at' => 'nullable|date',
+            'role' => 'required|in:user,vendeur,admin',
         ]);
 
         $validated['password'] = bcrypt($validated['password']);
@@ -51,7 +52,6 @@ class UserController extends Controller
     {
         $user = $request->user();
 
-        // ✅ Validation
         $validated = $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|email|max:100|unique:users,email,' . $user->id,
@@ -59,7 +59,6 @@ class UserController extends Controller
             'avatar' => 'nullable|image|max:2048',
         ]);
 
-        // ✅ Mise à jour des champs simples
         $user->name = $validated['name'];
         $user->email = $validated['email'];
 
@@ -67,7 +66,6 @@ class UserController extends Controller
             $user->password = bcrypt($validated['password']);
         }
 
-        // ✅ Avatar : suppression et upload si nouveau
         if ($request->hasFile('avatar')) {
             if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
                 Storage::disk('public')->delete($user->avatar);
@@ -81,7 +79,6 @@ class UserController extends Controller
 
         return back()->with('success', 'Informations mises à jour.');
     }
-
 
     public function destroy(User $user)
     {
