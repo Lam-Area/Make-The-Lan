@@ -33,14 +33,11 @@ Route::resource('userlogs', UserLogController::class);
 Route::resource('userpreferences', UserPreferenceController::class);
 
 /*
-|------------------------------------------------------------------
-| Favoris  ➜  protégés : seulement disponibles une fois connecté
-| (les visiteurs utilisent localStorage + cookie, donc pas besoin
-|  de back avant authentification)
-|------------------------------------------------------------------
+|--------------------------------------------------------------------------
+| Favoris  ➜ protégés : seulement disponibles une fois connecté
+|--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
-    // index, store, destroy suffisent pour ta logique actuelle
     Route::resource('favorites', FavoriteController::class)
         ->only(['index', 'store', 'destroy']);
 });
@@ -51,25 +48,27 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::post('/register', [AuthController::class, 'register']);
-Route::get('/login',  [AuthController::class, 'showLogin'])->name('login');
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
 /*
 |--------------------------------------------------------------------------
-| Profil vendeur
+| Profil (authentifié)
 |--------------------------------------------------------------------------
 */
-Route::put('/profile/info', [UserController::class, 'updateInfo'])->name('profile.update');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', function () {
+        $user = Auth::user();
+        $articles = Article::where('vendeur_id', $user->id)->get();
 
-Route::get('/profile', function () {
-    $user     = Auth::user();
-    $articles = Article::where('vendeur_id', $user->id)->get();
+        return Inertia::render('Profile', [
+            'articles' => $articles,
+        ]);
+    });
 
-    return Inertia::render('Profile', [
-        'articles' => $articles,
-    ]);
-})->middleware('auth');
+    Route::put('/profile/info', [UserController::class, 'updateInfo'])->name('profile.update');
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -83,12 +82,8 @@ Route::get('/', function () {
     ]);
 });
 
-// 🛒 Panier (offline + fusion login)
 Route::get('/panier', fn () => Inertia::render('Panier'));
-
-// ⭐ Wishlist /offline (visiteur) : même principe que le panier
 Route::get('/wishlist', fn () => Inertia::render('Wish'));
-
 
 Route::post('/userpreferences/toggle', [UserPreferenceController::class, 'toggle'])->name('userpreferences.toggle');
 

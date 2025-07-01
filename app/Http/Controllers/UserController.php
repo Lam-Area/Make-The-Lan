@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -51,15 +51,30 @@ class UserController extends Controller
         $user = $request->user();
 
         $validated = $request->validate([
-            'name' => 'required|string|max:100',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'name'     => 'nullable|string|max:100',
+            'email'    => 'nullable|email|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:6',
+            'avatar'   => 'nullable|image|max:2048', // 2MB max
         ]);
 
-        if (!empty($validated['password'])) {
-            $validated['password'] = bcrypt($validated['password']);
+        // Avatar : upload si fichier présent
+        if ($request->hasFile('avatar')) {
+            $path = $request->file('avatar')->store('avatars', 'public');
+            $validated['avatar'] = $path;
         } else {
-            unset($validated['password']);
+            unset($validated['avatar']);
+        }
+
+        // Nettoyage : on retire les champs vides
+        foreach (['name', 'email', 'password'] as $field) {
+            if (empty($validated[$field])) {
+                unset($validated[$field]);
+            }
+        }
+
+        // Hash du mot de passe si présent
+        if (isset($validated['password'])) {
+            $validated['password'] = bcrypt($validated['password']);
         }
 
         $user->update($validated);

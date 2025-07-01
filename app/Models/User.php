@@ -11,6 +11,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'avatar',
     ];
 
     public $timestamps = true;
@@ -30,18 +31,6 @@ class User extends Authenticatable
     public function orders()
     {
         return $this->hasMany(Order::class);
-    }
-
-    // 1,n avec Messages (envoyés)
-    public function sentMessages()
-    {
-        return $this->hasMany(Message::class, 'sender_id');
-    }
-
-    // 1,n avec Messages (reçus)
-    public function receivedMessages()
-    {
-        return $this->hasMany(Message::class, 'receiver_id');
     }
 
     // 1,n avec UserLogs

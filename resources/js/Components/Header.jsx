@@ -9,6 +9,10 @@ export default function Header() {
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
+  const avatarUrl = user?.avatar
+    ? `/storage/${user.avatar}`
+    : '/images/mainpdp.png';
+
   return (
     <header className="bg-[#16171A] bg-opacity-95 text-white p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center relative">
@@ -42,7 +46,7 @@ export default function Header() {
         </div>
 
         {/* Navigation desktop */}
-        <div className="hidden md:flex items-center gap-6 justify-end flex-1 pr-12">
+        <div className="hidden md:flex items-center gap-6 justify-end flex-1 pr-6">
           {!user ? (
             <>
               <Link href="/register" className="hover:underline">Inscription</Link>
@@ -55,14 +59,12 @@ export default function Header() {
               <span className="text-sm italic">Bienvenue, {user.name}</span>
               {user.role === 'user' && (
                 <>
-                  <Link href="/profile" className="hover:underline">profile</Link>
                   <Link href="/panier" className="hover:underline">Panier</Link>
                   <Link href="/wishlist" className="hover:underline">Souhaits</Link>
                 </>
               )}
               {user.role === 'vendeur' && (
                 <>
-                  <Link href="/profile" className="hover:underline">profile</Link>
                   <Link href="/articles" className="hover:underline">articles</Link>
                 </>
               )}
@@ -76,6 +78,14 @@ export default function Header() {
                 className="hover:underline text-red-400"
               >
                 Déconnexion
+              </Link>
+              <Link href="/profile" className="shrink-0">
+                <img
+                  src={avatarUrl}
+                  alt="Avatar"
+                  className="rounded-full object-cover border border-gray-600 hover:scale-105 transition-transform duration-150 cursor-pointer
+                            h-10 w-10 min-w-[2.5rem] min-h-[2.5rem] max-w-[40px] max-h-[40px] aspect-square"
+                />
               </Link>
             </>
           )}
@@ -95,18 +105,15 @@ export default function Header() {
               ) : (
                 <>
                   <span className="text-sm italic">Bienvenue, {user.name}</span>
+                  <Link href="/profile" className="hover:underline">Profile</Link>
                   {user.role === 'user' && (
                     <>
-                      <Link href="/profile" className="hover:underline">profile</Link>
                       <Link href="/panier" className="hover:underline">Panier</Link>
                       <Link href="/wishlist" className="hover:underline">Souhaits</Link>
                     </>
                   )}
                   {user.role === 'vendeur' && (
-                    <>
-                      <Link href="/profile" className="hover:underline">profile</Link>
-                      <Link href="/articles" className="hover:underline">articles</Link>
-                    </>
+                    <Link href="/articles" className="hover:underline">articles</Link>
                   )}
                   {user.role === 'admin' && (
                     <Link href="/profile" className="hover:underline">dashboard</Link>
