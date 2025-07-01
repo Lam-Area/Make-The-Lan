@@ -68,9 +68,7 @@ export default function Header() {
                   <Link href="/articles" className="hover:underline">articles</Link>
                 </>
               )}
-              {user.role === 'admin' && (
-                <Link href="/profile" className="hover:underline">profile/dashboard</Link>
-              )}
+              
               <Link
                 href="/logout"
                 method="post"

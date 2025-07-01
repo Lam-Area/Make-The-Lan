@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-
+use App\Models\UserLog;
 use App\Models\Article;
 use App\Models\User;
 use App\Http\Controllers\{
@@ -66,11 +66,16 @@ Route::middleware('auth')->group(function () {
             ? User::select('id', 'name', 'email', 'role')->get()
             : [];
 
+        $logs = $user->role === 'admin'
+            ? UserLog::with('user')->latest()->get()
+            : [];
+
         return Inertia::render('Profile', [
             'articles' => $articles,
             'users' => $users,
+            'logs' => $logs,
             'auth' => [
-                'user' => $user, // ← ici !
+                'user' => $user,
                 'isAdmin' => $user->role === 'admin',
                 'isVendeur' => $user->role === 'vendeur',
                 'isUser' => $user->role === 'user',
@@ -81,6 +86,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile/info', [UserController::class, 'updateInfo'])->name('profile.update');
     Route::post('/logout', [AuthController::class, 'logout']);
 });
+
 
 /*
 |--------------------------------------------------------------------------

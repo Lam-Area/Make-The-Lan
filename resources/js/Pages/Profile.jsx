@@ -28,7 +28,7 @@ const allSections = {
 };
 
 export default function Profile() {
-  const { auth, users = [] } = usePage().props;
+  const { auth, users = [], logs = [] } = usePage().props;
   const isAdmin = auth?.isAdmin;
   const isVendeur = auth?.isVendeur;
   const isUser = auth?.isUser;
@@ -79,7 +79,7 @@ export default function Profile() {
         <div className="flex-1 p-6">
           <h1 className="text-2xl font-bold mb-4">{allSections[selected]}</h1>
           <div className="bg-[#16171A] bg-opacity-70 p-4 rounded shadow">
-            {renderSectionContent(selected, users)}
+            {renderSectionContent(selected, users, logs)}
           </div>
         </div>
       </div>
@@ -87,8 +87,7 @@ export default function Profile() {
   );
 }
 
-// ✅ Transmettre `users` à UserList si section = userlist
-function renderSectionContent(section, users) {
+function renderSectionContent(section, users, logs) {
   switch (section) {
     case 'info': return <Info />;
     case 'panier': return <Panier />;
@@ -97,7 +96,7 @@ function renderSectionContent(section, users) {
     case 'aide': return <Help />;
     case 'preference': return <Preference />;
     case 'userlist': return <UserList users={users} />;
-    case 'userlogs': return <UserLogs />;
+    case 'userlogs': return <UserLogs logs={logs} />;
     case 'managearticles': return <ArticleAdmin />;
     case 'recentpurchases': return <RecentUserPurchases />;
     case 'articlemanagement': return <ManageArticles />;
