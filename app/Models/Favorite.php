@@ -17,13 +17,13 @@ class Favorite extends Model
         'created_at' => 'datetime',
     ];
 
-    // Le favori appartient à un utilisateur
+    // favori appartenant à utilisateur
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Le favori pointe vers un article
+    // favori --> vers un article
     public function article()
     {
         return $this->belongsTo(Article::class);

@@ -63,7 +63,7 @@ class AuthController extends Controller
                 'ip_address' => $request->ip(),
             ]);
 
-            // 🧠 Fusion des favoris (localStorage) avec la base
+            // fusionné favoris du local à bdd
             $wishlist = json_decode($request->cookie('wishlist_items'), true);
             if (is_array($wishlist)) {
                 foreach ($wishlist as $item) {

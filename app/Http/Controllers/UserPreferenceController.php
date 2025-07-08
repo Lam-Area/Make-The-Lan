@@ -78,12 +78,9 @@ class UserPreferenceController extends Controller
             $preference->dark_mode = $request->input('dark_mode');
             $preference->save();
         } else {
-            // On crée avec les champs requis
             UserPreference::create([
                 'user_id' => $user->id,
                 'dark_mode' => $request->input('dark_mode'),
-                'language' => 'fr', // valeur par défaut
-                'notification_email' => true, // valeur par défaut
             ]);
         }
 

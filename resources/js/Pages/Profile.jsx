@@ -53,7 +53,7 @@ export default function Profile() {
     });
   }
 
-  const [selected, setSelected] = useState('panier'); // default
+  const [selected, setSelected] = useState('info');
 
   return (
     <MainLayout isfull>

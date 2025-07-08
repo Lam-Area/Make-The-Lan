@@ -21,9 +21,6 @@ export default function Index({ preferences }) {
           <tr>
             <th className="px-4 py-2">Utilisateur</th>
             <th className="px-4 py-2">Dark Mode</th>
-            <th className="px-4 py-2">Langue</th>
-            <th className="px-4 py-2">Notifications Email</th>
-            <th className="px-4 py-2">Actions</th>
           </tr>
         </thead>
         <tbody>

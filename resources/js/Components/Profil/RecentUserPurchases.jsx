@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function RecentUserPurchases() {
-  // Données simulées pour affichage de base
+  // seeders temp
   const purchases = [
     {
       id: 1,

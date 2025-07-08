@@ -3,16 +3,16 @@ import React from 'react';
 export default function HelpSection() {
   const faq = [
     {
-      question: 'Comment télécharger un script après achat ?',
-      answer: 'Allez dans votre historique d’achat et cliquez sur le bouton "Télécharger" si disponible.',
+      question: 'Comment télécharger mon code après achat ?',
+      answer: 'Le code sera envoyé par mail',
     },
     {
-      question: 'Puis-je me faire rembourser un script ?',
-      answer: 'Non, en raison de la nature numérique des scripts, aucun remboursement n’est possible une fois le script téléchargé.',
+      question: 'Puis-je me faire rembourser ?',
+      answer: "Non, une fois l'achat effectué, le remboursement est impossible car l'argent est reversé au créateur de l'article vendu",
     },
     {
       question: 'Comment contacter le support ?',
-      answer: 'Vous pouvez nous écrire via le formulaire de contact ou à l’adresse support@myscript.com.',
+      answer: 'Vous pouvez nous écrire via notre adresse mail support@myscript.com.',
     },
   ];
 

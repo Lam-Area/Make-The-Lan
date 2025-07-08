@@ -19,11 +19,7 @@ use App\Http\Controllers\{
     UserPreferenceController
 };
 
-/*
-|--------------------------------------------------------------------------
-| Routes RESTful (backend persistant)
-|--------------------------------------------------------------------------
-*/
+
 Route::resource('articles', ArticleController::class);
 Route::resource('cartitems', CartItemController::class);
 Route::resource('orders', OrderController::class);
@@ -33,30 +29,19 @@ Route::resource('users', UserController::class);
 Route::resource('userlogs', UserLogController::class);
 Route::resource('userpreferences', UserPreferenceController::class);
 
-/*
-|--------------------------------------------------------------------------
-| Favoris  ➜ protégés : seulement disponibles une fois connecté
-|--------------------------------------------------------------------------
-*/
+
+/*seulement dispo une fois co*/
 Route::middleware('auth')->group(function () {
     Route::resource('favorites', FavoriteController::class)
         ->only(['index', 'store', 'destroy']);
 });
 
-/*
-|--------------------------------------------------------------------------
-| Auth
-|--------------------------------------------------------------------------
-*/
+/* auth */
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
-/*
-|--------------------------------------------------------------------------
-| Profil (authentifié)
-|--------------------------------------------------------------------------
-*/
+/* profil */
 Route::middleware('auth')->group(function () {
     Route::get('/profile', function () {
         $user = Auth::user();
@@ -88,11 +73,7 @@ Route::middleware('auth')->group(function () {
 });
 
 
-/*
-|--------------------------------------------------------------------------
-| Pages visiteurs
-|--------------------------------------------------------------------------
-*/
+/* for all */
 Route::get('/', function () {
     $articles = Article::orderBy('created_at', 'desc')->take(9)->get();
     return Inertia::render('Home', [
@@ -105,18 +86,10 @@ Route::get('/wishlist', fn () => Inertia::render('Wish'));
 
 Route::post('/userpreferences/toggle', [UserPreferenceController::class, 'toggle'])->name('userpreferences.toggle');
 
-/*
-|--------------------------------------------------------------------------
-| Pages légales & divers
-|--------------------------------------------------------------------------
-*/
+
 Route::get('/register', fn () => Inertia::render('Register'));
 Route::get('/legal',    fn () => Inertia::render('Legal'));
 Route::get('/terms',    fn () => Inertia::render('Terms'));
 
-/*
-|--------------------------------------------------------------------------
-| Fallback 404
-|--------------------------------------------------------------------------
-*/
+/* fallback */
 Route::fallback(fn () => Inertia::render('Page404'));

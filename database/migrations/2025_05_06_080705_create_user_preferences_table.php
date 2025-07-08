@@ -11,8 +11,6 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->boolean('dark_mode');
-            $table->string('language', 10);
-            $table->boolean('notification_email');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

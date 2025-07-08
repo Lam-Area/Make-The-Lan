@@ -19,13 +19,13 @@ class OrderItem extends Model
         'created_at' => 'datetime',
     ];
 
-    // OrderItem appartient à une commande
+    // OrderItem appartenant à x commande
     public function order()
     {
         return $this->belongsTo(Order::class);
     }
 
-    // OrderItem correspond à un article acheté
+    // OrderItem correspond à x article buy
     public function article()
     {
         return $this->belongsTo(Article::class);

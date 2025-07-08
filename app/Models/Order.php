@@ -18,13 +18,13 @@ class Order extends Model
         'created_at' => 'datetime',
     ];
 
-    // Une commande appartient à un utilisateur
+    // commande appartenant à l'utilisateur
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Une commande contient plusieurs articles (OrderItems)
+    // commande qui contient x articles "OrderItems"
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);

@@ -17,7 +17,7 @@ export default function Header() {
     <header className="bg-[#16171A] bg-opacity-95 text-white p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center relative">
         
-        {/* Logo + Recherche */}
+        {/* Logo/search */}
         <div className="flex items-center gap-4 flex-1 pl-4">
           <Link href="/">
             <img
@@ -33,19 +33,18 @@ export default function Header() {
           />
         </div>
 
-        {/* Logo central */}
         <div className="text-2xl font-bold text-center tracking-wide hidden md:flex flex-1 justify-center">
           <Link href="/">MyScript</Link>
         </div>
 
-        {/* Bouton hamburger (mobile uniquement) */}
+        {/* hamburger (mobile) */}
         <div className="md:hidden pr-4">
           <button onClick={toggleMenu}>
             {menuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
-        {/* Navigation desktop */}
+        {/* redirect en fonction du user */}
         <div className="hidden md:flex items-center gap-6 justify-end flex-1 pr-6">
           {!user ? (
             <>

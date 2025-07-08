@@ -1,5 +1,3 @@
-// resources/js/Pages/OrderItems/Index.jsx
-
 import React from 'react';
 import { Link } from '@inertiajs/react';
 

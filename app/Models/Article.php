@@ -24,25 +24,25 @@ class Article extends Model
         'updated_at' => 'datetime',
     ];
 
-    // Article appartient à un vendeur (User)
+    // article appartenant à id_vendeur
     public function vendeur()
     {
         return $this->belongsTo(User::class, 'vendeur_id');
     }
 
-    // Article peut être dans plusieurs favoris
+    // Article dans favoris
     public function favorites()
     {
         return $this->hasMany(Favorite::class);
     }
 
-    // Article peut être dans plusieurs paniers
+    // Article dans paniers
     public function cartItems()
     {
         return $this->hasMany(CartItem::class);
     }
 
-    // Article peut être commandé plusieurs fois
+    // Article commander
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);

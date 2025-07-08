@@ -15,7 +15,7 @@ export default function ManageOwnArticles() {
 
   return (
     <div className="min-h-screen bg-[#1e1e21] bg-opacity-25 p-6 text-white">
-      {/* Header avec bouton vers /articles */}
+      {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h1></h1>
         <Link
@@ -26,7 +26,7 @@ export default function ManageOwnArticles() {
         </Link>
       </div>
 
-      {/* Liste des articles */}
+      {/* Liste articles */}
       <div className="space-y-4">
         {userArticles.map(article => (
           <div
@@ -58,7 +58,7 @@ export default function ManageOwnArticles() {
         ))}
       </div>
 
-      {/* Bouton Ajouter */}
+      {/* Bouton add */}
       <div className="mt-6">
         <Link
           href="/articles/create"

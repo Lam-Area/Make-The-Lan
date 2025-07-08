@@ -1,5 +1,3 @@
-// resources/js/Context/ThemeContext.js
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { router, usePage } from '@inertiajs/react';
 
@@ -9,12 +7,12 @@ export const ThemeProvider = ({ children }) => {
   const { auth, userPreference } = usePage().props;
 
   const getInitialDarkMode = () => {
-    // 1. Si connecté → préférences utilisateur (BDD)
+    // si co, stack bdd
     if (auth?.user && userPreference) {
       return userPreference.dark_mode;
     }
 
-    // 2. Sinon → localStorage
+    // sinon, local
     return localStorage.getItem('darkMode') === '1';
   };
 
@@ -32,7 +30,7 @@ export const ThemeProvider = ({ children }) => {
     setDarkMode(updated);
     localStorage.setItem('darkMode', updated ? '1' : '0');
 
-    // ✅ Si connecté, enregistrer côté BDD
+    // si co, stack bdd
     if (auth?.user) {
       router.post('/userpreferences/toggle', {
         dark_mode: updated,
