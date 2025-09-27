@@ -61,7 +61,7 @@ export default function Home() {
           <Section
             title="Nouveaux articles disponibles"
             highlight="Nouveaux articles"
-            subtitle="Sélection fraîchement ajoutée"
+            subtitle="Sélection récemment ajoutée"
             items={[...recentArticles]
               .sort((a, b) => {
                 if (a.category === 'router' && b.category !== 'router') return -1;
@@ -77,7 +77,7 @@ export default function Home() {
           <Section
             title="Switches Cisco"
             highlight="Switches"
-            subtitle="Empile, trunk, et assure le débit"
+            subtitle="Pour assurer un débit"
             items={switchArticles.slice(0, 6)}
             cta={{ href: '/articles?category=switch', label: 'Tous les switches' }}
             onAdd={addToCart}
@@ -87,7 +87,7 @@ export default function Home() {
           <Section
             title="Routeurs Cisco"
             highlight="Routeurs"
-            subtitle="Le cerveau de tes réseaux"
+            subtitle="Pour un réseaux plus securisé"
             items={routerArticles.slice(0, 6)}
             cta={{ href: '/articles?category=router', label: 'Tous les routeurs' }}
             onAdd={addToCart}

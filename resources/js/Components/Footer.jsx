@@ -24,8 +24,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="mt-3 text-sm text-gray-300">
-              Réseau, matos & bons plans. Des configs qui tiennent la charge,
-              sans blabla.
+              Toujours mieux que les serveurs d'OVH
             </p>
 
             <div className="mt-4 flex items-center gap-3">

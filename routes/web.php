@@ -43,10 +43,14 @@ Route::post('/login', [AuthController::class, 'login']);
 |  Profil — seulement connecté
 |=========================*/
 Route::middleware('auth')->group(function () {
+
     Route::get('/profile', function () {
         $user = Auth::user();
 
-        $articles = Article::where('vendeur_id', $user->id)->get();
+        // ✅ Admin = tous les articles ; sinon = seulement ceux du vendeur connecté
+        $articles = $user->role === 'admin'
+            ? Article::latest()->get()
+            : Article::where('vendeur_id', $user->id)->latest()->get();
 
         $users = $user->role === 'admin'
             ? User::select('id', 'name', 'email', 'role')->get()
@@ -74,15 +78,19 @@ Route::middleware('auth')->group(function () {
                 'isUser'    => $user->role === 'user',
             ],
         ]);
-    });
+    })->name('profile');
 
     Route::put('/profile/info', [UserController::class, 'updateInfo'])->name('profile.update');
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // ✅ Détonateur : Success.jsx déclenche cet endpoint pour
     // copier le panier -> historique, puis vider le panier.
     Route::post('/checkout/finalize', [CheckoutController::class, 'finalize'])
         ->name('checkout.finalize');
+
+    // (Optionnel) Page d’admin dédiée aux articles — nécessite la méthode adminIndex dans ArticleController
+    Route::get('/admin/articles', [ArticleController::class, 'adminIndex'])
+        ->name('admin.articles.index');
 });
 
 /* =========================
@@ -131,6 +139,8 @@ Route::post('/checkout',        [CheckoutController::class, 'create'])->name('ch
 Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
 Route::get('/checkout/cancel',  [CheckoutController::class, 'cancel'])->name('checkout.cancel');
 Route::post('/stripe/webhook',  [CheckoutController::class, 'webhook'])->name('stripe.webhook');
+// Si besoin : exclure CSRF pour le webhook Stripe
+// ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 
 /* =========================
 |  Fallback 404 Inertia

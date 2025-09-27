@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+// resources/js/Components/Profil/Info.jsx
+import React, { useEffect, useRef, useState } from 'react';
 import { useForm, usePage } from '@inertiajs/react';
+import { User, Mail, Lock, Upload, Image as ImageIcon, Eye, EyeOff, Loader2 } from 'lucide-react';
 
 export default function InfoSection() {
   const { user } = usePage().props.auth;
@@ -11,21 +13,20 @@ export default function InfoSection() {
     avatar: null,
   });
 
-  const [preview, setPreview] = useState(null);
+  const [preview, setPreview] = useState('/images/mainpdp.png');
+  const [showPwd, setShowPwd] = useState(false);
+  const fileRef = useRef(null);
 
-  const handleChange = (e) => {
-    const { name, type, value, checked, files } = e.target;
-
+  const onChange = (e) => {
+    const { name, type, value, files } = e.target;
     if (type === 'file') {
-      setData(name, files[0]);
-    } else if (type === 'checkbox') {
-      setData(name, checked);
+      setData(name, files?.[0] ?? null);
     } else {
       setData(name, value);
     }
   };
 
-  const handleSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
     post('/profile/info?_method=PUT', {
       forceFormData: true,
@@ -36,88 +37,165 @@ export default function InfoSection() {
 
   useEffect(() => {
     if (data.avatar instanceof File) {
-      const objectUrl = URL.createObjectURL(data.avatar);
-      setPreview(objectUrl);
-      return () => URL.revokeObjectURL(objectUrl);
+      const url = URL.createObjectURL(data.avatar);
+      setPreview(url);
+      return () => URL.revokeObjectURL(url);
     }
-
-    if (typeof user.avatar === 'string') {
+    if (typeof user?.avatar === 'string' && user.avatar) {
       setPreview(`/storage/${user.avatar}`);
     } else {
       setPreview('/images/mainpdp.png');
     }
-  }, [data.avatar, user.avatar]);
+  }, [data.avatar, user?.avatar]);
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded">
-        <div>
-          <label className="block text-sm font-medium text-white">Nom</label>
-          <input
-            type="text"
-            name="name"
-            value={data.name}
-            onChange={handleChange}
-            className="mt-1 block w-full rounded-sm border-gray-300 shadow-sm text-gray-700"
-          />
-          {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
-        </div>
+    <form onSubmit={onSubmit} className="space-y-6 text-white">
+      {/* Carte Avatar + Upload */}
+      <div className="relative">
+        <div className="absolute -inset-0.5 rounded-[22px] bg-gradient-to-tr from-white/15 via-transparent to-white/15 blur-sm" />
+        <div className="relative rounded-[20px] border border-white/10 bg-white/5 p-5 backdrop-blur">
+          <h3 className="text-lg font-semibold">Photo de profil</h3>
 
-        <div>
-          <label className="block text-sm font-medium text-white">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={data.email}
-            onChange={handleChange}
-            className="mt-1 block w-full rounded-sm border-gray-300 shadow-sm text-gray-700"
-          />
-          {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-        </div>
+          <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <div className="flex items-center gap-3">
+              <div className="h-20 w-20 overflow-hidden rounded-full border border-white/10 bg-[#0b0e10]">
+                {/* Aperçu */}
+                {preview ? (
+                  <img src={preview} alt="Avatar preview" className="h-full w-full object-cover" />
+                ) : (
+                  <div className="grid h-full w-full place-items-center text-gray-400">
+                    <ImageIcon size={20} />
+                  </div>
+                )}
+              </div>
 
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-white">
-            Mot de passe (laisser vide pour ne pas changer)
-          </label>
-          <input
-            type="password"
-            name="password"
-            value={data.password}
-            onChange={handleChange}
-            className="mt-1 block w-1/2 rounded-sm border-gray-300 shadow-sm text-gray-700"
-          />
-          {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
-        </div>
+              <div className="text-xs text-gray-300 leading-5">
+                PNG/JPG • max ~2 Mo (recommandé) <br />
+                Astuce : vise un cadrage carré pour un rendu net.
+              </div>
+            </div>
 
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-white">Photo de profil</label>
-          <input
-            type="file"
-            name="avatar"
-            accept="image/*"
-            onChange={handleChange}
-            className="mt-1 block w-1/2 text-gray-700"
-          />
-          {errors.avatar && <p className="text-red-500 text-sm">{errors.avatar}</p>}
-        </div>
+            <div className="sm:ml-auto">
+              <input
+                ref={fileRef}
+                type="file"
+                name="avatar"
+                accept="image/*"
+                onChange={onChange}
+                className="hidden"
+              />
+              <button
+                type="button"
+                onClick={() => fileRef.current?.click()}
+                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10"
+              >
+                <Upload size={16} /> Choisir une image
+              </button>
+            </div>
+          </div>
 
-        <div className="md:col-span-2">
-          <p className="text-sm text-white mb-2">Aperçu actuel :</p>
-          <img
-            src={preview || '/images/mainpdp.png'}
-            alt="Avatar preview"
-            className="w-24 h-24 rounded-full object-cover border"
-          />
+          {errors.avatar && (
+            <p className="mt-2 text-xs text-amber-300" aria-live="polite">{errors.avatar}</p>
+          )}
         </div>
       </div>
 
-      <button
-        type="submit"
-        disabled={processing}
-        className="px-4 py-2 bg-[#2A3740] text-white rounded hover:bg-[#272e33]"
-      >
-        Enregistrer
-      </button>
+      {/* Carte Infos */}
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur">
+        <h3 className="text-lg font-semibold">Informations personnelles</h3>
+
+        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {/* Nom */}
+          <Field label="Nom" error={errors.name} icon={<User size={18} className="text-gray-400" />}>
+            <input
+              type="text"
+              name="name"
+              value={data.name}
+              onChange={onChange}
+              autoComplete="name"
+              className="w-full bg-transparent outline-none"
+              placeholder="Nom et prénom"
+            />
+          </Field>
+
+          {/* Email */}
+          <Field label="Email" error={errors.email} icon={<Mail size={18} className="text-gray-400" />}>
+            <input
+              type="email"
+              name="email"
+              value={data.email}
+              onChange={onChange}
+              autoComplete="email"
+              className="w-full bg-transparent outline-none"
+              placeholder="adresse@email.com"
+            />
+          </Field>
+
+          {/* Mot de passe */}
+          <div className="sm:col-span-2">
+            <Field
+              label="Mot de passe (laisser vide pour ne pas changer)"
+              error={errors.password}
+              icon={<Lock size={18} className="text-gray-400" />}
+              trailing={
+                <button
+                  type="button"
+                  onClick={() => setShowPwd((v) => !v)}
+                  className="rounded-md p-1 hover:bg-white/10"
+                  aria-label={showPwd ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                >
+                  {showPwd ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              }
+            >
+              <input
+                type={showPwd ? 'text' : 'password'}
+                name="password"
+                value={data.password}
+                onChange={onChange}
+                autoComplete="new-password"
+                className="w-full bg-transparent outline-none"
+                placeholder="Au moins 8 caractères"
+              />
+            </Field>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="mt-5 flex flex-wrap items-center gap-3">
+          <button
+            type="submit"
+            disabled={processing}
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-700 active:scale-[.99] disabled:opacity-60"
+          >
+            {processing ? <Loader2 className="animate-spin" size={16} /> : null}
+            Enregistrer
+          </button>
+
+          <button
+            type="button"
+            onClick={() => reset('password')}
+            className="text-sm text-gray-300 hover:underline"
+          >
+            Effacer le mot de passe saisi
+          </button>
+        </div>
+      </div>
     </form>
+  );
+}
+
+/* Champ avec label + icône + bordure glass */
+function Field({ label, error, icon, trailing, children }) {
+  return (
+    <div>
+      <label className="mb-1 block text-sm text-gray-300">{label}</label>
+      <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur focus-within:border-white/20">
+        {icon}
+        <div className="flex-1">{children}</div>
+        {trailing}
+      </div>
+      {error && <div className="mt-1 text-xs text-amber-300" aria-live="polite">{error}</div>}
+    </div>
   );
 }

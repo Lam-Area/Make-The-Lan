@@ -22,7 +22,7 @@ function LayoutContent({ children, isfull }) {
       }}
     >
       <Header />
-      <main className={`flex-1 ${isfull ? 'bg-black bg-opacity-70' : 'bg-black bg-opacity-70'}`}>
+      <main className={`flex-1 ${isfull ? 'bg-black bg-opacity-60' : 'bg-black bg-opacity-60'}`}>
         {children}
       </main>
       <Footer />

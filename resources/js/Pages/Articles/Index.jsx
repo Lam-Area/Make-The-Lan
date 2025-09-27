@@ -3,14 +3,29 @@ import React from 'react';
 import { Link, usePage, router } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
 import { useCart } from '@/Context/CartContext';
+import { Search, Filter, X } from 'lucide-react';
 
 const fmtEUR = (n) =>
   new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(n || 0));
 
+/* Highlights verts pour une partie du titre */
+function Highlight({ title, highlight }) {
+  if (!highlight) return title;
+  const i = title.indexOf(highlight);
+  if (i === -1) return title;
+  return (
+    <>
+      {title.slice(0, i)}
+      <span className="text-emerald-400">{highlight}</span>
+      {title.slice(i + highlight.length)}
+    </>
+  );
+}
+
 const titleByCat = (cat) => {
-  if (cat === 'switch') return 'Switches Cisco';
-  if (cat === 'router') return 'Routeurs Cisco';
-  return 'Catalogue des articles';
+  if (cat === 'switch') return { full: 'Switches Cisco', hi: 'Switches' };
+  if (cat === 'router') return { full: 'Routeurs Cisco', hi: 'Routeurs' };
+  return { full: 'Catalogue des articles', hi: 'Catalogue' };
 };
 const subtitleByCat = (cat) => {
   if (cat === 'switch') return 'Empile, trunk, et assure le débit';
@@ -23,12 +38,19 @@ export default function Index() {
   const { addToCart } = useCart();
 
   const [q, setQ] = React.useState(filters.search || '');
+  const [sort, setSort] = React.useState(filters.sort || 'recent');
 
   const buildUrl = (params = {}) => {
     const p = new URLSearchParams();
-    const v = { category: filters.category, search: q.trim(), ...params };
+    const v = {
+      category: filters.category,
+      search: (params.search ?? q).trim(),
+      sort: params.sort ?? sort,
+      ...params,
+    };
     if (v.category) p.set('category', v.category);
     if (v.search) p.set('search', v.search);
+    if (v.sort) p.set('sort', v.sort);
     const qs = p.toString();
     return `/articles${qs ? `?${qs}` : ''}`;
   };
@@ -39,8 +61,16 @@ export default function Index() {
   };
 
   const setCategory = (cat) => {
-    router.visit(buildUrl({ category: cat, search: q.trim() }));
+    const next = buildUrl({ category: cat || undefined });
+    router.visit(next);
   };
+
+  const changeSort = (value) => {
+    setSort(value);
+    router.visit(buildUrl({ sort: value }));
+  };
+
+  const { full: pageTitle, hi: hiWord } = titleByCat(filters.category);
 
   return (
     <MainLayout>
@@ -51,7 +81,7 @@ export default function Index() {
           <div className="flex items-end justify-between gap-3">
             <div>
               <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">
-                {titleByCat(filters.category)}
+                <Highlight title={pageTitle} highlight={hiWord} />
               </h1>
               <p className="mt-1 text-sm text-gray-300">{subtitleByCat(filters.category)}</p>
             </div>
@@ -76,30 +106,48 @@ export default function Index() {
             </div>
           </div>
 
-          {/* Recherche */}
-          <form onSubmit={submit} className="mt-5 mb-6 flex gap-2">
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Rechercher un modèle, une réf…"
-              className="flex-1 bg-[#0e1012]/60 backdrop-blur rounded-lg px-4 py-2 border border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
-            />
-            {q && (
-              <button
-                type="button"
-                onClick={() => { setQ(''); router.visit(buildUrl({ search: '' })); }}
-                className="px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm"
+          {/* Barre d’outils: recherche + tri */}
+          <div className="mt-5 mb-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {/* Recherche */}
+            <form onSubmit={submit} className="sm:col-span-2">
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <input
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  placeholder="Rechercher un modèle, une réf…"
+                  className="w-full rounded-xl border border-white/10 bg-white/5 pl-9 pr-12 py-2 text-sm outline-none placeholder:text-gray-400 focus:border-white/20"
+                />
+                {q && (
+                  <button
+                    type="button"
+                    onClick={() => { setQ(''); router.visit(buildUrl({ search: '' })); }}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 hover:bg-white/10"
+                    aria-label="Effacer la recherche"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
+              </div>
+            </form>
+
+            {/* Tri */}
+            <div className="rounded-xl border border-white/10 bg-white/5 p-2 backdrop-blur">
+              <label className="mb-1 flex items-center gap-2 text-xs text-gray-400">
+                <Filter size={14} /> Trier par
+              </label>
+              <select
+                value={sort}
+                onChange={(e) => changeSort(e.target.value)}
+                className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm outline-none focus:border-white/20"
               >
-                Effacer
-              </button>
-            )}
-            <button
-              type="submit"
-              className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700"
-            >
-              Rechercher
-            </button>
-          </form>
+                <option className="text-black" value="recent">Plus récents</option>
+                <option className="text-black" value="price_asc">Prix (bas → élevé)</option>
+                <option className="text-black" value="price_desc">Prix (élevé → bas)</option>
+                <option className="text-black" value="stock_desc">Stock (élevé → bas)</option>
+              </select>
+            </div>
+          </div>
 
           {/* Grid */}
           {articles.length ? (
@@ -142,27 +190,29 @@ function FilterPill({ active, label, onClick }) {
 
 function ProductCard({ article, onAdd }) {
   const img = article.main_image_url
-    ? `/storage/${article.main_image_url}`
+    ? (article.main_image_url.startsWith('http') || article.main_image_url.startsWith('/'))
+        ? article.main_image_url
+        : `/storage/${article.main_image_url}`
     : '/images/product-placeholder.png';
 
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur transition hover:border-white/20 hover:bg-white/[0.07]">
       {/* Image */}
-      <div className="relative aspect-[16/10] w-full overflow-hidden">
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-black/30">
         <img
           src={img}
           alt={article.title}
           loading="lazy"
-          className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
+          className="h-full w-full object-contain p-2 transition duration-300 group-hover:scale-[1.02]"
         />
         {article.category && (
           <span className="absolute left-3 top-3 rounded-full bg-black/60 px-2.5 py-1 text-xs font-medium ring-1 ring-white/15">
-            {article.category}
+            {humanCat(article.category)}
           </span>
         )}
       </div>
 
-      {/* Content (identique à Home) */}
+      {/* Content */}
       <div className="p-4">
         <h3 className="line-clamp-2 text-lg font-semibold">
           <Link
@@ -181,9 +231,9 @@ function ProductCard({ article, onAdd }) {
           {article.description || '—'}
         </p>
 
-        <div className="mt-4 flex items-center justify-between">
+        <div className="mt-4">
           <div className="text-xl font-semibold">{fmtEUR(article.price)}</div>
-          <div className="flex items-center gap-2">
+          <div className="mt-2 flex items-center gap-2">
             <Link
               href={`/articles/${article.id}`}
               className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm hover:bg-white/10 transition"
@@ -207,4 +257,13 @@ function ProductCard({ article, onAdd }) {
       </div>
     </div>
   );
+}
+
+function humanCat(cat) {
+  switch (cat) {
+    case 'router': return 'Routeur';
+    case 'switch': return 'Switch';
+    case 'access_point': return 'Point d’accès';
+    default: return cat || '—';
+  }
 }
