@@ -1,6 +1,6 @@
 // resources/js/Pages/Home.jsx
 import React from 'react';
-import { usePage, Link, router } from '@inertiajs/react';
+import { usePage, Link } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
 import BannerCarousel from '@/Components/BannerCarousel';
 import DiscordWidget from '@/Components/DiscordWidget';
@@ -9,13 +9,24 @@ import { useCart } from '@/Context/CartContext';
 const fmtEUR = (n) =>
   new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(n || 0));
 
-export default function Home() {
-  const {
-    recentArticles = [],
-    switchArticles = [],
-    routerArticles = [],
-  } = usePage().props;
+/* -- met en vert un segment précis d'un titre -- */
+function Highlight({ title, highlight }) {
+  if (!highlight) return title;
+  const idx = title.indexOf(highlight);
+  if (idx === -1) return title;
+  const before = title.slice(0, idx);
+  const after = title.slice(idx + highlight.length);
+  return (
+    <>
+      {before}
+      <span className="text-emerald-400">{highlight}</span>
+      {after}
+    </>
+  );
+}
 
+export default function Home() {
+  const { recentArticles = [], switchArticles = [], routerArticles = [] } = usePage().props;
   const { addToCart } = useCart();
 
   return (
@@ -25,7 +36,9 @@ export default function Home() {
           {/* HERO / PARTENAIRES */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
-              <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">Nos partenaires</h1>
+              <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">
+                Nos <span className="text-emerald-400">partenaires</span>
+              </h1>
               <div className="mt-6">
                 <BannerCarousel />
               </div>
@@ -33,10 +46,9 @@ export default function Home() {
 
             <div className="lg:col-span-1">
               <div className="h-full rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
-                <h2 className="text-xl font-semibold">Rejoindre la communauté</h2>
+                <h2 className="text-xl font-semibold text-emerald-400">Rejoindre la communauté</h2>
                 <p className="mt-2 text-sm text-gray-300">
-                  Ici on parle code !
-                  Viens faire un tour et partager tes configs.
+                  Ici on parle code ! Viens faire un tour et partager tes configs.
                 </p>
                 <div className="mt-4">
                   <DiscordWidget />
@@ -48,6 +60,7 @@ export default function Home() {
           {/* SECTION: Nouveaux articles */}
           <Section
             title="Nouveaux articles disponibles"
+            highlight="Nouveaux articles"
             subtitle="Sélection fraîchement ajoutée"
             items={[...recentArticles]
               .sort((a, b) => {
@@ -63,6 +76,7 @@ export default function Home() {
           {/* SECTION: Switches */}
           <Section
             title="Switches Cisco"
+            highlight="Switches"
             subtitle="Empile, trunk, et assure le débit"
             items={switchArticles.slice(0, 6)}
             cta={{ href: '/articles?category=switch', label: 'Tous les switches' }}
@@ -72,6 +86,7 @@ export default function Home() {
           {/* SECTION: Routeurs */}
           <Section
             title="Routeurs Cisco"
+            highlight="Routeurs"
             subtitle="Le cerveau de tes réseaux"
             items={routerArticles.slice(0, 6)}
             cta={{ href: '/articles?category=router', label: 'Tous les routeurs' }}
@@ -86,12 +101,14 @@ export default function Home() {
 /* =========================
    Section block
 ========================= */
-function Section({ title, subtitle, items = [], cta, onAdd }) {
+function Section({ title, highlight, subtitle, items = [], cta, onAdd }) {
   return (
     <section className="mt-14">
       <div className="flex items-end justify-between gap-3">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-semibold">{title}</h2>
+          <h2 className="text-2xl sm:text-3xl font-semibold">
+            <Highlight title={title} highlight={highlight} />
+          </h2>
           {subtitle && <p className="mt-1 text-sm text-gray-300">{subtitle}</p>}
         </div>
         {cta && (
@@ -137,7 +154,6 @@ function ProductCard({ article, onAdd }) {
           loading="lazy"
           className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
         />
-        {/* Category pill */}
         {article.category && (
           <span className="absolute left-3 top-3 rounded-full bg-black/60 px-2.5 py-1 text-xs font-medium ring-1 ring-white/15">
             {article.category}

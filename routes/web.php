@@ -113,15 +113,16 @@ Route::get('/', function () {
 /* =========================
 |  Pages simples
 |=========================*/
-Route::get('/panier', fn () => Inertia::render('Panier'));
-Route::get('/wishlist', fn () => Inertia::render('Wish'));
+Route::get('/panier', fn () => Inertia::render('Panier'))->name('cart.page');
+Route::get('/wishlist', fn () => Inertia::render('Wish'))->name('wishlist.page');
 
 Route::post('/userpreferences/toggle', [UserPreferenceController::class, 'toggle'])
     ->name('userpreferences.toggle');
 
-Route::get('/register', fn () => Inertia::render('Register'));
-Route::get('/legal',    fn () => Inertia::render('Legal'));
-Route::get('/terms',    fn () => Inertia::render('Terms'));
+/* formulaires invités */
+Route::get('/register', fn () => Inertia::render('Register'))->name('register.form');
+Route::get('/legal',    fn () => Inertia::render('Legal'))->name('legal');
+Route::get('/terms',    fn () => Inertia::render('Terms'))->name('terms');
 
 /* =========================
 |  Stripe Checkout

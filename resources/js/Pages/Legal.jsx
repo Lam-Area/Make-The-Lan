@@ -1,48 +1,50 @@
+// resources/js/Pages/Legal.jsx
 import React from 'react';
+import MainLayout from '@/Layouts/MainLayout';
 
-export default function LegalPage() {
+export default function Legal() {
   return (
-    <div className="text-white max-w-4xl mx-auto px-6 py-10">
-      <h1 className="text-2xl font-bold mb-6">Informations légales</h1>
+    <MainLayout>
+      <div className="min-h-screen text-white">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 py-12">
+          <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-6 sm:p-8">
+            <h1 className="text-3xl font-semibold">Informations légales</h1>
+            <p className="mt-1 text-sm text-gray-400">Dernière mise à jour : {new Date().toLocaleDateString('fr-FR')}</p>
 
-      <section className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">Éditeur du site</h2>
-        <p>
-          <strong>MyScript</strong> <br />
-          42 Rue des Scripts, 13000 Marseille, France <br />
-          Email : contact@myscript.com <br />
-          SIRET : 123 456 789 00000
-        </p>
-      </section>
+            <div className="mt-6 space-y-6 text-sm leading-6 text-gray-200">
+              <section>
+                <h2 className="text-lg font-medium text-white mb-2">Éditeur du site</h2>
+                <p>Make The Lan — contact&nbsp;: admin@mtl.com</p>
+                <p>Adresse postale — xxxxxx, France</p>
+                <p>SIREN/SIRET — 000 000 000 00000</p>
+              </section>
 
-      <section className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">Responsable de la publication</h2>
-        <p>John Doe – contact@myscript.com</p>
-      </section>
+              <section>
+                <h2 className="text-lg font-medium text-white mb-2">Hébergement</h2>
+                <p>Hébergeur — xxxxxx</p>
+                <p>xxxxxx, France</p>
+              </section>
 
-      <section className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">Hébergement</h2>
-        <p>
-          OVH SAS <br />
-          2 rue Kellermann, 59100 Roubaix, France <br />
-          Téléphone : 1007
-        </p>
-      </section>
+              <section>
+                <h2 className="text-lg font-medium text-white mb-2">Données personnelles</h2>
+                <p>
+                  Les données collectées sont utilisées pour la gestion des comptes, des commandes
+                  et l’amélioration du service. Vous disposez d’un droit d’accès, de rectification
+                  et de suppression. Écrivez-nous à <span className="text-blue-300">admin@mtl.com</span>.
+                </p>
+              </section>
 
-      <section className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">Propriété intellectuelle</h2>
-        <p>
-          Tous les contenus (scripts, textes, images, logos) présents sur le site MyScript
-          sont protégés par les lois en vigueur sur la propriété intellectuelle et sont la propriété exclusive de MyScript.
-        </p>
-      </section>
-
-      <section>
-        <h2 className="text-xl font-semibold mb-2">Conditions d’utilisation</h2>
-        <p>
-          L’accès au site implique l’acceptation pleine et entière des conditions générales d’utilisation. Le site est mis à jour régulièrement.
-        </p>
-      </section>
-    </div>
+              <section>
+                <h2 className="text-lg font-medium text-white mb-2">Cookies</h2>
+                <p>
+                  Des cookies techniques et de mesure d’audience peuvent être déposés. Vous pouvez
+                  gérer vos préférences depuis votre profil.
+                </p>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </MainLayout>
   );
 }
