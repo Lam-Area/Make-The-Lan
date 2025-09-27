@@ -11,31 +11,37 @@ class ArticleController extends Controller
 {
     /**
      * GET /articles
-     * Filtres supportés :
+     * Filtres:
      * - ?category=router|switch|access_point
-     * - ?q=mot+clé  (titre/description/sku)
+     * - ?search=mot+clé   (alias: ?q=)
      * - ?sort=recent|price_asc|price_desc|stock_desc
      */
     public function index(Request $request)
     {
-        $query = Article::query();
+        $query   = Article::query();
+        $search  = trim((string) ($request->get('search') ?? $request->get('q') ?? ''));
+        $category = $request->get('category');
+        $sort     = $request->get('sort', 'recent');
 
-        // Filtre catégorie
-        if ($cat = $request->get('category')) {
-            $query->where('category', $cat);
+        // Catégorie
+        if ($category) {
+            $query->where('category', $category);
         }
 
-        // Recherche simple
-        if ($q = $request->get('q')) {
-            $query->where(function ($qq) use ($q) {
-                $qq->where('title', 'like', "%{$q}%")
-                   ->orWhere('description', 'like', "%{$q}%")
-                   ->orWhere('sku', 'like', "%{$q}%");
+        // Recherche (titre, description, marque, modèle, SKU)
+        if ($search !== '') {
+            $query->where(function ($qq) use ($search) {
+                $like = "%{$search}%";
+                $qq->where('title', 'like', $like)
+                   ->orWhere('description', 'like', $like)
+                   ->orWhere('brand', 'like', $like)
+                   ->orWhere('model', 'like', $like)
+                   ->orWhere('sku', 'like', $like);
             });
         }
 
         // Tri
-        switch ($request->get('sort')) {
+        switch ($sort) {
             case 'price_asc':
                 $query->orderBy('price', 'asc');
                 break;
@@ -55,9 +61,9 @@ class ArticleController extends Controller
         return Inertia::render('Articles/Index', [
             'articles' => $articles,
             'filters'  => [
-                'category' => $request->get('category'),
-                'q'        => $request->get('q'),
-                'sort'     => $request->get('sort', 'recent'),
+                'category' => $category,
+                'search'   => $search,
+                'sort'     => $sort,
             ],
         ]);
     }
@@ -83,17 +89,14 @@ class ArticleController extends Controller
             'vendeur_id'      => ['required', 'exists:users,id'],
         ]);
 
-        // Normalisation de l'image (facultatif mais pratique)
+        // Normalisation de l'image: on garde un chemin relatif (ex: product/xxx.jpg)
         if (!empty($validated['main_image_url'])) {
             $path = ltrim($validated['main_image_url'], '/');
-            if (!str_starts_with($path, 'storage/')) {
-                // Si on a juste "product/xxx.jpg", on préfixe avec "storage/"
-                $path = 'storage/' . $path;
-            }
+            $path = preg_replace('#^storage/#', '', $path); // retire "storage/" si donné
             $validated['main_image_url'] = $path;
         }
 
-        // specs peut arriver en string JSON → array
+        // specs JSON -> array si besoin
         if (isset($validated['specs']) && is_string($validated['specs'])) {
             $decoded = json_decode($validated['specs'], true);
             $validated['specs'] = is_array($decoded) ? $decoded : null;
@@ -101,15 +104,12 @@ class ArticleController extends Controller
 
         Article::create($validated);
 
-        return redirect()->route('articles.index')
-            ->with('success', 'Article créé avec succès.');
+        return redirect()->route('articles.index')->with('success', 'Article créé avec succès.');
     }
 
     public function edit(Article $article)
     {
-        return Inertia::render('Articles/Edit', [
-            'article' => $article,
-        ]);
+        return Inertia::render('Articles/Edit', ['article' => $article]);
     }
 
     public function update(Request $request, Article $article)
@@ -130,9 +130,7 @@ class ArticleController extends Controller
 
         if (!empty($validated['main_image_url'])) {
             $path = ltrim($validated['main_image_url'], '/');
-            if (!str_starts_with($path, 'storage/')) {
-                $path = 'storage/' . $path;
-            }
+            $path = preg_replace('#^storage/#', '', $path);
             $validated['main_image_url'] = $path;
         }
 
@@ -143,25 +141,18 @@ class ArticleController extends Controller
 
         $article->update($validated);
 
-        return redirect()->route('articles.index')
-            ->with('success', 'Article modifié avec succès.');
+        return redirect()->route('articles.index')->with('success', 'Article modifié avec succès.');
     }
 
     public function destroy(Article $article)
     {
         $article->delete();
-
-        return redirect()->route('articles.index')
-            ->with('success', 'Article supprimé.');
+        return redirect()->route('articles.index')->with('success', 'Article supprimé.');
     }
 
     public function show(Article $article)
     {
-        // Fournit les infos vendeur pour le bloc vendeur + Show.jsx
         $article->load('vendeur');
-
-        return Inertia::render('Articles/Show', [
-            'article' => $article,
-        ]);
+        return Inertia::render('Articles/Show', ['article' => $article]);
     }
 }

@@ -1,36 +1,54 @@
+// resources/js/Components/Header.jsx
 import React, { useState } from 'react';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, usePage, router } from '@inertiajs/react';
 import { Menu, X } from 'lucide-react';
 
 export default function Header() {
   const { auth } = usePage().props;
   const user = auth?.user;
   const [menuOpen, setMenuOpen] = useState(false);
+  const [search, setSearch] = useState('');
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
-  const avatarUrl = user?.avatar
-    ? `/storage/${user.avatar}`
-    : '/images/mainpdp.png';
+  const avatarUrl = user?.avatar ? `/storage/${user.avatar}` : '/images/mainpdp.png';
+
+  const submitSearch = (e) => {
+    e.preventDefault();
+    const q = search.trim();
+    if (!q) return;
+    // envoie vers l’index Articles avec le paramètre "search"
+    router.visit(`/articles?search=${encodeURIComponent(q)}`);
+    setMenuOpen(false);
+  };
 
   return (
     <header className="bg-[#16171A] bg-opacity-95 text-white p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center relative">
-        
-        {/* Logo/search */}
+
+        {/* Logo + Search */}
         <div className="flex items-center gap-4 flex-1 pl-4">
           <Link href="/">
-            <img
-              src="/images/logo.png"
-              alt="Logo"
-              className="h-10 w-10 object-contain cursor-pointer"
-            />
+            <img src="/images/logo.png" alt="Logo" className="h-10 w-10 object-contain cursor-pointer" />
           </Link>
-          <input
-            type="text"
-            placeholder="Rechercher..."
-            className="bg-[#495761] px-3 py-1 rounded focus:outline-none focus:ring w-full max-w-xs"
-          />
+
+          {/* form pour Enter/submit */}
+          <form onSubmit={submitSearch} className="w-full max-w-xs flex items-center gap-2">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Rechercher…"
+              className="bg-[#495761] px-3 py-1 rounded focus:outline-none focus:ring w-full"
+            />
+            <button
+              type="submit"
+              className="px-3 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white text-sm whitespace-nowrap"
+              aria-label="Rechercher"
+            >
+              Rechercher
+            </button>
+          </form>
         </div>
 
         <div className="text-2xl font-bold text-center tracking-wide hidden md:flex flex-1 justify-center">
@@ -63,17 +81,9 @@ export default function Header() {
                 </>
               )}
               {user.role === 'vendeur' && (
-                <>
-                  <Link href="/articles" className="hover:underline">articles</Link>
-                </>
+                <Link href="/articles" className="hover:underline">articles</Link>
               )}
-              
-              <Link
-                href="/logout"
-                method="post"
-                as="button"
-                className="hover:underline text-red-400"
-              >
+              <Link href="/logout" method="post" as="button" className="hover:underline text-red-400">
                 Déconnexion
               </Link>
               <Link href="/profile" className="shrink-0">
@@ -81,7 +91,7 @@ export default function Header() {
                   src={avatarUrl}
                   alt="Avatar"
                   className="rounded-full object-cover border border-gray-600 hover:scale-105 transition-transform duration-150 cursor-pointer
-                            h-10 w-10 min-w-[2.5rem] min-h-[2.5rem] max-w-[40px] max-h-[40px] aspect-square"
+                             h-10 w-10 min-w-[2.5rem] min-h-[2.5rem] max-w-[40px] max-h-[40px] aspect-square"
                 />
               </Link>
             </>
@@ -109,18 +119,9 @@ export default function Header() {
                       <Link href="/wishlist" className="hover:underline">Souhaits</Link>
                     </>
                   )}
-                  {user.role === 'vendeur' && (
-                    <Link href="/articles" className="hover:underline">articles</Link>
-                  )}
-                  {user.role === 'admin' && (
-                    <Link href="/profile" className="hover:underline">dashboard</Link>
-                  )}
-                  <Link
-                    href="/logout"
-                    method="post"
-                    as="button"
-                    className="hover:underline text-red-400"
-                  >
+                  {user.role === 'vendeur' && <Link href="/articles" className="hover:underline">articles</Link>}
+                  {user.role === 'admin' && <Link href="/profile" className="hover:underline">dashboard</Link>}
+                  <Link href="/logout" method="post" as="button" className="hover:underline text-red-400">
                     Déconnexion
                   </Link>
                 </>
