@@ -1,5 +1,11 @@
-import React from 'react';
 import { useForm, Link, usePage } from '@inertiajs/react';
+import React from 'react';
+
+const CATEGORIES = [
+  { value: 'router', label: 'Routeur' },
+  { value: 'switch', label: 'Switch' },
+  { value: 'access_point', label: 'Point d’accès' },
+];
 
 export default function Create() {
   const { errors, auth } = usePage().props;
@@ -7,16 +13,22 @@ export default function Create() {
 
   const { data, setData, post, processing } = useForm({
     title: '',
-    description: '',
+    brand: 'Cisco',
+    model: '',
+    category: 'switch',
+    sku: '',
     price: '',
-    file_path: '',
-    code_preview: '',
+    stock_quantity: 0,
+    main_image_url: '',
+    description: '',
+    specs: '', // JSON string (ex: {"ports":48,"uplinks":"4x SFP+"})
     vendeur_id: vendeurId,
   });
 
+  const setNumber = (key) => (e) => setData(key, e.target.value === '' ? '' : Number(e.target.value));
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Données soumises :', data);
     post('/articles');
   };
 
@@ -26,60 +38,128 @@ export default function Create() {
         <h1 className="text-2xl text-white font-bold mb-6">Créer un article</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-white font-medium">Titre</label>
+          <Field label="Titre" error={errors.title}>
             <input
               type="text"
               value={data.title}
               onChange={(e) => setData('title', e.target.value)}
               className="w-full border p-2 rounded"
             />
-            {errors.title && <div className="text-red-500">{errors.title}</div>}
+          </Field>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Field label="Marque" error={errors.brand}>
+              <input
+                type="text"
+                value={data.brand}
+                onChange={(e) => setData('brand', e.target.value)}
+                className="w-full border p-2 rounded"
+              />
+            </Field>
+
+            <Field label="Modèle" error={errors.model}>
+              <input
+                type="text"
+                value={data.model}
+                onChange={(e) => setData('model', e.target.value)}
+                className="w-full border p-2 rounded"
+              />
+            </Field>
+
+            <Field label="Catégorie" error={errors.category}>
+              <select
+                value={data.category}
+                onChange={(e) => setData('category', e.target.value)}
+                className="w-full border p-2 rounded"
+              >
+                {CATEGORIES.map((c) => (
+                  <option key={c.value} value={c.value}>{c.label}</option>
+                ))}
+              </select>
+            </Field>
           </div>
 
-          <div>
-            <label className="block text-white font-medium">Description</label>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Field label="SKU" error={errors.sku}>
+              <input
+                type="text"
+                value={data.sku}
+                onChange={(e) => setData('sku', e.target.value)}
+                className="w-full border p-2 rounded"
+                placeholder="ex: C9200L-48P-4X-E"
+              />
+            </Field>
+
+            <Field label="Prix (€)" error={errors.price}>
+              <input
+                type="number"
+                step="0.01"
+                value={data.price}
+                onChange={setNumber('price')}
+                className="w-full border p-2 rounded"
+              />
+            </Field>
+
+            <Field label="Stock" error={errors.stock_quantity}>
+              <input
+                type="number"
+                min="0"
+                value={data.stock_quantity}
+                onChange={setNumber('stock_quantity')}
+                className="w-full border p-2 rounded"
+              />
+            </Field>
+          </div>
+
+          <Field label="Image principale (URL)" error={errors.main_image_url}>
+            <input
+              type="text"
+              value={data.main_image_url}
+              onChange={(e) => setData('main_image_url', e.target.value)}
+              className="w-full border p-2 rounded"
+              placeholder="/images/products/cisco-9200l.jpg"
+            />
+          </Field>
+
+          <Field label="Description" error={errors.description}>
             <textarea
               value={data.description}
               onChange={(e) => setData('description', e.target.value)}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded min-h-28"
             />
-            {errors.description && <div className="text-red-500">{errors.description}</div>}
-          </div>
+          </Field>
 
-          <div>
-            <label className="block text-white font-medium">Prix</label>
-            <input
-              type="number"
-              step="0.01"
-              value={data.price}
-              onChange={(e) => setData('price', e.target.value)}
-              className="w-full border p-2 rounded"
+          <Field label="Spécifications (JSON)" error={errors.specs}>
+            <textarea
+              value={data.specs}
+              onChange={(e) => setData('specs', e.target.value)}
+              className="w-full border p-2 rounded font-mono min-h-28"
+              placeholder='{"ports":48,"uplinks":"4x SFP+","os":"IOS XE"}'
             />
-            {errors.price && <div className="text-red-500">{errors.price}</div>}
-          </div>
+          </Field>
 
-          <div>
-            <label className="block text-white font-medium">Fichier (chemin)</label>
-            <input
-              type="text"
-              value={data.file_path}
-              onChange={(e) => setData('file_path', e.target.value)}
-              className="w-full border p-2 rounded"
-            />
-            {errors.file_path && <div className="text-red-500">{errors.file_path}</div>}
-          </div>
-
-          <div>
-            <label className="block text-white font-medium">Code Preview</label>
-            <input
-              type="text"
-              value={data.code_preview}
-              onChange={(e) => setData('code_preview', e.target.value)}
-              className="w-full border p-2 rounded"
-            />
-            {errors.code_preview && <div className="text-red-500">{errors.code_preview}</div>}
-          </div>
+          {/* Optionnel: champs hérités, gardés pour compat */}
+          <details className="mt-2">
+            <summary className="cursor-pointer text-sm text-gray-300">Champs hérités (optionnels)</summary>
+            <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Field label="file_path" error={errors.file_path}>
+                <input
+                  type="text"
+                  onChange={(e) => setData('file_path', e.target.value)}
+                  className="w-full border p-2 rounded"
+                  value={data.file_path || ''}
+                />
+              </Field>
+              <Field label="code_preview" error={errors.code_preview}>
+                <input
+                  type="text"
+                  onChange={(e) => setData('code_preview', e.target.value)}
+                  className="w-full border p-2 rounded"
+                  value={data.code_preview || ''}
+                />
+              </Field>
+            </div>
+          </details>
 
           <input type="hidden" name="vendeur_id" value={data.vendeur_id} />
 
@@ -91,15 +171,20 @@ export default function Create() {
             >
               Créer
             </button>
-            <Link
-              href="/articles"
-              className="text-gray-300 hover:underline"
-            >
-              Annuler
-            </Link>
+            <Link href="/articles" className="text-gray-300 hover:underline">Annuler</Link>
           </div>
         </form>
       </div>
+    </div>
+  );
+}
+
+function Field({ label, error, children }) {
+  return (
+    <div>
+      <label className="block text-white font-medium mb-1">{label}</label>
+      {children}
+      {error && <div className="text-red-500 text-sm mt-1">{error}</div>}
     </div>
   );
 }
