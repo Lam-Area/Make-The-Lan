@@ -31,7 +31,13 @@ export default function Home() {
           {/* Nouveaux articles (max 3) */}
           <Section
             title="Nouveaux articles disponibles"
-            items={recentArticles.slice(0, 3)}
+            items={[...recentArticles]
+              .sort((a, b) => {
+                if (a.category === 'router' && b.category !== 'router') return -1;
+                if (b.category === 'router' && a.category !== 'router') return 1;
+                return 0;
+              })
+              .slice(0, 3)}
             seeMoreHref="/articles?sort=recent"
             seeMoreLabel="Voir tout"
             addToCart={addToCart}
