@@ -30,25 +30,56 @@ class Article extends Model
         'updated_at'     => 'datetime',
     ];
 
-    /** Relations */
+    /** --------------------
+     * Relations
+     * -------------------- */
     public function vendeur()
     {
         return $this->belongsTo(User::class, 'vendeur_id');
     }
+
     public function favorites()
     {
         return $this->hasMany(Favorite::class);
     }
+
     public function cartItems()
     {
         return $this->hasMany(CartItem::class);
     }
+
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
     }
 
-    /** Génération auto d’un slug unique si absent */
+    /** --------------------
+     * Mutators / Accessors
+     * -------------------- */
+
+    // Normalise automatiquement l'URL de l'image principale
+    public function setMainImageUrlAttribute($value)
+    {
+        if ($value) {
+            $path = ltrim($value, '/');
+            if (!str_starts_with($path, 'storage/')) {
+                $path = 'storage/' . $path;
+            }
+            $this->attributes['main_image_url'] = $path;
+        } else {
+            $this->attributes['main_image_url'] = null;
+        }
+    }
+
+    // Renvoie toujours un tableau pour specs (évite les null)
+    public function getSpecsAttribute($value)
+    {
+        return $value ? json_decode($value, true) : [];
+    }
+
+    /** --------------------
+     * Slug auto-généré
+     * -------------------- */
     protected static function booted(): void
     {
         static::creating(function (Article $article) {

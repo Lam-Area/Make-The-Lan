@@ -9,29 +9,50 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
+        // --- Admin ---
         User::create([
-            'name' => 'Admin Test',
-            'email' => 'admin@myscript.com',
-            'password' => bcrypt('admin123'),
-            'role' => 'admin',
+            'name'       => 'Admin Principal',
+            'email'      => 'admin@mtl.com',
+            'password'   => bcrypt('admin123'),
+            'role'       => 'admin',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // --- Gérants ---
+        User::create([
+            'name'       => 'Gérant Routeurs',
+            'email'      => 'gerant.routeurs@mtl.com',
+            'password'   => bcrypt('router123'),
+            'role'       => 'vendeur',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
         User::create([
-            'name' => 'Vendeur Test',
-            'email' => 'vendeur@myscript.com',
-            'password' => bcrypt('vendeur123'),
-            'role' => 'vendeur',
+            'name'       => 'Gérant Switches',
+            'email'      => 'gerant.switches@mtl.com',
+            'password'   => bcrypt('switch123'),
+            'role'       => 'vendeur',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // --- Utilisateurs ---
+        User::create([
+            'name'       => 'Alice Client',
+            'email'      => 'alice@mtl.com',
+            'password'   => bcrypt('user123'),
+            'role'       => 'user',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
         User::create([
-            'name' => 'User Test',
-            'email' => 'user@myscript.com',
-            'password' => bcrypt('user123'),
-            'role' => 'user',
+            'name'       => 'Bob Client',
+            'email'      => 'bob@mtl.com',
+            'password'   => bcrypt('user123'),
+            'role'       => 'user',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

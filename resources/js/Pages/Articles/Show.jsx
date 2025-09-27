@@ -23,6 +23,14 @@ export default function Show() {
     router.visit('/wishlist');
   };
 
+  // ✅ Résout le souci d'image: préfixe /storage si c'est un chemin local
+  const imgSrc = (() => {
+    const p = article.main_image_url;
+    if (!p) return '/images/product-placeholder.png';
+    if (p.startsWith('http://') || p.startsWith('https://') || p.startsWith('/')) return p;
+    return `/storage/${p}`;
+  })();
+
   return (
     <MainLayout>
       <div className="w-full text-white px-6 py-10">
@@ -42,9 +50,10 @@ export default function Show() {
             <div className="lg:col-span-2">
               <div className="rounded-lg overflow-hidden bg-[#0e1012] border border-gray-700 aspect-video flex items-center justify-center">
                 <img
-                  src={article.main_image_url || '/images/product-placeholder.png'}
-                  alt={article.title}
+                  src={imgSrc}
+                  alt={article.title || 'Produit'}
                   className="w-full h-full object-contain p-4"
+                  loading="lazy"
                 />
               </div>
 
@@ -76,7 +85,7 @@ export default function Show() {
                 <Info label="Ajouté le" value={formatDate(article.created_at)} />
               </div>
 
-              {/* Prix + Boutons (en dessous) */}
+              {/* Prix + Boutons */}
               <div className="mb-6">
                 <div className="text-3xl font-extrabold whitespace-nowrap">
                   {formatPrice(article.price)}
@@ -158,11 +167,8 @@ function Specs({ specs }) {
   if (!data || typeof data !== 'object') {
     return <p className="text-gray-400 text-sm">Aucune spécification fournie.</p>;
   }
-
   const entries = Object.entries(data);
-  if (entries.length === 0) {
-    return <p className="text-gray-400 text-sm">Aucune spécification fournie.</p>;
-  }
+  if (entries.length === 0) return <p className="text-gray-400 text-sm">Aucune spécification fournie.</p>;
 
   return (
     <div className="overflow-hidden rounded border border-gray-700">
@@ -190,10 +196,7 @@ function renderSpecValue(v) {
 function formatPrice(p) {
   const n = Number(p);
   if (Number.isNaN(n)) return p ?? '';
-  return new Intl.NumberFormat('fr-FR', {
-    style: 'currency',
-    currency: 'EUR'
-  }).format(n);
+  return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(n);
 }
 
 function formatDate(d) {

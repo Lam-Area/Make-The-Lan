@@ -12,18 +12,19 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
+        // ⬅️ ne plus valider/recevoir "role"
         $validated = $request->validate([
-            'name' => 'required|string|max:100',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6|confirmed',
-            'role' => 'required|in:user,vendeur',
+            'name'                  => 'required|string|max:100',
+            'email'                 => 'required|email:rfc|max:150|unique:users,email',
+            'password'              => 'required|string|min:8|confirmed',
         ]);
 
+        // ⬅️ rôle forcé côté serveur
         $user = \App\Models\User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => bcrypt($validated['password']),
-            'role' => $validated['role'],
+            'name'       => $validated['name'],
+            'email'      => $validated['email'],
+            'password'   => bcrypt($validated['password']),
+            'role'       => 'user',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -31,9 +32,9 @@ class AuthController extends Controller
         Auth::login($user);
 
         UserLog::create([
-            'user_id' => $user->id,
-            'name' => Auth::user()->name,
-            'action' => 'Inscription réussie',
+            'user_id'    => $user->id,
+            'name'       => Auth::user()->name, // si votre table user_logs n'a pas "name", retirez cette ligne
+            'action'     => 'Inscription réussie',
             'ip_address' => $request->ip(),
             'created_at' => now(),
         ]);
@@ -49,7 +50,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'email'    => ['required', 'email'],
             'password' => ['required'],
         ]);
 
@@ -57,25 +58,20 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             UserLog::create([
-                'user_id' => Auth::id(),
-                'name' => Auth::user()->name,
-                'action' => 'Connexion réussie',
+                'user_id'    => Auth::id(),
+                'name'       => Auth::user()->name, // idem remarque
+                'action'     => 'Connexion réussie',
                 'ip_address' => $request->ip(),
             ]);
 
-            // fusionné favoris du local à bdd
+            // Fusion liste de souhaits locale -> BDD
             $wishlist = json_decode($request->cookie('wishlist_items'), true);
             if (is_array($wishlist)) {
                 foreach ($wishlist as $item) {
-                    if (isset($item['id'])) {
+                    if (!empty($item['id'])) {
                         Favorite::firstOrCreate(
-                            [
-                                'user_id' => Auth::id(),
-                                'article_id' => $item['id'],
-                            ],
-                            [
-                                'created_at' => now(),
-                            ]
+                            ['user_id' => Auth::id(), 'article_id' => $item['id']],
+                            ['created_at' => now()]
                         );
                     }
                 }
@@ -93,9 +89,9 @@ class AuthController extends Controller
     {
         if (Auth::check()) {
             UserLog::create([
-                'user_id' => Auth::id(),
-                'name' => Auth::user()->name,
-                'action' => 'Déconnexion',
+                'user_id'    => Auth::id(),
+                'name'       => Auth::user()->name, // idem remarque
+                'action'     => 'Déconnexion',
                 'ip_address' => $request->ip(),
             ]);
         }

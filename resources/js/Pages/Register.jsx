@@ -1,3 +1,4 @@
+// resources/js/Pages/Register.jsx
 import React from 'react';
 import { useForm, Link, Head } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
@@ -8,7 +9,7 @@ export default function Register() {
     email: '',
     password: '',
     password_confirmation: '',
-    role: 'user',
+    role: 'user',          // forcé côté client
     acceptCookies: false,
   });
 
@@ -27,23 +28,8 @@ export default function Register() {
           <div className="p-8 rounded-lg w-full max-w-md bg-[#16171A] bg-opacity-75 shadow">
             <h2 className="text-2xl font-bold mb-6 text-center">Créer un compte</h2>
 
-            <div className="mb-6 text-center">
-              <span className="mr-4 font-semibold">Je suis :</span>
-              <button
-                type="button"
-                className={`px-4 py-2 rounded-l ${data.role === 'user' ? 'bg-blue-600' : 'bg-gray-600'} hover:bg-blue-700`}
-                onClick={() => setData('role', 'user')}
-              >
-                Utilisateur
-              </button>
-              <button
-                type="button"
-                className={`px-4 py-2 rounded-r ${data.role === 'vendeur' ? 'bg-blue-600' : 'bg-gray-600'} hover:bg-blue-700`}
-                onClick={() => setData('role', 'vendeur')}
-              >
-                Vendeur
-              </button>
-            </div>
+            {/* Champ caché role=user */}
+            <input type="hidden" name="role" value={data.role} />
 
             <form onSubmit={handleSubmit}>
               <div className="mb-4">

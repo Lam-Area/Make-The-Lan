@@ -9,12 +9,56 @@ use Inertia\Inertia;
 
 class ArticleController extends Controller
 {
-    public function index()
+    /**
+     * GET /articles
+     * Filtres supportés :
+     * - ?category=router|switch|access_point
+     * - ?q=mot+clé  (titre/description/sku)
+     * - ?sort=recent|price_asc|price_desc|stock_desc
+     */
+    public function index(Request $request)
     {
-        $articles = Article::latest()->get();
+        $query = Article::query();
+
+        // Filtre catégorie
+        if ($cat = $request->get('category')) {
+            $query->where('category', $cat);
+        }
+
+        // Recherche simple
+        if ($q = $request->get('q')) {
+            $query->where(function ($qq) use ($q) {
+                $qq->where('title', 'like', "%{$q}%")
+                   ->orWhere('description', 'like', "%{$q}%")
+                   ->orWhere('sku', 'like', "%{$q}%");
+            });
+        }
+
+        // Tri
+        switch ($request->get('sort')) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'stock_desc':
+                $query->orderBy('stock_quantity', 'desc');
+                break;
+            case 'recent':
+            default:
+                $query->orderBy('created_at', 'desc');
+        }
+
+        $articles = $query->get();
 
         return Inertia::render('Articles/Index', [
             'articles' => $articles,
+            'filters'  => [
+                'category' => $request->get('category'),
+                'q'        => $request->get('q'),
+                'sort'     => $request->get('sort', 'recent'),
+            ],
         ]);
     }
 
@@ -39,13 +83,23 @@ class ArticleController extends Controller
             'vendeur_id'      => ['required', 'exists:users,id'],
         ]);
 
-        // specs peut arriver en string JSON depuis un formulaire brut
+        // Normalisation de l'image (facultatif mais pratique)
+        if (!empty($validated['main_image_url'])) {
+            $path = ltrim($validated['main_image_url'], '/');
+            if (!str_starts_with($path, 'storage/')) {
+                // Si on a juste "product/xxx.jpg", on préfixe avec "storage/"
+                $path = 'storage/' . $path;
+            }
+            $validated['main_image_url'] = $path;
+        }
+
+        // specs peut arriver en string JSON → array
         if (isset($validated['specs']) && is_string($validated['specs'])) {
             $decoded = json_decode($validated['specs'], true);
             $validated['specs'] = is_array($decoded) ? $decoded : null;
         }
 
-        $article = Article::create($validated);
+        Article::create($validated);
 
         return redirect()->route('articles.index')
             ->with('success', 'Article créé avec succès.');
@@ -73,6 +127,14 @@ class ArticleController extends Controller
             'specs'           => ['nullable'],
             'vendeur_id'      => ['required', 'exists:users,id'],
         ]);
+
+        if (!empty($validated['main_image_url'])) {
+            $path = ltrim($validated['main_image_url'], '/');
+            if (!str_starts_with($path, 'storage/')) {
+                $path = 'storage/' . $path;
+            }
+            $validated['main_image_url'] = $path;
+        }
 
         if (isset($validated['specs']) && is_string($validated['specs'])) {
             $decoded = json_decode($validated['specs'], true);

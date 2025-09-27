@@ -34,7 +34,7 @@ export default function Header() {
         </div>
 
         <div className="text-2xl font-bold text-center tracking-wide hidden md:flex flex-1 justify-center">
-          <Link href="/">MyScript</Link>
+          <Link href="/">Make The Lan</Link>
         </div>
 
         {/* hamburger (mobile) */}
