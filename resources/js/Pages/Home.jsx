@@ -1,6 +1,6 @@
 // resources/js/Pages/Home.jsx
 import React from 'react';
-import { usePage, Link } from '@inertiajs/react';
+import { usePage, Link, router } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
 import BannerCarousel from '@/Components/BannerCarousel';
 import DiscordWidget from '@/Components/DiscordWidget';
@@ -10,27 +10,45 @@ const fmtEUR = (n) =>
   new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(n || 0));
 
 export default function Home() {
-  const { recentArticles = [], switchArticles = [], routerArticles = [] } = usePage().props;
+  const {
+    recentArticles = [],
+    switchArticles = [],
+    routerArticles = [],
+  } = usePage().props;
+
   const { addToCart } = useCart();
 
   return (
     <MainLayout>
-      <div className="min-h-screen text-white p-6">
-        <div className="max-w-6xl mx-auto">
-          {/* Partenaires */}
-          <h1 className="text-3xl font-bold mt-12 text-left">Nos partenaires</h1>
-          <div className="flex flex-col lg:flex-row justify-between gap-6 items-start">
-            <div className="w-full lg:w-3/5 mt-14">
-              <BannerCarousel />
+      <div className="min-h-screen text-white">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10">
+          {/* HERO / PARTENAIRES */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">Nos partenaires</h1>
+              <div className="mt-6">
+                <BannerCarousel />
+              </div>
             </div>
-            <div className="w-full lg:w-[350px]">
-              <DiscordWidget />
+
+            <div className="lg:col-span-1">
+              <div className="h-full rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
+                <h2 className="text-xl font-semibold">Rejoindre la communauté</h2>
+                <p className="mt-2 text-sm text-gray-300">
+                  Ici on parle code !
+                  Viens faire un tour et partager tes configs.
+                </p>
+                <div className="mt-4">
+                  <DiscordWidget />
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Nouveaux articles (max 3) */}
+          {/* SECTION: Nouveaux articles */}
           <Section
             title="Nouveaux articles disponibles"
+            subtitle="Sélection fraîchement ajoutée"
             items={[...recentArticles]
               .sort((a, b) => {
                 if (a.category === 'router' && b.category !== 'router') return -1;
@@ -38,27 +56,26 @@ export default function Home() {
                 return 0;
               })
               .slice(0, 3)}
-            seeMoreHref="/articles?sort=recent"
-            seeMoreLabel="Voir tout"
-            addToCart={addToCart}
+            cta={{ href: '/articles?sort=recent', label: 'Voir tout' }}
+            onAdd={addToCart}
           />
 
-          {/* Switches (max 6) */}
+          {/* SECTION: Switches */}
           <Section
             title="Switches Cisco"
+            subtitle="Empile, trunk, et assure le débit"
             items={switchArticles.slice(0, 6)}
-            seeMoreHref="/articles?category=switch"
-            seeMoreLabel="Voir tous les switches"
-            addToCart={addToCart}
+            cta={{ href: '/articles?category=switch', label: 'Tous les switches' }}
+            onAdd={addToCart}
           />
 
-          {/* Routeurs (max 6) */}
+          {/* SECTION: Routeurs */}
           <Section
             title="Routeurs Cisco"
+            subtitle="Le cerveau de tes réseaux"
             items={routerArticles.slice(0, 6)}
-            seeMoreHref="/articles?category=router"
-            seeMoreLabel="Voir tous les routeurs"
-            addToCart={addToCart}
+            cta={{ href: '/articles?category=router', label: 'Tous les routeurs' }}
+            onAdd={addToCart}
           />
         </div>
       </div>
@@ -66,59 +83,110 @@ export default function Home() {
   );
 }
 
-function Section({ title, items, seeMoreHref, seeMoreLabel, addToCart }) {
+/* =========================
+   Section block
+========================= */
+function Section({ title, subtitle, items = [], cta, onAdd }) {
   return (
-    <>
-      <div className="mt-14 mb-6 flex items-center justify-between">
-        <h2 className="text-3xl font-bold">{title}</h2>
-        <Link href={seeMoreHref} className="text-blue-400 hover:underline text-sm">
-          {seeMoreLabel}
-        </Link>
+    <section className="mt-14">
+      <div className="flex items-end justify-between gap-3">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-semibold">{title}</h2>
+          {subtitle && <p className="mt-1 text-sm text-gray-300">{subtitle}</p>}
+        </div>
+        {cta && (
+          <Link
+            href={cta.href}
+            className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition"
+          >
+            {cta.label}
+          </Link>
+        )}
       </div>
 
       {items.length ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((a) => (
-            <Card key={a.id} article={a} onAdd={() => addToCart(a)} />
+            <ProductCard key={a.id} article={a} onAdd={() => onAdd(a)} />
           ))}
         </div>
       ) : (
-        <p className="text-gray-500">Aucun article pour le moment.</p>
+        <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-8 text-center text-gray-300">
+          Aucun article pour le moment.
+        </div>
       )}
-    </>
+    </section>
   );
 }
 
-function Card({ article, onAdd }) {
-  const img = article.main_image_url ? `/storage/${article.main_image_url}` : '/images/product-placeholder.png';
+/* =========================
+   Product card
+========================= */
+function ProductCard({ article, onAdd }) {
+  const img = article.main_image_url
+    ? `/storage/${article.main_image_url}`
+    : '/images/product-placeholder.png';
+
   return (
-    <div className="bg-[#16171A] bg-opacity-90 rounded-lg shadow hover:shadow-lg transition flex flex-col overflow-hidden">
-      <div className="bg-[#0e1012] aspect-video w-full flex items-center justify-center border-b border-gray-800">
-        <img src={img} alt={article.title} className="w-full h-full object-contain p-3" />
+    <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur transition hover:border-white/20 hover:bg-white/[0.07]">
+      {/* Image */}
+      <div className="relative aspect-[16/10] w-full overflow-hidden">
+        <img
+          src={img}
+          alt={article.title}
+          loading="lazy"
+          className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
+        />
+        {/* Category pill */}
+        {article.category && (
+          <span className="absolute left-3 top-3 rounded-full bg-black/60 px-2.5 py-1 text-xs font-medium ring-1 ring-white/15">
+            {article.category}
+          </span>
+        )}
       </div>
 
-      <div className="p-4 flex-1 flex flex-col">
-        <h3 className="text-lg font-semibold mb-1 line-clamp-2">{article.title}</h3>
-        <p className="text-gray-400 text-xs mb-2">
+      {/* Content */}
+      <div className="p-4">
+        <h3 className="line-clamp-2 text-lg font-semibold">
+          <Link
+            href={`/articles/${article.id}`}
+            className="decoration-blue-400/40 hover:underline underline-offset-4"
+          >
+            {article.title}
+          </Link>
+        </h3>
+
+        <p className="mt-1 text-xs text-gray-400">
           Publié le {new Date(article.created_at).toLocaleDateString('fr-FR')}
         </p>
-        <p className="text-gray-300 text-sm mb-4 line-clamp-2">{article.description}</p>
 
-        <div className="mt-auto flex items-center justify-between">
-          <div className="font-bold text-xl">{fmtEUR(article.price)}</div>
-          <div className="flex items-center gap-3">
-            <Link href={`/articles/${article.id}`} className="text-green-400 hover:underline text-sm">
+        <p className="mt-2 line-clamp-2 text-sm text-gray-300">
+          {article.description || '—'}
+        </p>
+
+        <div className="mt-4 flex items-center justify-between">
+          <div className="text-xl font-semibold">{fmtEUR(article.price)}</div>
+          <div className="flex items-center gap-2">
+            <Link
+              href={`/articles/${article.id}`}
+              className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm hover:bg-white/10 transition"
+            >
               Voir
             </Link>
             <button
               onClick={onAdd}
-              className="text-sm text-white bg-green-600 hover:bg-green-700 px-3 py-1 rounded"
+              className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-medium hover:bg-emerald-700 active:scale-[.99] transition"
               title="Ajouter au panier"
             >
               Ajouter
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Glow on hover */}
+      <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition">
+        <div className="absolute -inset-px rounded-2xl bg-gradient-to-r from-white/10 via-transparent to-white/10" />
       </div>
     </div>
   );

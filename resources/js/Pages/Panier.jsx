@@ -1,131 +1,148 @@
-// resources/js/Pages/Checkout/Success.jsx
-import React, { useEffect, useRef, useState } from 'react';
-import { Link, usePage } from '@inertiajs/react';
-import MainLayout from '@/Layouts/MainLayout';
+// resources/js/Pages/Panier.jsx
+import React from 'react';
 import { useCart } from '@/Context/CartContext';
+import { Link, router } from '@inertiajs/react';
+import MainLayout from '@/Layouts/MainLayout';
 
-export default function Success() {
-  const { auth, session = {}, sessionId } = usePage().props;
-  const { cart, clearCart } = useCart();
+function formatEUR(n) {
+  return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(n) || 0);
+}
 
-  const [finalized, setFinalized] = useState(false);
-  const [finalizeError, setFinalizeError] = useState('');
-  const fired = useRef(false);
+export default function Panier() {
+  const { cart, removeFromCart } = useCart();
 
-  useEffect(() => {
-    const doFinalize = async () => {
-      if (fired.current) return;
-      fired.current = true;
+  const total = cart.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
 
-      if (!auth?.user) {
-        clearCart?.();
-        setFinalized(true);
-        return;
-      }
+  const handleCheckout = () => {
+    if (!cart.length) return;
 
-      if (!Array.isArray(cart) || cart.length === 0) {
-        setFinalized(true);
-        return;
-      }
+    const items = cart.map((it) => ({
+      id: it.id,
+      title: it.title,
+      price: Number(it.price) || 0,
+      qty: 1,
+      main_image_url: it.main_image_url || '',
+    }));
 
-      try {
-        const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-        const res = await fetch('/checkout/finalize', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': token || '',
-            'X-Requested-With': 'XMLHttpRequest',
-          },
-          body: JSON.stringify({ items: cart }),
-        });
-
-        const data = await res.json().catch(() => ({}));
-
-        if (!res.ok || !data.ok) {
-          throw new Error(data?.message || 'Erreur finalize');
-        }
-
-        // ✅ OK : on vide le panier
-        clearCart?.();
-        setFinalized(true);
-      } catch (e) {
-        setFinalizeError(
-          "Échec d'enregistrement de l'historique. Paiement OK, mais l'historique n'a pas été mis à jour."
-        );
-      }
-    };
-
-    doFinalize();
-  }, [auth?.user, cart, clearCart]);
-
-  const paid = session?.payment_status === 'paid';
-  const total =
-    typeof session?.amount_total === 'number'
-      ? new Intl.NumberFormat('fr-FR', {
-          style: 'currency',
-          currency: (session?.currency || 'eur').toUpperCase(),
-        }).format(session.amount_total / 100)
-      : '—';
+    router.post('/checkout', { items });
+  };
 
   return (
     <MainLayout>
-      <div className="min-h-[70vh] px-6 py-12 text-white">
-        <div className="max-w-3xl mx-auto bg-[#16171A] bg-opacity-95 border border-gray-700 rounded-xl p-6">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold mb-1">
-                Paiement {paid ? 'réussi' : 'traité'}
-              </h1>
-              <p className="text-gray-300">
-                Merci pour votre achat{auth?.user ? `, ${auth.user.name}` : ''} !
-              </p>
-            </div>
-            <div className="text-3xl">🎉</div>
-          </div>
+      <div className="min-h-screen text-white">
+        <section className="mx-auto w-full max-w-6xl px-4 sm:px-6 py-10">
+          <h1 className="text-3xl font-semibold tracking-tight">Votre panier</h1>
 
-          <div className="mt-6 grid gap-3 text-sm">
-            <Row label="Statut paiement" value={session?.payment_status ?? '—'} />
-            <Row label="Montant total" value={total} />
-            <Row label="Session ID" value={sessionId || '—'} mono />
-            <Row label="Payment Intent" value={session?.payment_intent || '—'} mono />
-          </div>
-
-          <div className="mt-6">
-            {!auth?.user ? (
-              <p className="text-yellow-300 text-sm">
-                Vous n’êtes pas connecté : le paiement est effectué, mais aucun historique n’a été créé.
-              </p>
-            ) : finalizeError ? (
-              <p className="text-red-400 text-sm">{finalizeError}</p>
-            ) : finalized ? (
-              <p className="text-green-400 text-sm">Historique mis à jour et panier vidé. ✅</p>
-            ) : (
-              <p className="text-gray-400 text-sm">Finalisation en cours…</p>
-            )}
-          </div>
-
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/" className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700">
-              Retour à l’accueil
-            </Link>
-            {auth?.user && (
-              <Link href="/profile" className="px-4 py-2 rounded bg-green-600 hover:bg-green-700">
-                Voir mon historique d’achat
+          {/* Empty state */}
+          {cart.length === 0 ? (
+            <div className="mt-10 rounded-2xl border border-white/10 bg-white/5 p-10 text-center backdrop-blur">
+              <div className="mx-auto mb-3 h-12 w-12 rounded-full bg-white/10 grid place-items-center">🧺</div>
+              <p className="text-lg text-gray-300">Aucun article dans le panier.</p>
+              <Link
+                href="/"
+                className="mt-6 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium hover:bg-blue-700 transition"
+              >
+                Parcourir les articles
               </Link>
-            )}
-          </div>
-        </div>
+            </div>
+          ) : (
+            <>
+              {/* List */}
+              <ul className="mt-8 space-y-4">
+                {cart.map((item) => (
+                  <li
+                    key={item.id}
+                    className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur transition hover:border-white/20 hover:bg-white/[0.07]"
+                  >
+                    <div className="flex items-center gap-4 p-4 sm:p-5">
+                      {/* image */}
+                      <div className="relative shrink-0">
+                        {item.main_image_url ? (
+                          <img
+                            src={`/storage/${item.main_image_url}`}
+                            alt={item.title}
+                            className="h-20 w-20 sm:h-24 sm:w-24 rounded-xl object-cover ring-1 ring-white/10"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-xl bg-white/10 ring-1 ring-white/10 grid place-items-center text-gray-400 text-xs">
+                            Aucune image
+                          </div>
+                        )}
+                      </div>
+
+                      {/* details */}
+                      <div className="min-w-0 flex-1">
+                        <h3 className="truncate text-base sm:text-lg font-medium">
+                          <Link
+                            href={`/articles/${item.id}`}
+                            className="decoration-blue-400/40 hover:underline underline-offset-4"
+                          >
+                            {item.title}
+                          </Link>
+                        </h3>
+                        <p className="mt-1 text-sm text-gray-300 line-clamp-2">
+                          {item.description || '—'}
+                        </p>
+                        <div className="mt-2 text-sm text-gray-400">Quantité : 1</div>
+                      </div>
+
+                      {/* price + actions */}
+                      <div className="flex shrink-0 flex-col items-end gap-3">
+                        <div className="text-right text-lg font-semibold">{formatEUR(item.price)}</div>
+                        <div className="flex items-center gap-3">
+                          <Link
+                            href={`/articles/${item.id}`}
+                            className="text-emerald-400 hover:text-emerald-300 text-sm"
+                          >
+                            Voir l’article
+                          </Link>
+                          <button
+                            onClick={() => removeFromCart(item.id)}
+                            className="text-red-400 hover:text-red-300 text-sm"
+                          >
+                            Supprimer
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* subtle gradient border on hover */}
+                    <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition">
+                      <div className="absolute -inset-px rounded-2xl bg-gradient-to-r from-white/10 via-transparent to-white/10" />
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Sticky footer */}
+              <div className="sticky bottom-4 mt-8">
+                <div className="mx-auto w-full max-w-6xl rounded-2xl border border-white/10 bg-black/60 backdrop-blur px-4 sm:px-6 py-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
+                    <p className="text-xl">
+                      Total : <span className="font-semibold">{formatEUR(total)}</span>
+                    </p>
+                    <div className="flex gap-3">
+                      <Link
+                        href="/"
+                        className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10 transition"
+                      >
+                        Continuer mes achats
+                      </Link>
+                      <button
+                        onClick={handleCheckout}
+                        className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-medium hover:bg-blue-700 active:scale-[.99] transition shadow-[0_0_0_1px_rgba(255,255,255,.08)]"
+                      >
+                        Payer avec Stripe
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </section>
       </div>
     </MainLayout>
-  );
-}
-
-function Row({ label, value, mono = false }) {
-  return (
-    <div className="flex justify-between items-center gap-4 bg-[#0e1012] rounded p-3 border border-gray-700">
-      <div className="text-gray-300">{label}</div>
-      <div className={`text-white ${mono ? 'font-mono text-xs' : ''}`}>{value}</div>
-    </div>
   );
 }
