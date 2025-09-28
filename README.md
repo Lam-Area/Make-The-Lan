@@ -1,42 +1,50 @@
-# Dead Simple Laravel-Inertia-React Starter Kit
+# Make The Lan — Laravel + Inertia + React
 
-This is a dead simple to kickstart your Laravel Inertia with React. Powered with:
+Back-office + front pour une boutique “réseau” (switch, routeur) :
+- catalogue, panier, **wishlist**
+- paiement **Stripe Checkout**
+- profils / rôles (**admin**, vendeur, user)
+- logs d’utilisation & préférences
+- UI moderne (Tailwind, Inertia + React)
 
-+ [Laravel](https://laravel.com)
-+ [React](https://react.dev)
-+ [Inertia](https://inertiajs.com)
-+ [Vite](https://vitejs.dev)
-+ [Tailwindcss](https://tailwindcss.com)
-+ [Tailwindui](https://tailwindui.com)
-+ [Heroicons](https://heroicons.com/)
-+ [Eslint](https://eslint.org)
+---
 
-> Blogpost: [Simple Laravel Inertia React and Tailwindcss Starter Kit](https://blog.didiktrisusanto.dev/simple-laravel-inertia-react-and-tailwindcss-starter-kit)
+## 🧭 Sommaire
+- [Stack](#-stack)
+- [Prérequis](#-prérequis)
+- [Setup rapide (Windows + WAMP + phpMyAdmin)](#️-setup-rapide-windows--wamp--phpmyadmin)
+- [Démarrer en local](#️-démarrer-en-local)
+- [Scripts utiles](#-scripts-utiles)
+- [Où sont les choses importantes ?](#️-où-sont-les-choses-importantes-)
+- [Endpoints clés (Stripe)](#-endpoints-clés-stripe)
+- [Dépannage rapide](#-dépannage-rapide)
+- [Licence](#-licence)
 
-## Application Structure
+---
 
-Available two separate basic application structures which are:
+## 🧱 Stack
+- **Laravel** (API + routes + modèles)
+- **Inertia.js + React** (SPA sans API REST explicite)
+- **Vite** (build front)
+- **Tailwind CSS**
+- **Stripe Checkout**
+- **MySQL/MariaDB** (via **WAMP + phpMyAdmin** sur Windows)
+- Icônes : **lucide-react**
 
-+ Landing Pages: Landing or your common end user web front applications. `https://yourapplication.com/*`
-+ Backoffice: Your internal application for backoffice or admin panel. `https://yourapplication.com/backoffice/*`
+---
 
-## Installation
+## ✅ Prérequis
+- **PHP 8.2+** & **Composer**
+- **Node 18/20+** & **npm**
+- **MySQL/MariaDB**
+  - Windows : **WampServer** + **phpMyAdmin**
+- (Optionnel) **Stripe CLI** pour écouter les webhooks en local
 
-+ Clone this repository `git clone git@github.com:didikz/laravel-inertia-react-starter.git`
-+ Move to the project directory
-+ Create `.env` file: `cp .env.example .env`
-+ Install Laravel `composer install`
-+ Setup app key `php artisan key:generate`
-+ Install node dependencies `npm install`
+---
 
-## Running the project
+## ⚡️ Setup rapide (Windows + WAMP + phpMyAdmin)
 
+1) **Cloner & entrer dans le projet**
 ```bash
-# running laravel
-php artisan serve
-
-# build local frontend
-npm run dev
-```
-
-Visit `http://localhost:8000` to see your runing project.
+git clone <votre-repo>
+cd <dossier-projet>
