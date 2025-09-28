@@ -17,13 +17,11 @@ class CartItem extends Model
         'created_at' => 'datetime',
     ];
 
-    // item du panier < à l'utilisateur
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // item du panier lié à l'article
     public function article()
     {
         return $this->belongsTo(Article::class);

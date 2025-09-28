@@ -1,4 +1,3 @@
-// resources/js/Pages/Terms.jsx
 import React from 'react';
 import MainLayout from '@/Layouts/MainLayout';
 

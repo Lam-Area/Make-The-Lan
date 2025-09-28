@@ -1,4 +1,3 @@
-// resources/js/Components/Profil/ManageOwnArticles.jsx
 import React from 'react';
 import { usePage, Link, router } from '@inertiajs/react';
 import {
@@ -21,13 +20,11 @@ export default function ManageOwnArticles() {
   const { articles = [], auth } = usePage().props;
   const me = auth?.user;
 
-  // Articles du vendeur connecté
   const mine = React.useMemo(
     () => articles.filter((a) => a.vendeur_id === me?.id),
     [articles, me?.id]
   );
 
-  // Filtres / tri
   const [q, setQ] = React.useState('');
   const [cat, setCat] = React.useState('all');
   const [sort, setSort] = React.useState('created_desc');
@@ -60,7 +57,7 @@ export default function ManageOwnArticles() {
       case 'created_asc':
         list.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
         break;
-      default: // created_desc
+      default:
         list.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     }
     return list;
@@ -73,7 +70,6 @@ export default function ManageOwnArticles() {
 
   return (
     <section className="text-white">
-      {/* Toolbar */}
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2 className="text-2xl sm:text-3xl font-semibold">Mes articles</h2>
@@ -125,7 +121,6 @@ export default function ManageOwnArticles() {
         </div>
       </div>
 
-      {/* Grid */}
       {filtered.length ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {filtered.map((a) => (
@@ -133,7 +128,6 @@ export default function ManageOwnArticles() {
               key={a.id}
               className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur transition hover:border-white/20 hover:bg-white/[0.07]"
             >
-              {/* Image */}
               <div className="relative aspect-[16/10] w-full overflow-hidden">
                 <img
                   src={imgOf(a)}
@@ -155,7 +149,6 @@ export default function ManageOwnArticles() {
                 </button>
               </div>
 
-              {/* Content */}
               <div className="p-4">
                 <h3 className="line-clamp-2 text-lg font-semibold">
                   <Link
@@ -197,7 +190,6 @@ export default function ManageOwnArticles() {
                 </div>
               </div>
 
-              {/* Glow */}
               <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition">
                 <div className="absolute -inset-px rounded-2xl bg-gradient-to-r from-white/10 via-transparent to-white/10" />
               </div>

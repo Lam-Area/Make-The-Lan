@@ -12,14 +12,12 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        // ⬅️ ne plus valider/recevoir "role"
         $validated = $request->validate([
             'name'                  => 'required|string|max:100',
             'email'                 => 'required|email:rfc|max:150|unique:users,email',
             'password'              => 'required|string|min:8|confirmed',
         ]);
 
-        // ⬅️ rôle forcé côté serveur
         $user = \App\Models\User::create([
             'name'       => $validated['name'],
             'email'      => $validated['email'],
@@ -33,7 +31,7 @@ class AuthController extends Controller
 
         UserLog::create([
             'user_id'    => $user->id,
-            'name'       => Auth::user()->name, // si votre table user_logs n'a pas "name", retirez cette ligne
+            'name'       => Auth::user()->name,
             'action'     => 'Inscription réussie',
             'ip_address' => $request->ip(),
             'created_at' => now(),
@@ -59,12 +57,11 @@ class AuthController extends Controller
 
             UserLog::create([
                 'user_id'    => Auth::id(),
-                'name'       => Auth::user()->name, // idem remarque
+                'name'       => Auth::user()->name,
                 'action'     => 'Connexion réussie',
                 'ip_address' => $request->ip(),
             ]);
 
-            // Fusion liste de souhaits locale -> BDD
             $wishlist = json_decode($request->cookie('wishlist_items'), true);
             if (is_array($wishlist)) {
                 foreach ($wishlist as $item) {
@@ -90,7 +87,7 @@ class AuthController extends Controller
         if (Auth::check()) {
             UserLog::create([
                 'user_id'    => Auth::id(),
-                'name'       => Auth::user()->name, // idem remarque
+                'name'       => Auth::user()->name,
                 'action'     => 'Déconnexion',
                 'ip_address' => $request->ip(),
             ]);

@@ -1,4 +1,3 @@
-// resources/js/Pages/Page404.jsx
 import React from 'react';
 import { Link, Head, router } from '@inertiajs/react';
 
@@ -16,17 +15,14 @@ export default function Page404() {
     <>
       <Head title="Page introuvable • 404" />
       <div className="relative min-h-screen w-full overflow-hidden bg-[#0b0e10] text-white flex items-center justify-center">
-        {/* halos décoratifs */}
         <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-blue-500/20 blur-3xl" />
 
-        {/* carte centrale */}
         <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
           <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-8 md:p-12 backdrop-blur">
             <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-white/10" />
 
             <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2">
-              {/* bloc gauche : code + texte + CTAs */}
               <div>
                 <div className="text-[65px] leading-none font-black tracking-tight sm:text-[88px] md:text-[110px]">
                   <span className="bg-gradient-to-r from-emerald-300 via-white to-emerald-300 bg-clip-text text-transparent">
@@ -63,7 +59,6 @@ export default function Page404() {
                 </div>
               </div>
 
-              {/* bloc droit : recherche */}
               <div className="rounded-2xl border border-white/10 bg-[#0b0e10]/60 p-5 backdrop-blur">
                 <h2 className="text-lg font-medium">Chercher un article</h2>
                 <p className="mt-1 text-sm text-gray-300">

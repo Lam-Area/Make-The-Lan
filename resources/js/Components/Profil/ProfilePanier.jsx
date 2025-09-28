@@ -1,4 +1,3 @@
-// resources/js/Components/Profil/ProfilePanier.jsx (ou ta page Panier)
 import React from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
 import { useCart } from '@/Context/CartContext';
@@ -11,21 +10,18 @@ export default function CartSection() {
   const { cart, removeFromCart } = useCart();
   const { auth } = usePage().props;
 
-  // Sous-total = somme des (prix * quantité)
   const subtotal = cart.reduce(
     (sum, it) => sum + Number(it.price || 0) * Number(it.quantity || 1),
     0
   );
 
-  // Mode import : pas de TVA au panier
-  const total = subtotal; // Total (hors taxes d’import)
+  const total = subtotal;
 
   const goCheckout = () => {
     if (!auth?.user) {
       router.visit('/login');
       return;
     }
-    // On envoie les items à Stripe via /checkout
     const items = cart.map((it) => ({
       id: it.id,
       title: it.title,
@@ -58,7 +54,6 @@ export default function CartSection() {
       <h2 className="text-2xl sm:text-3xl font-semibold">Mon panier</h2>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
-        {/* Liste des items */}
         <div className="lg:col-span-2 space-y-4">
           {cart.map((item) => {
             const qty = Number(item.quantity || 1);
@@ -125,7 +120,6 @@ export default function CartSection() {
           })}
         </div>
 
-        {/* Récapitulatif */}
         <div className="lg:col-span-1">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur">
             <h3 className="text-lg font-semibold">Récapitulatif</h3>
@@ -136,7 +130,6 @@ export default function CartSection() {
                 <span>{fmtEUR(subtotal)}</span>
               </div>
 
-              {/* Taxes import : texte uniquement */}
               <div className="flex items-start justify-between text-gray-300">
                 <span className="pr-4">Taxes</span>
                 <span className="text-right italic">Calculées à l’import</span>

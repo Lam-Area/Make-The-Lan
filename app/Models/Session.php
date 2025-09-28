@@ -19,7 +19,6 @@ class Session extends Model
         'last_activity' => 'datetime',
     ];
 
-    // session basé sur user
     public function user()
     {
         return $this->belongsTo(User::class);

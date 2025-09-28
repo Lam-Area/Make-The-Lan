@@ -1,7 +1,6 @@
-// resources/js/Pages/Articles/Create.jsx
 import React from 'react';
 import { useForm, Link, usePage } from '@inertiajs/react';
-import MainLayout from '@/Layouts/MainLayout';           // ⬅️ import du layout
+import MainLayout from '@/Layouts/MainLayout';
 import {
   ArrowLeft, Save, Image as ImageIcon, FileJson, Tag, Type, Hash, Layers,
   DollarSign, Package, Building, Info, CheckCircle2, AlertTriangle
@@ -71,9 +70,8 @@ export default function Create() {
   };
 
   return (
-    <MainLayout> {/* ⬅️ le fond & le header/footer viennent d’ici */}
+    <MainLayout>
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 py-8 text-white">
-        {/* Header */}
         <div className="mb-6 flex items-center justify-between">
           <div>
             <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Créer un article</h1>
@@ -87,9 +85,7 @@ export default function Create() {
           </Link>
         </div>
 
-        {/* Form + Preview */}
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          {/* LEFT */}
           <div className="lg:col-span-2 space-y-5">
             <Section title="Informations produit">
               <Field label="Titre" error={errors.title} icon={<Type size={16} />}>
@@ -256,7 +252,6 @@ export default function Create() {
             </div>
           </div>
 
-          {/* RIGHT: apercu */}
           <div className="lg:col-span-1">
             <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur">
               <div className="relative aspect-[16/10] overflow-hidden rounded-t-2xl">
@@ -303,7 +298,6 @@ export default function Create() {
   );
 }
 
-/* UI bits */
 function Section({ title, children }) {
   return (
     <section className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-5 backdrop-blur">

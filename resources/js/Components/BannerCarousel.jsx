@@ -1,4 +1,3 @@
-// resources/js/Components/BannerCarousel.jsx
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -9,16 +8,15 @@ const banners = [
 ];
 
 export default function BannerCarousel() {
-  // Duplique en tête/queue pour boucler sans flash
   const slides = useMemo(() => {
     if (!banners.length) return [];
     const first = banners[0], last = banners[banners.length - 1];
     return [last, ...banners, first];
   }, []);
 
-  const [index, setIndex] = useState(1);       // commence sur le 1er “vrai” slide
-  const [anim, setAnim] = useState(true);      // active la transition CSS
-  const [paused, setPaused] = useState(false); // pause au survol
+  const [index, setIndex] = useState(1);
+  const [anim, setAnim] = useState(true);
+  const [paused, setPaused] = useState(false);
   const animatingRef = useRef(false);
   const autoplayMs = 5000;
 
@@ -36,35 +34,28 @@ export default function BannerCarousel() {
   const next = () => goTo(index + 1);
   const prev = () => goTo(index - 1);
 
-  // Autoplay
   useEffect(() => {
     if (paused || !banners.length) return;
     const t = setInterval(next, autoplayMs);
     return () => clearInterval(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paused, index, banners.length]);
 
-  // Bouclage “invisible” en fin/début de track
   const onTransitionEnd = () => {
     animatingRef.current = false;
     if (index === slides.length - 1) {
-      // fin -> saute sans transition au 1
       setAnim(false);
       setIndex(1);
       requestAnimationFrame(() => {
-        // réactive la transition pour le prochain mouvement
         setAnim(true);
       });
     } else if (index === 0) {
-      // début -> saute sans transition au dernier réel
       setAnim(false);
       setIndex(slides.length - 2);
       requestAnimationFrame(() => setAnim(true));
     }
   };
 
-  // Aller à un point précis (depuis les bullets)
-  const gotoDot = (i) => goTo(i + 1); // +1 car offset (slide 0 = clone fin)
+  const gotoDot = (i) => goTo(i + 1);
 
   return (
     <div
@@ -72,7 +63,6 @@ export default function BannerCarousel() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Track */}
       <div
         className={`flex h-64 sm:h-72 lg:h-80 select-none ${anim ? 'transition-transform duration-700 ease-[cubic-bezier(.22,.61,.36,1)]' : ''}`}
         style={{ transform: `translateX(-${index * 100}%)` }}
@@ -94,7 +84,6 @@ export default function BannerCarousel() {
               loading={i === index ? 'eager' : 'lazy'}
               draggable="false"
             />
-            {/* voile et bords dégradés pour un rendu plus “hero” */}
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20" />
             <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-black/30 to-transparent" />
             <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-black/30 to-transparent" />
@@ -102,7 +91,6 @@ export default function BannerCarousel() {
         ))}
       </div>
 
-      {/* Flèches */}
       <button
         onClick={prev}
         aria-label="Slide précédent"
@@ -118,7 +106,6 @@ export default function BannerCarousel() {
         <ChevronRight className="h-5 w-5 text-white" />
       </button>
 
-      {/* Bullets */}
       <div className="pointer-events-none absolute bottom-3 left-0 right-0 flex items-center justify-center gap-2">
         {banners.map((_, i) => (
           <button

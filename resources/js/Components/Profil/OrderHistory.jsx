@@ -1,4 +1,3 @@
-// resources/js/Components/Profil/OrderHistory.jsx (ou remplace ton fichier actuel)
 import React from 'react';
 import { usePage, Link } from '@inertiajs/react';
 import {
@@ -55,7 +54,6 @@ function OrderCard({ order }) {
 
   return (
     <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
-      {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/15">
@@ -79,14 +77,12 @@ function OrderCard({ order }) {
         </div>
       </div>
 
-      {/* Items */}
       <div className="mt-4 grid grid-cols-1 gap-3">
         {items.map((it) => (
           <OrderItem key={it.id} item={it} />
         ))}
       </div>
 
-      {/* Footer */}
       <div className="mt-4 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
         <div className="text-sm text-gray-300">
           Total TTC : <span className="text-lg font-semibold text-white">{total}</span>

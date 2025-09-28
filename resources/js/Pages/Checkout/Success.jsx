@@ -39,8 +39,8 @@ export default function Success() {
                 'X-Requested-With': 'XMLHttpRequest',
                 },
                 body: JSON.stringify({
-                session_id: sessionId || '',                 // ✅ requis
-                items: cart,                                  // [{id, price, ...}]
+                session_id: sessionId || '',
+                items: cart,  
                 payment_intent: session?.payment_intent || '',
                 }),
             });
@@ -53,7 +53,6 @@ export default function Success() {
             setFinalizeError('');
             setFinalized(true);
             } catch (e) {
-            // En dernier recours, si Stripe dit paid, on vide quand même le panier local
             if (alreadyPaid) {
                 try { localStorage.removeItem('cart_items'); } catch {}
                 clearCart?.();

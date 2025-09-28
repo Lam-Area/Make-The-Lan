@@ -1,0 +1,51 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Make The Lan - Logo</title>
+  <desc id="desc">Barres réseau cyan reliées à des nœuds verts, style moderne 2024</desc>
+
+  <!-- Défs -->
+  <defs>
+    <!-- Dégradés -->
+    <linearGradient id="g-bar" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#22D3EE"></stop>
+      <stop offset="100%" stop-color="#06B6D4"></stop>
+    </linearGradient>
+    <linearGradient id="g-node" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#34D399"></stop>
+      <stop offset="100%" stop-color="#10B981"></stop>
+    </linearGradient>
+
+    <!-- Glow discret -->
+    <filter id="soft-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"></feGaussianBlur>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.75
+                0 0 0 0 0.95
+                0 0 0 0 1
+                0 0 0 0.55 0" result="glow"></feColorMatrix>
+      <feMerge>
+        <feMergeNode in="glow"></feMergeNode>
+        <feMergeNode in="SourceGraphic"></feMergeNode>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Groupe principal -->
+  <g filter="url(#soft-glow)">
+    <!-- Nœuds gauches -->
+    <rect x="30" y="54" width="26" height="26" rx="8" fill="url(#g-node)"></rect>
+    <rect x="30" y="106" width="26" height="26" rx="8" fill="url(#g-node)"></rect>
+    <rect x="30" y="158" width="26" height="26" rx="8" fill="url(#g-node)"></rect>
+
+    <!-- Nœuds droits -->
+    <rect x="200" y="54" width="26" height="26" rx="8" fill="url(#g-node)"></rect>
+    <rect x="200" y="106" width="26" height="26" rx="8" fill="url(#g-node)"></rect>
+    <rect x="200" y="210-52" width="26" height="26" rx="8" fill="url(#g-node)"></rect>
+    <!-- (le dernier est volontairement décalé pour dynamiser la compo) -->
+    <rect x="200" y="210" width="26" height="26" rx="8" fill="url(#g-node)" opacity="0.0"></rect>
+
+    <!-- Barres LAN -->
+    <rect x="70" y="48" width="116" height="36" rx="12" fill="url(#g-bar)"></rect>
+    <rect x="70" y="100" width="156" height="36" rx="12" fill="url(#g-bar)"></rect>
+    <rect x="70" y="152" width="156" height="36" rx="12" fill="url(#g-bar)"></rect>
+    <rect x="70" y="204" width="136" height="36" rx="12" fill="url(#g-bar)"></rect>
+  </g>
+</svg>

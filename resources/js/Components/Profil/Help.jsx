@@ -1,4 +1,3 @@
-// resources/js/Components/Profil/Help.jsx
 import React from 'react';
 import { Link } from '@inertiajs/react';
 import {
@@ -47,7 +46,6 @@ export default function HelpSection() {
 
   return (
     <div className="space-y-6">
-      {/* Bandeau / tip */}
       <div className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-5 backdrop-blur">
         <div className="flex items-start gap-3">
           <ShieldCheck className="mt-0.5 h-5 w-5 text-emerald-400" />
@@ -62,7 +60,6 @@ export default function HelpSection() {
         </div>
       </div>
 
-      {/* Recherche */}
       <div className="rounded-2xl border border-white/10 bg-white/5 p-3 sm:p-4 backdrop-blur">
         <div className="relative">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
@@ -75,7 +72,6 @@ export default function HelpSection() {
         </div>
       </div>
 
-      {/* FAQ */}
       <div className="rounded-2xl border border-white/10 bg-white/5 p-2 sm:p-3 backdrop-blur">
         <h3 className="px-2 sm:px-3 py-2 text-sm font-semibold text-gray-200">
           Questions fréquentes
@@ -87,7 +83,6 @@ export default function HelpSection() {
         </div>
       </div>
 
-      {/* Raccourcis / Liens utiles */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <CardLink
           icon={LifeBuoy}
@@ -103,7 +98,6 @@ export default function HelpSection() {
         />
       </div>
 
-      {/* Contact / Support */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <ActionCard
           icon={Mail}
@@ -124,7 +118,6 @@ export default function HelpSection() {
   );
 }
 
-/* --------- UI subcomponents --------- */
 
 function Accordion({ question, answer }) {
   const [open, setOpen] = React.useState(false);

@@ -1,4 +1,3 @@
-// resources/js/Components/Profil/UserLogs.jsx
 import React, { useMemo, useState } from "react";
 import { Link } from "@inertiajs/react";
 import { Search, Filter, Trash2, Globe, Clock, Activity, User as UserIcon } from "lucide-react";
@@ -29,7 +28,6 @@ export default function UserLogs({ logs }) {
     if (action !== "all") {
       out = out.filter((l) => l.action === action);
     }
-    // tri récent -> ancien
     out.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     return out;
   }, [rows, q, action]);
@@ -38,7 +36,6 @@ export default function UserLogs({ logs }) {
 
   return (
     <div className="text-white">
-      {/* Header */}
       <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2 className="text-2xl sm:text-3xl font-semibold">Logs des utilisateurs</h2>
@@ -49,9 +46,7 @@ export default function UserLogs({ logs }) {
         </div>
       </div>
 
-      {/* Filtres */}
       <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
-        {/* Recherche */}
         <div className="rounded-xl border border-white/10 bg-white/5 p-2 backdrop-blur">
           <label className="mb-1 block text-xs text-gray-400">Recherche</label>
           <div className="relative">
@@ -68,7 +63,6 @@ export default function UserLogs({ logs }) {
           </div>
         </div>
 
-        {/* Action */}
         <div className="rounded-xl border border-white/10 bg-white/5 p-2 backdrop-blur">
           <label className="mb-1 block text-xs text-gray-400">Action</label>
           <div className="relative">
@@ -90,7 +84,6 @@ export default function UserLogs({ logs }) {
           </div>
         </div>
 
-        {/* Reset */}
         <div className="flex items-end">
           <button
             onClick={() => {
@@ -105,7 +98,6 @@ export default function UserLogs({ logs }) {
         </div>
       </div>
 
-      {/* Table */}
       <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/5 backdrop-blur">
         <table className="min-w-full text-left text-sm">
           <thead>
@@ -174,7 +166,6 @@ export default function UserLogs({ logs }) {
         </table>
       </div>
 
-      {/* Pagination légère */}
       {filtered.length > limit && (
         <div className="mt-4 flex justify-center">
           <button
@@ -199,7 +190,6 @@ export default function UserLogs({ logs }) {
   );
 }
 
-/* ——— UI helpers ——— */
 function Th({ children, className = "" }) {
   return <th className={`px-4 py-3 ${className}`}>{children}</th>;
 }

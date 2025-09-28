@@ -18,7 +18,6 @@ const fmtDateTime = (d) => {
 };
 
 export default function PurchaseLogs() {
-  // ⚠️ Attendu depuis le contrôleur: purchaseLogs = [...]
   const { purchaseLogs = [] } = usePage().props;
 
   const [q, setQ] = React.useState('');
@@ -36,7 +35,6 @@ export default function PurchaseLogs() {
 
   return (
     <section>
-      {/* Header */}
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2 className="text-2xl sm:text-3xl font-semibold">
@@ -47,7 +45,6 @@ export default function PurchaseLogs() {
           </p>
         </div>
 
-        {/* Recherche */}
         <div className="relative w-full sm:w-80">
           <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <input
@@ -59,7 +56,6 @@ export default function PurchaseLogs() {
         </div>
       </div>
 
-      {/* Liste */}
       {filtered.length ? (
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur">
           <ul className="divide-y divide-white/10">
@@ -68,14 +64,12 @@ export default function PurchaseLogs() {
               const unit = Number(log.price || 0);
               const total = unit * qty;
 
-              // avatar initial
               const initial =
                 (log?.user?.name?.trim()?.[0] || log?.user?.email?.trim()?.[0] || '?')
                   .toUpperCase();
 
               return (
                 <li key={log.id} className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-12 hover:bg-white/5 transition">
-                  {/* Acheteur */}
                   <div className="sm:col-span-4 flex items-center gap-3">
                     <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 bg-white/10 text-sm font-semibold">
                       {initial}
@@ -89,7 +83,6 @@ export default function PurchaseLogs() {
                     </div>
                   </div>
 
-                  {/* Article */}
                   <div className="sm:col-span-4 min-w-0">
                     <div className="flex items-center gap-2 text-sm font-medium">
                       <Package size={16} className="opacity-70" />
@@ -117,7 +110,6 @@ export default function PurchaseLogs() {
                     </div>
                   </div>
 
-                  {/* Montants */}
                   <div className="sm:col-span-4 flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <div className="text-xs text-gray-400">Prix unitaire</div>

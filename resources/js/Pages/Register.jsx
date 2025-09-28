@@ -1,17 +1,16 @@
-// resources/js/Pages/Register.jsx
 import React from 'react';
 import { useForm, Link, Head } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
 import { Eye, EyeOff, Mail, User, Lock } from 'lucide-react';
 
-/* Utilitaires */
+
 const strengthOf = (pwd) => {
   let score = 0;
   if (pwd.length >= 8) score++;
   if (/[a-z]/.test(pwd) && /[A-Z]/.test(pwd)) score++;
   if (/\d/.test(pwd)) score++;
   if (/[^A-Za-z0-9]/.test(pwd)) score++;
-  return score; // 0..4
+  return score;
 };
 const strengthLabel = ['Très faible', 'Faible', 'Moyenne', 'Bonne', 'Excellente'];
 
@@ -54,12 +53,12 @@ export default function Register() {
       <Head title="Créer un compte" />
 
       <div className="min-h-screen text-white">
-        {/* Centrage vertical comme sur la page de connexion */}
+
         <div className="min-h-[calc(100vh-8rem)] flex items-center">
+
           <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-6 lg:py-0">
-            {/* Mobile: 1 col (pitch au-dessus du form). Desktop: 2 cols */}
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-              {/* Pitch / visuel — visible aussi en mobile (reste au-dessus) */}
               <div>
                 <h1 className="text-4xl font-semibold leading-tight">
                   Rejoins <span className="text-emerald-400">Make The Lan</span>
@@ -78,7 +77,7 @@ export default function Register() {
                 </div>
               </div>
 
-              {/* Carte glass formulaire */}
+
               <div className="relative">
                 <div className="absolute -inset-0.5 rounded-[22px] bg-gradient-to-tr from-white/15 via-transparent to-white/15 blur-sm" />
                 <div className="relative rounded-[20px] border border-white/10 bg-white/5 p-6 sm:p-8 backdrop-blur">
@@ -90,10 +89,10 @@ export default function Register() {
                     </Link>
                   </p>
 
-                  {/* Champ caché role=user */}
+
                   <input type="hidden" name="role" value={data.role} />
 
-                  {/* erreurs globales */}
+
                   {(clientError || errors?.message) && (
                     <div className="mt-4 rounded-lg border border-amber-400/30 bg-amber-400/10 p-3 text-amber-200 text-sm">
                       {clientError || errors.message}
@@ -101,7 +100,7 @@ export default function Register() {
                   )}
 
                   <form onSubmit={onSubmit} className="mt-6 space-y-4">
-                    {/* Nom */}
+
                     <Field
                       label="Nom"
                       error={errors.name}
@@ -117,7 +116,7 @@ export default function Register() {
                       />
                     </Field>
 
-                    {/* Email */}
+
                     <Field
                       label="Email"
                       error={errors.email}
@@ -133,7 +132,7 @@ export default function Register() {
                       />
                     </Field>
 
-                    {/* Password */}
+
                     <Field
                       label="Mot de passe"
                       error={errors.password}
@@ -159,7 +158,7 @@ export default function Register() {
                       />
                     </Field>
 
-                    {/* Strength meter */}
+
                     <div className="mt-1">
                       <div className="flex gap-1">
                         {[0, 1, 2, 3].map((i) => (
@@ -174,7 +173,7 @@ export default function Register() {
                       </div>
                     </div>
 
-                    {/* Confirmation */}
+
                     <Field
                       label="Confirmer le mot de passe"
                       icon={<Lock size={18} className="text-gray-400" />}
@@ -199,7 +198,7 @@ export default function Register() {
                       />
                     </Field>
 
-                    {/* Cookies */}
+
                     <label className="mt-3 flex items-start gap-3 text-sm">
                       <input
                         type="checkbox"
@@ -220,7 +219,7 @@ export default function Register() {
                       </span>
                     </label>
 
-                    {/* CTA */}
+
                     <button
                       type="submit"
                       disabled={processing}
@@ -246,7 +245,7 @@ export default function Register() {
   );
 }
 
-/* Composant champ avec label + icône + bordure glass */
+
 function Field({ label, error, icon, trailing, children }) {
   return (
     <div>

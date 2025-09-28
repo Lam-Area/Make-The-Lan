@@ -1,4 +1,3 @@
-// resources/js/Components/Profil/ArticleAdmin.jsx
 import React, { useMemo, useState } from "react";
 import { Link, router, usePage } from "@inertiajs/react";
 import { Plus, Search, Filter, Edit3, Trash2, Package, Layers, Tag } from "lucide-react";
@@ -83,7 +82,6 @@ export default function ArticleAdmin() {
 
   return (
     <div className="text-white">
-      {/* Header */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2 className="text-2xl sm:text-3xl font-semibold">Gestion des articles</h2>
@@ -97,14 +95,12 @@ export default function ArticleAdmin() {
         </Link>
       </div>
 
-      {/* Stats */}
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <StatCard icon={<Layers size={18} />} label="Articles" value={stats.total} />
         <StatCard icon={<Package size={18} />} label="Stock total" value={stats.stock} />
         <StatCard icon={<Tag size={18} />} label="Prix moyen" value={fmtEUR(stats.avg)} />
       </div>
 
-      {/* Filtres */}
       <div className="mb-4 grid grid-cols-1 gap-3 md:grid-cols-3">
         <div className="rounded-xl border border-white/10 bg-white/5 p-2 backdrop-blur">
           <label className="mb-1 block text-xs text-gray-400">Recherche</label>
@@ -153,7 +149,6 @@ export default function ArticleAdmin() {
         </div>
       </div>
 
-      {/* ======= LISTE MOBILE ( < lg ) ======= */}
       <ul className="lg:hidden space-y-3">
         {filtered.length === 0 ? (
           <li className="rounded-xl border border-white/10 bg-white/5 p-4 text-center text-gray-300">
@@ -200,7 +195,6 @@ export default function ArticleAdmin() {
         )}
       </ul>
 
-      {/* ======= TABLEAU DESKTOP ( >= lg ) ======= */}
       <div className="mt-3 hidden lg:block overflow-x-auto rounded-2xl border border-white/10 bg-white/5 backdrop-blur">
         <table className="min-w-full table-fixed text-left text-sm">
           <thead>
@@ -264,7 +258,6 @@ export default function ArticleAdmin() {
   );
 }
 
-/* ——— UI helpers ——— */
 function Th({ children, className = "" }) {
   return <th className={`px-4 py-3 ${className}`}>{children}</th>;
 }

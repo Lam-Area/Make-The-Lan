@@ -15,7 +15,6 @@ export default function Cancel() {
         title: item.title,
         price: parseFloat(item.price || 0),
         quantity: 1,
-        // main_image_url: item.main_image_url ?? undefined,
       })),
     [cart]
   );

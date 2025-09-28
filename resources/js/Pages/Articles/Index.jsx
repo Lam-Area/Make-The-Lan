@@ -1,4 +1,3 @@
-// resources/js/Pages/Articles/Index.jsx
 import React from 'react';
 import { Link, usePage, router } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
@@ -8,7 +7,6 @@ import { Search, Filter, X } from 'lucide-react';
 const fmtEUR = (n) =>
   new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(n || 0));
 
-/* Highlights verts pour une partie du titre */
 function Highlight({ title, highlight }) {
   if (!highlight) return title;
   const i = title.indexOf(highlight);
@@ -77,7 +75,6 @@ export default function Index() {
       <div className="min-h-screen text-white">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10">
 
-          {/* Header */}
           <div className="flex items-end justify-between gap-3">
             <div>
               <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">
@@ -86,7 +83,6 @@ export default function Index() {
               <p className="mt-1 text-sm text-gray-300">{subtitleByCat(filters.category)}</p>
             </div>
 
-            {/* Filtres rapides */}
             <div className="hidden sm:flex items-center gap-2">
               <FilterPill
                 active={!filters.category}
@@ -106,9 +102,7 @@ export default function Index() {
             </div>
           </div>
 
-          {/* Barre d’outils: recherche + tri */}
           <div className="mt-5 mb-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-            {/* Recherche */}
             <form onSubmit={submit} className="sm:col-span-2">
               <div className="relative">
                 <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -131,7 +125,6 @@ export default function Index() {
               </div>
             </form>
 
-            {/* Tri */}
             <div className="rounded-xl border border-white/10 bg-white/5 p-2 backdrop-blur">
               <label className="mb-1 flex items-center gap-2 text-xs text-gray-400">
                 <Filter size={14} /> Trier par
@@ -149,7 +142,6 @@ export default function Index() {
             </div>
           </div>
 
-          {/* Grid */}
           {articles.length ? (
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {articles.map((a) => (
@@ -197,7 +189,6 @@ function ProductCard({ article, onAdd }) {
 
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur transition hover:border-white/20 hover:bg-white/[0.07]">
-      {/* Image */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-black/30">
         <img
           src={img}
@@ -212,7 +203,6 @@ function ProductCard({ article, onAdd }) {
         )}
       </div>
 
-      {/* Content */}
       <div className="p-4">
         <h3 className="line-clamp-2 text-lg font-semibold">
           <Link
@@ -251,7 +241,6 @@ function ProductCard({ article, onAdd }) {
         </div>
       </div>
 
-      {/* Glow */}
       <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition">
         <div className="absolute -inset-px rounded-2xl bg-gradient-to-r from-white/10 via-transparent to-white/10" />
       </div>

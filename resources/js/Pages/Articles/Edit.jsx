@@ -1,4 +1,3 @@
-// resources/js/Pages/Articles/Edit.jsx
 import React from 'react';
 import { useForm, usePage, Link } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
@@ -45,7 +44,6 @@ export default function Edit() {
       ? JSON.stringify(article.specs)
       : (article.specs || ''),
 
-    // hérités (optionnels)
     file_path: article.file_path || '',
     code_preview: article.code_preview || '',
     vendeur_id: article.vendeur_id || '',
@@ -70,7 +68,6 @@ export default function Edit() {
   return (
     <MainLayout>
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10 text-white">
-        {/* Header */}
         <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">
@@ -89,7 +86,6 @@ export default function Edit() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Form */}
           <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-5">
             <Section title="Caractéristiques principales">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -251,7 +247,6 @@ export default function Edit() {
               <input type="hidden" name="vendeur_id" value={data.vendeur_id} />
             </details>
 
-            {/* Actions */}
             <div className="flex items-center gap-3">
               <button
                 type="submit"
@@ -269,7 +264,6 @@ export default function Edit() {
             </div>
           </form>
 
-          {/* Aperçu */}
           <aside className="space-y-4">
             <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
               <div className="mb-3 text-sm text-gray-300">Aperçu</div>
@@ -332,7 +326,6 @@ export default function Edit() {
   );
 }
 
-/* ---------- UI helpers ---------- */
 function Section({ title, children }) {
   return (
     <section className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-5 backdrop-blur">

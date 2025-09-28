@@ -1,11 +1,9 @@
-// resources/js/Pages/Users/Index.jsx
 import React, { useMemo, useState } from "react";
 import { Head, Link, usePage } from "@inertiajs/react";
 import MainLayout from "@/Layouts/MainLayout";
 import { Plus, Search, Shield, Users as UsersIcon } from "lucide-react";
 
 export default function UsersIndex({ users }) {
-  // users est un paginator Laravel (users.data, users.links, etc.)
   const { props } = usePage();
   const [q, setQ] = useState("");
   const [role, setRole] = useState("all");
@@ -38,7 +36,6 @@ export default function UsersIndex({ users }) {
       <Head title="Utilisateurs" />
       <div className="min-h-screen text-white">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10">
-          {/* En-tête */}
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h1 className="text-2xl sm:text-3xl font-semibold flex items-center gap-2">
@@ -58,9 +55,7 @@ export default function UsersIndex({ users }) {
             </Link>
           </div>
 
-          {/* Stats & filtres */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-6">
-            {/* Carte stats */}
             <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
               <div className="text-sm text-gray-300">Total</div>
               <div className="mt-1 text-2xl font-semibold">{total}</div>
@@ -71,7 +66,6 @@ export default function UsersIndex({ users }) {
               </div>
             </div>
 
-            {/* Recherche */}
             <div className="lg:col-span-2 rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
               <label className="mb-2 block text-sm text-gray-300">
                 Recherche
@@ -87,7 +81,6 @@ export default function UsersIndex({ users }) {
               </div>
             </div>
 
-            {/* Filtre rôle */}
             <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
               <label className="mb-2 block text-sm text-gray-300">Rôle</label>
               <div className="inline-flex overflow-hidden rounded-xl border border-white/10">
@@ -114,7 +107,6 @@ export default function UsersIndex({ users }) {
             </div>
           </div>
 
-          {/* Tableau */}
           <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/5 backdrop-blur">
             <table className="min-w-full text-left text-sm">
               <thead>
@@ -201,7 +193,6 @@ export default function UsersIndex({ users }) {
             </table>
           </div>
 
-          {/* Pagination (compatible links ou prev/next) */}
           <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
             <div className="text-sm text-gray-300">
               Page {users?.current_page} / {users?.last_page}
@@ -214,7 +205,6 @@ export default function UsersIndex({ users }) {
   );
 }
 
-/* —————— UI helpers —————— */
 function Th({ children }) {
   return <th className="px-4 py-3">{children}</th>;
 }
@@ -269,7 +259,6 @@ function RoleBadge({ role }) {
 }
 
 function Pagination({ users }) {
-  // Supporte users.links (Laravel) ou prev/next simples
   const links = users?.links;
   if (Array.isArray(links) && links.length) {
     return (

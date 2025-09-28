@@ -1,5 +1,3 @@
-// resources/js/Pages/CartItems/Edit.jsx
-
 import React from 'react';
 import { useForm, Head, Link } from '@inertiajs/react';
 

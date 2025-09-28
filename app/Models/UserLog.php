@@ -21,7 +21,6 @@ class UserLog extends Model
         'created_at' => 'datetime',
     ];
 
-    // logs du user
     public function user()
     {
         return $this->belongsTo(User::class);

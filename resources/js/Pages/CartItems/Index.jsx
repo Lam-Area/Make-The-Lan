@@ -1,5 +1,3 @@
-// resources/js/Pages/CartItems/Index.jsx
-
 import React from 'react';
 import { Link } from '@inertiajs/react';
 

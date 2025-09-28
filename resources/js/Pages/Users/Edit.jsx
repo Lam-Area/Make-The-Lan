@@ -1,4 +1,3 @@
-// resources/js/Pages/Users/Edit.jsx
 import React, { useState } from "react";
 import { useForm, Head, Link } from "@inertiajs/react";
 import MainLayout from "@/Layouts/MainLayout";
@@ -25,7 +24,6 @@ export default function Edit({ user }) {
 
       <div className="min-h-screen text-white">
         <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 py-10">
-          {/* Header */}
           <div className="mb-6 flex items-center justify-between gap-3">
             <div>
               <h1 className="text-2xl sm:text-3xl font-semibold">
@@ -43,14 +41,12 @@ export default function Edit({ user }) {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Formulaire */}
             <div className="relative lg:col-span-2">
               <div className="absolute -inset-0.5 rounded-[22px] bg-gradient-to-tr from-white/15 via-transparent to-white/15 blur-sm" />
               <form
                 onSubmit={submit}
                 className="relative rounded-[20px] border border-white/10 bg-white/5 p-6 sm:p-8 backdrop-blur space-y-5"
               >
-                {/* Nom */}
                 <Field label="Nom" error={errors.name} icon={<UserIcon size={18} className="text-gray-400" />}>
                   <input
                     type="text"
@@ -62,7 +58,6 @@ export default function Edit({ user }) {
                   />
                 </Field>
 
-                {/* Email */}
                 <Field label="Email" error={errors.email} icon={<Mail size={18} className="text-gray-400" />}>
                   <input
                     type="email"
@@ -74,7 +69,6 @@ export default function Edit({ user }) {
                   />
                 </Field>
 
-                {/* Mot de passe */}
                 <Field label="Mot de passe (laisser vide pour ne pas changer)" error={errors.password} icon={<Lock size={18} className="text-gray-400" />}
                   trailing={
                     <button
@@ -97,7 +91,6 @@ export default function Edit({ user }) {
                   />
                 </Field>
 
-                {/* Rôle */}
                 <div>
                   <label className="mb-1 block text-sm text-gray-300">Rôle</label>
                   <div className="inline-flex overflow-hidden rounded-xl border border-white/10">
@@ -126,7 +119,6 @@ export default function Edit({ user }) {
                   )}
                 </div>
 
-                {/* Actions */}
                 <div className="pt-2 flex items-center gap-3">
                   <button
                     type="submit"
@@ -145,7 +137,6 @@ export default function Edit({ user }) {
               </form>
             </div>
 
-            {/* Panneau latéral (infos rapides) */}
             <aside className="space-y-6">
               <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur">
                 <div className="flex items-center gap-3">
@@ -175,7 +166,6 @@ export default function Edit({ user }) {
                 </div>
               </div>
 
-              {/* Danger zone (optionnel) */}
               <div className="rounded-2xl border border-red-500/30 bg-red-500/10 p-5">
                 <div className="text-sm text-red-200 mb-3 font-medium">
                   Zone sensible
@@ -202,7 +192,6 @@ export default function Edit({ user }) {
   );
 }
 
-/* Champ générique avec icône & verre */
 function Field({ label, error, icon, trailing, children }) {
   return (
     <div>

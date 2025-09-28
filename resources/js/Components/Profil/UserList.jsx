@@ -1,4 +1,3 @@
-// resources/js/Components/Profil/UserList.jsx
 import React from "react";
 import { Link } from "@inertiajs/react";
 import {
@@ -10,7 +9,6 @@ import {
   User2,
 } from "lucide-react";
 
-/* Petites helpers */
 const roleBadge = (role) => {
   switch (role) {
     case "admin":
@@ -67,7 +65,6 @@ export default function UserList({ users = [] }) {
 
   return (
     <section className="space-y-4">
-      {/* Header + outils */}
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 className="text-xl sm:text-2xl font-semibold">
@@ -80,7 +77,6 @@ export default function UserList({ users = [] }) {
         </div>
 
         <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:items-center">
-          {/* Recherche */}
           <label className="relative inline-flex w-full items-center sm:w-72">
             <Search className="pointer-events-none absolute left-3 h-4 w-4 text-gray-400" />
             <input
@@ -91,7 +87,6 @@ export default function UserList({ users = [] }) {
             />
           </label>
 
-          {/* Filtres rôle */}
           <div className="inline-flex overflow-hidden rounded-xl border border-white/10">
             {[
               { v: "all", label: "Tous" },
@@ -115,9 +110,7 @@ export default function UserList({ users = [] }) {
         </div>
       </div>
 
-      {/* Container verre */}
       <div className="rounded-2xl border border-white/10 bg-white/5 p-3 sm:p-4 backdrop-blur">
-        {/* Table (desktop) */}
         <div className="hidden md:block overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead>
@@ -194,7 +187,6 @@ export default function UserList({ users = [] }) {
           </table>
         </div>
 
-        {/* Cartes (mobile) */}
         <div className="grid gap-3 md:hidden">
           {filtered.length === 0 ? (
             <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-center text-gray-300">

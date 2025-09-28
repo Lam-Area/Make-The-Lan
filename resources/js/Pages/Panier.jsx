@@ -1,4 +1,3 @@
-// resources/js/Pages/Panier.jsx
 import React from 'react';
 import { useCart } from '@/Context/CartContext';
 import { Link, router } from '@inertiajs/react';
@@ -33,7 +32,6 @@ export default function Panier() {
         <section className="mx-auto w-full max-w-6xl px-4 sm:px-6 py-10">
           <h1 className="text-3xl font-semibold tracking-tight">Votre panier</h1>
 
-          {/* Empty state */}
           {cart.length === 0 ? (
             <div className="mt-10 rounded-2xl border border-white/10 bg-white/5 p-10 text-center backdrop-blur">
               <div className="mx-auto mb-3 h-12 w-12 rounded-full bg-white/10 grid place-items-center">🧺</div>
@@ -47,7 +45,6 @@ export default function Panier() {
             </div>
           ) : (
             <>
-              {/* List */}
               <ul className="mt-8 space-y-4">
                 {cart.map((item) => (
                   <li
@@ -55,7 +52,6 @@ export default function Panier() {
                     className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur transition hover:border-white/20 hover:bg-white/[0.07]"
                   >
                     <div className="flex items-center gap-4 p-4 sm:p-5">
-                      {/* image */}
                       <div className="relative shrink-0">
                         {item.main_image_url ? (
                           <img
@@ -71,7 +67,6 @@ export default function Panier() {
                         )}
                       </div>
 
-                      {/* details */}
                       <div className="min-w-0 flex-1">
                         <h3 className="truncate text-base sm:text-lg font-medium">
                           <Link
@@ -87,7 +82,6 @@ export default function Panier() {
                         <div className="mt-2 text-sm text-gray-400">Quantité : 1</div>
                       </div>
 
-                      {/* price + actions */}
                       <div className="flex shrink-0 flex-col items-end gap-3">
                         <div className="text-right text-lg font-semibold">{formatEUR(item.price)}</div>
                         <div className="flex items-center gap-3">
@@ -107,7 +101,6 @@ export default function Panier() {
                       </div>
                     </div>
 
-                    {/* subtle gradient border on hover */}
                     <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition">
                       <div className="absolute -inset-px rounded-2xl bg-gradient-to-r from-white/10 via-transparent to-white/10" />
                     </div>
@@ -115,7 +108,6 @@ export default function Panier() {
                 ))}
               </ul>
 
-              {/* Sticky footer */}
               <div className="sticky bottom-4 mt-8">
                 <div className="mx-auto w-full max-w-6xl rounded-2xl border border-white/10 bg-black/60 backdrop-blur px-4 sm:px-6 py-4">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between">

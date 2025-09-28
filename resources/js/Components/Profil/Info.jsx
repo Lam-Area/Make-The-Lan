@@ -1,4 +1,3 @@
-// resources/js/Components/Profil/Info.jsx
 import React, { useEffect, useRef, useState } from 'react';
 import { useForm, usePage } from '@inertiajs/react';
 import { User, Mail, Lock, Upload, Image as ImageIcon, Eye, EyeOff, Loader2 } from 'lucide-react';
@@ -50,7 +49,6 @@ export default function InfoSection() {
 
   return (
     <form onSubmit={onSubmit} className="space-y-6 text-white">
-      {/* Carte Avatar + Upload */}
       <div className="relative">
         <div className="absolute -inset-0.5 rounded-[22px] bg-gradient-to-tr from-white/15 via-transparent to-white/15 blur-sm" />
         <div className="relative rounded-[20px] border border-white/10 bg-white/5 p-5 backdrop-blur">
@@ -59,7 +57,6 @@ export default function InfoSection() {
           <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
             <div className="flex items-center gap-3">
               <div className="h-20 w-20 overflow-hidden rounded-full border border-white/10 bg-[#0b0e10]">
-                {/* Aperçu */}
                 {preview ? (
                   <img src={preview} alt="Avatar preview" className="h-full w-full object-cover" />
                 ) : (
@@ -100,12 +97,10 @@ export default function InfoSection() {
         </div>
       </div>
 
-      {/* Carte Infos */}
       <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur">
         <h3 className="text-lg font-semibold">Informations personnelles</h3>
 
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {/* Nom */}
           <Field label="Nom" error={errors.name} icon={<User size={18} className="text-gray-400" />}>
             <input
               type="text"
@@ -118,7 +113,6 @@ export default function InfoSection() {
             />
           </Field>
 
-          {/* Email */}
           <Field label="Email" error={errors.email} icon={<Mail size={18} className="text-gray-400" />}>
             <input
               type="email"
@@ -131,7 +125,6 @@ export default function InfoSection() {
             />
           </Field>
 
-          {/* Mot de passe */}
           <div className="sm:col-span-2">
             <Field
               label="Mot de passe (laisser vide pour ne pas changer)"
@@ -161,7 +154,6 @@ export default function InfoSection() {
           </div>
         </div>
 
-        {/* Actions */}
         <div className="mt-5 flex flex-wrap items-center gap-3">
           <button
             type="submit"
@@ -185,7 +177,6 @@ export default function InfoSection() {
   );
 }
 
-/* Champ avec label + icône + bordure glass */
 function Field({ label, error, icon, trailing, children }) {
   return (
     <div>

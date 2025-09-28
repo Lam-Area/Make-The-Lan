@@ -9,23 +9,15 @@ use App\Models\UserPreference;
 class HandleInertiaRequests extends Middleware
 {
     /**
-     * The root template that's loaded on the first page visit.
-     *
      * @var string
      */
     protected $rootView = 'app';
 
-    /**
-     * Determines the current asset version.
-     */
     public function version(Request $request): ?string
     {
         return parent::version($request);
     }
 
-    /**
-     * props share par défaut
-     */
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [

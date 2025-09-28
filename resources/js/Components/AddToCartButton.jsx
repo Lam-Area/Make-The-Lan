@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCart } from '@/Context/CartContext'; // ✅
+import { useCart } from '@/Context/CartContext';
 
 export default function AddToCartButton({ article }) {
   const { addToCart } = useCart();

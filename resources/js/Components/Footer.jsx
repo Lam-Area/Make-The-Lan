@@ -1,4 +1,3 @@
-// resources/js/Components/Footer.jsx
 import React from 'react';
 import { Link } from '@inertiajs/react';
 import { Github, Mail, MessageCircle } from 'lucide-react';
@@ -9,9 +8,7 @@ export default function Footer() {
   return (
     <footer className="mt-auto bg-[#0b0e10]/70 backdrop-blur">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10">
-        {/* Contenu principal */}
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
-          {/* Marque */}
           <div>
             <Link href="/" className="flex items-center gap-3">
               <img
@@ -47,7 +44,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Navigation / Légal */}
           <div className="grid grid-cols-2 gap-6 sm:gap-10">
             <div>
               <h3 className="text-sm font-semibold text-gray-200">Navigation</h3>
@@ -67,7 +63,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Callout communauté */}
           <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
             <h3 className="text-sm font-semibold text-gray-200"><span className="text-emerald-400">Rejoindre la communauté</span></h3>
             <p className="mt-2 text-sm text-gray-300">
@@ -85,7 +80,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Ligne info (sans bande séparée) */}
         <div className="mt-8 flex flex-col items-center justify-between gap-3 text-xs text-gray-400 sm:flex-row">
           <p>© Make The Lan {year}. Tous droits réservés.</p>
         </div>

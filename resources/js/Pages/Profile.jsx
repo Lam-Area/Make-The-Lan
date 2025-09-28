@@ -3,7 +3,6 @@ import React, { useMemo, useState } from 'react';
 import { usePage, Link } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
 
-// Sous-views existantes
 import Info from '@/Components/Profil/Info';
 import Panier from '@/Components/Profil/ProfilePanier';
 import Order from '@/Components/Profil/OrderHistory';
@@ -16,7 +15,6 @@ import RecentUserPurchases from '@/Components/Profil/RecentUserPurchases';
 import ManageArticles from '@/Components/Profil/ManageOwnArticles';
 import Preference from '@/Components/Profil/Preference';
 
-// Icônes
 import {
   User as UserIcon,
   ShoppingCart,
@@ -54,7 +52,6 @@ export default function Profile() {
 
   const avatarUrl = user?.avatar ? `/storage/${user.avatar}` : '/images/mainpdp.png';
 
-  // Navigation par rôle
   const nav = useMemo(() => {
     const base = [
       { key: 'info', label: SECTION_LABELS.info, icon: UserIcon },
@@ -87,7 +84,6 @@ export default function Profile() {
       );
     }
 
-    // Éviter les doublons si plusieurs rôles
     const seen = new Set();
     return base.filter((i) => (seen.has(i.key) ? false : seen.add(i.key)));
   }, [isAdmin, isVendeur, isUser]);
@@ -105,9 +101,7 @@ export default function Profile() {
       <div className="min-h-screen w-full text-white">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-8">
           <div className="grid grid-cols-1 md:grid-cols-[280px,1fr] gap-6">
-            {/* Sidebar */}
             <aside className="md:sticky md:top-24 h-max">
-              {/* Carte user */}
               <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
                 <div className="flex items-center gap-3">
                   <img
@@ -127,7 +121,6 @@ export default function Profile() {
                 </div>
               </div>
 
-              {/* Nav desktop */}
               <nav className="mt-4 hidden md:block">
                 <ul className="space-y-2">
                   {nav.map(({ key, label, icon: Icon }) => {
@@ -152,7 +145,6 @@ export default function Profile() {
                 </ul>
               </nav>
 
-              {/* Actions rapides */}
               <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-3 backdrop-blur">
                 <div className="text-xs text-gray-400">Actions rapides</div>
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -178,9 +170,7 @@ export default function Profile() {
               </div>
             </aside>
 
-            {/* Contenu */}
             <main className="min-w-0">
-              {/* Nav mobile (pills) */}
               <div className="md:hidden -mx-4 sm:-mx-6 px-4 sm:px-6 sticky top-16 z-10 bg-[#0b0e10]/80 backdrop-blur border-b border-white/10">
                 <div className="py-3 overflow-x-auto">
                   <div className="flex gap-2 w-max">
@@ -205,7 +195,6 @@ export default function Profile() {
                 </div>
               </div>
 
-              {/* En-tête + carte contenu */}
               <div className="mt-4">
                 <h1 className="text-2xl font-semibold tracking-tight">
                   {SECTION_LABELS[selected] || 'Profil'}

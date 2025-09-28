@@ -7,12 +7,10 @@ export const ThemeProvider = ({ children }) => {
   const { auth, userPreference } = usePage().props;
 
   const getInitialDarkMode = () => {
-    // si co, stack bdd
     if (auth?.user && userPreference) {
       return userPreference.dark_mode;
     }
 
-    // sinon, local
     return localStorage.getItem('darkMode') === '1';
   };
 
@@ -30,7 +28,6 @@ export const ThemeProvider = ({ children }) => {
     setDarkMode(updated);
     localStorage.setItem('darkMode', updated ? '1' : '0');
 
-    // si co, stack bdd
     if (auth?.user) {
       router.post('/userpreferences/toggle', {
         dark_mode: updated,

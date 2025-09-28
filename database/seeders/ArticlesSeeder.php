@@ -12,21 +12,17 @@ class ArticlesSeeder extends Seeder
     {
         $now = Carbon::now();
 
-        // Récupère les deux vendeurs (gérants) créés dans UserSeeder
-        // Adapte les emails si tu as mis d'autres adresses.
         $vendeurSwitchId = DB::table('users')->where('email', 'switch.manager@mtl.com')->value('id')
             ?? DB::table('users')->where('role', 'vendeur')->orderBy('id')->value('id');
 
         $vendeurRouterId = DB::table('users')->where('email', 'router.manager@mtl.com')->value('id')
             ?? DB::table('users')->where('role', 'vendeur')->orderBy('id', 'desc')->value('id');
 
-        // Sécurité minimale : si pas de vendeurs, on ne seed pas (évite FK fail)
         if (!$vendeurSwitchId || !$vendeurRouterId) {
             return;
         }
 
         $articles = [
-            // ---------- SWITCH ----------
             [
                 'title'          => 'Cisco Catalyst 8235',
                 'description'    => "Switch Cisco Catalyst 8235 – hautes performances pour réseau d’entreprise.",

@@ -24,15 +24,12 @@ class Article extends Model
 
     protected $casts = [
         'price'          => 'decimal:2',
-        'specs'          => 'array',        // JSON -> array
+        'specs'          => 'array',
         'stock_quantity' => 'integer',
         'created_at'     => 'datetime',
         'updated_at'     => 'datetime',
     ];
 
-    /** --------------------
-     * Relations
-     * -------------------- */
     public function vendeur()
     {
         return $this->belongsTo(User::class, 'vendeur_id');
@@ -53,11 +50,6 @@ class Article extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    /** --------------------
-     * Mutators / Accessors
-     * -------------------- */
-
-    // Normalise automatiquement l'URL de l'image principale
     public function setMainImageUrlAttribute($value)
     {
         if ($value) {
@@ -71,15 +63,11 @@ class Article extends Model
         }
     }
 
-    // Renvoie toujours un tableau pour specs (évite les null)
     public function getSpecsAttribute($value)
     {
         return $value ? json_decode($value, true) : [];
     }
 
-    /** --------------------
-     * Slug auto-généré
-     * -------------------- */
     protected static function booted(): void
     {
         static::creating(function (Article $article) {

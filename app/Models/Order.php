@@ -1,6 +1,5 @@
 <?php
 
-// app/Models/Order.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -20,13 +19,11 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Relation existante
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
     }
 
-    // ✅ Alias pour la compatibilité avec "items"
     public function items()
     {
         return $this->hasMany(OrderItem::class);

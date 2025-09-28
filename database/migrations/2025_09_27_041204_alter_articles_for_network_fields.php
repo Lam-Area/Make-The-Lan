@@ -8,7 +8,6 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('articles', function (Blueprint $table) {
-            // Ces garde-fous permettent de rejouer la migration sans erreur selon l'état de la BDD
 
             if (!Schema::hasColumn('articles', 'brand')) {
                 $table->string('brand', 100)->nullable()->after('price');
@@ -37,18 +36,12 @@ return new class extends Migration {
             if (!Schema::hasColumn('articles', 'specs')) {
                 $table->json('specs')->nullable()->after('main_image_url');
             }
-
-            // ⚠️ NE PAS recréer l’index ici : il est déjà dans la migration de création
-            // $table->index(['category','brand']);  // ← supprimé
         });
     }
 
     public function down(): void
     {
-        // On ne touche pas à l’index ici non plus.
         Schema::table('articles', function (Blueprint $table) {
-            // Si tu veux, tu peux laisser le down vide ou enlever des colonnes prudemment.
-            // $table->dropColumn([...]); // optionnel
         });
     }
 };

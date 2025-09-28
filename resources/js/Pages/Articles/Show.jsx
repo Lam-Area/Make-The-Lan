@@ -1,4 +1,3 @@
-// resources/js/Pages/Articles/Show.jsx
 import React from 'react';
 import { usePage, Link, router } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
@@ -14,7 +13,6 @@ export default function Show() {
   const stock = Number(article.stock_quantity ?? 0);
   const inStock = stock > 0;
 
-  // Image src robuste (/storage si chemin local)
   const imgSrc = (() => {
     const p = article.main_image_url;
     if (!p) return '/images/product-placeholder.png';
@@ -22,7 +20,6 @@ export default function Show() {
     return `/storage/${p}`;
   })();
 
-  // Quantité
   const [qty, setQty] = React.useState(1);
   const clampQty = (n) => {
     if (!inStock) return 0;
@@ -33,7 +30,6 @@ export default function Show() {
   const inc = () => setQty((q) => clampQty(q + 1));
   const dec = () => setQty((q) => clampQty(q - 1));
 
-  // Actions
   const handleAddToCart = () => {
     const item = { ...article, quantity: qty };
     addToCart(item);
@@ -54,7 +50,6 @@ export default function Show() {
     <MainLayout>
       <div className="px-6 py-10 text-white">
         <div className="mx-auto max-w-6xl">
-          {/* Top nav actions */}
           <div className="mb-6 flex items-center justify-between text-sm">
             <div className="flex items-center gap-3">
               <button onClick={() => window.history.back()} className="text-gray-300 hover:underline">
@@ -72,7 +67,6 @@ export default function Show() {
           </div>
 
           <div className="grid gap-10 lg:grid-cols-5">
-            {/* Image */}
             <div className="lg:col-span-2">
               <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0b0e10]">
                 <div className="aspect-video grid place-items-center p-4">
@@ -81,7 +75,6 @@ export default function Show() {
               </div>
             </div>
 
-            {/* Content */}
             <div className="lg:col-span-3">
               <div className="mb-3 flex flex-wrap items-center gap-3">
                 {article.category && <Badge tone="indigo">{humanCat(article.category)}</Badge>}
@@ -92,10 +85,8 @@ export default function Show() {
 
               <h1 className="mb-3 text-3xl font-bold leading-tight">{article.title}</h1>
 
-              {/* Prix + Quantité + Actions (glass) */}
               <div className="mb-6 rounded-2xl border border-white/10 bg-[#0b0e10]/70 p-4">
                 <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-                  {/* Prix */}
                   <div>
                     <div className="text-[2rem] font-extrabold leading-none">
                       {formatPrice(article.price)}
@@ -103,10 +94,8 @@ export default function Show() {
                     <div className="mt-1 text-xs text-gray-400">TTC — Livraison standard</div>
                   </div>
 
-                  {/* Quantité + Boutons */}
                   {!isVendeur && (
                     <div className="w-full md:w-auto flex flex-col items-stretch md:items-end gap-3">
-                      {/* Quantité au-dessus */}
                       <QtyStepper
                         qty={qty}
                         setQty={setQty}
@@ -117,7 +106,6 @@ export default function Show() {
                         disabled={!inStock}
                       />
 
-                      {/* Boutons alignés */}
                       <div className="flex flex-wrap gap-2 justify-start md:justify-end">
                         <Btn onClick={handleAddToCart} disabled={!inStock} tone={inStock ? 'green' : 'muted'}>
                           Ajouter au panier
@@ -134,7 +122,6 @@ export default function Show() {
                 </div>
               </div>
 
-              {/* Description */}
               {article.description && (
                 <section className="mb-6">
                   <h2 className="mb-2 text-xl font-semibold">Description</h2>
@@ -144,7 +131,6 @@ export default function Show() {
                 </section>
               )}
 
-              {/* Infos courtes */}
               <section className="mb-6 grid gap-3 sm:grid-cols-2">
                 <Fact label="Marque" value={article.brand || 'Cisco'} />
                 {article.model && <Fact label="Modèle" value={article.model} />}
@@ -152,7 +138,6 @@ export default function Show() {
                 {article.warranty_months && <Fact label="Garantie" value={`${article.warranty_months} mois`} />}
               </section>
 
-              {/* Spécifications */}
               <section>
                 <h2 className="mb-3 text-xl font-semibold">Spécifications</h2>
                 <Specs specs={article.specs} />
@@ -165,7 +150,6 @@ export default function Show() {
   );
 }
 
-/* ====== UI helpers ====== */
 function Badge({ children, tone = 'slate' }) {
   const cls = {
     green: 'bg-green-500/18 text-green-300 border-green-500/30',
@@ -241,7 +225,6 @@ function QtyStepper({ qty, setQty, dec, inc, onChange, max, disabled }) {
   );
 }
 
-/* ====== Specs ====== */
 function Specs({ specs }) {
   let data = specs;
   if (typeof specs === 'string') {

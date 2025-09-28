@@ -12,10 +12,6 @@ use App\Models\OrderItem;
 
 class CheckoutController extends Controller
 {
-    /**
-     * POST /checkout
-     * items: [{ id, title, price, quantity|qty?, main_image_url? }]
-     */
     public function create(Request $request)
     {
         $data = $request->validate([
@@ -82,11 +78,6 @@ class CheckoutController extends Controller
         }
     }
 
-    /**
-     * GET /checkout/success?session_id=...
-     * Affiche la page de confirmation + (si payé) crée l’Order à partir des données Stripe
-     * pour éviter les doubles, on vérifie stripe_payment_intent.
-     */
     public function success(Request $request)
     {
         $sessionId = (string) $request->query('session_id');
@@ -138,7 +129,6 @@ class CheckoutController extends Controller
                                 }
                             }
 
-                            // Sans colonne quantity : N lignes
                             for ($i = 0; $i < $qty; $i++) {
                                 OrderItem::create([
                                     'order_id'          => $order->id,
@@ -161,15 +151,11 @@ class CheckoutController extends Controller
         ]);
     }
 
-    /** GET /checkout/cancel */
     public function cancel()
     {
         return Inertia::render('Checkout/Cancel');
     }
 
-    /**
-     * POST /stripe/webhook (optionnel)
-     */
     public function webhook(Request $request)
     {
         $secret = config('services.stripe.webhook_secret');
@@ -188,16 +174,11 @@ class CheckoutController extends Controller
         }
 
         if ($event->type === 'checkout.session.completed') {
-            // Tu pourrais finaliser ici si tu préfères côté webhook.
         }
 
         return response('ok', 200);
     }
 
-    /**
-     * POST /checkout/finalize
-     * Déclenché depuis Success.jsx pour “copier” le panier côté BDD (fallback).
-     */
     public function finalize(Request $request)
     {
         $user = Auth::user();

@@ -1,4 +1,3 @@
-// resources/js/Components/Profil/Wishlist.jsx
 import React from 'react';
 import { Link } from '@inertiajs/react';
 import { useWishlist } from '@/Context/WishlistContext';
@@ -47,7 +46,6 @@ export default function WishlistSection() {
         )}
       </div>
 
-      {/* État vide */}
       {wishlist.length === 0 ? (
         <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-10 text-center backdrop-blur">
           <div className="mx-auto mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/10">
@@ -78,13 +76,11 @@ export default function WishlistSection() {
   );
 }
 
-/* ====== Carte produit small (même style que Home, juste plus compacte) ====== */
 function SmallProductCard({ article, onAdd, onRemove }) {
   const img = imgSrcOf(article);
 
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur transition hover:border-white/20 hover:bg-white/[0.07]">
-      {/* Image (légèrement plus compacte) */}
       <div className="relative aspect-[16/11] w-full overflow-hidden">
         <img
           src={img}
@@ -92,13 +88,11 @@ function SmallProductCard({ article, onAdd, onRemove }) {
           loading="lazy"
           className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
         />
-        {/* Catégorie */}
         {article.category && (
           <span className="absolute left-3 top-3 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-medium ring-1 ring-white/15">
             {article.category}
           </span>
         )}
-        {/* Remove */}
         <button
           onClick={onRemove}
           className="absolute right-3 top-3 rounded-lg bg-black/40 p-1.5 backdrop-blur ring-1 ring-white/20 hover:bg-black/60"
@@ -108,7 +102,6 @@ function SmallProductCard({ article, onAdd, onRemove }) {
         </button>
       </div>
 
-      {/* Contenu (tailles réduites) */}
       <div className="p-3">
         <h3 className="line-clamp-2 text-base font-semibold">
           <Link
@@ -143,7 +136,6 @@ function SmallProductCard({ article, onAdd, onRemove }) {
         </div>
       </div>
 
-      {/* Glow */}
       <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition">
         <div className="absolute -inset-px rounded-2xl bg-gradient-to-r from-white/10 via-transparent to-white/10" />
       </div>

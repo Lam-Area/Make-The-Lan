@@ -9,7 +9,6 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // --- Admin ---
         User::create([
             'name'       => 'Admin Principal',
             'email'      => 'admin@mtl.com',
@@ -19,7 +18,6 @@ class UserSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        // --- Gérants ---
         User::create([
             'name'       => 'Gérant Routeurs',
             'email'      => 'gerant.routeurs@mtl.com',
@@ -38,7 +36,6 @@ class UserSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        // --- Utilisateurs ---
         User::create([
             'name'       => 'Alice Client',
             'email'      => 'alice@mtl.com',

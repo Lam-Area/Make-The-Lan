@@ -1,4 +1,3 @@
-// resources/js/Pages/Home.jsx
 import React from 'react';
 import { usePage, Link } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
@@ -9,7 +8,6 @@ import { useCart } from '@/Context/CartContext';
 const fmtEUR = (n) =>
   new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(n || 0));
 
-/* -- met en vert un segment précis d'un titre -- */
 function Highlight({ title, highlight }) {
   if (!highlight) return title;
   const idx = title.indexOf(highlight);
@@ -33,7 +31,6 @@ export default function Home() {
     <MainLayout>
       <div className="min-h-screen text-white">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10">
-          {/* HERO / PARTENAIRES */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
               <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">
@@ -57,7 +54,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* SECTION: Nouveaux articles */}
           <Section
             title="Nouveaux articles disponibles"
             highlight="Nouveaux articles"
@@ -73,7 +69,6 @@ export default function Home() {
             onAdd={addToCart}
           />
 
-          {/* SECTION: Switches */}
           <Section
             title="Switches Cisco"
             highlight="Switches"
@@ -83,7 +78,6 @@ export default function Home() {
             onAdd={addToCart}
           />
 
-          {/* SECTION: Routeurs */}
           <Section
             title="Routeurs Cisco"
             highlight="Routeurs"
@@ -98,9 +92,6 @@ export default function Home() {
   );
 }
 
-/* =========================
-   Section block
-========================= */
 function Section({ title, highlight, subtitle, items = [], cta, onAdd }) {
   return (
     <section className="mt-14">
@@ -136,9 +127,6 @@ function Section({ title, highlight, subtitle, items = [], cta, onAdd }) {
   );
 }
 
-/* =========================
-   Product card
-========================= */
 function ProductCard({ article, onAdd }) {
   const img = article.main_image_url
     ? `/storage/${article.main_image_url}`
@@ -146,7 +134,6 @@ function ProductCard({ article, onAdd }) {
 
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur transition hover:border-white/20 hover:bg-white/[0.07]">
-      {/* Image */}
       <div className="relative aspect-[16/10] w-full overflow-hidden">
         <img
           src={img}
@@ -161,7 +148,6 @@ function ProductCard({ article, onAdd }) {
         )}
       </div>
 
-      {/* Content */}
       <div className="p-4">
         <h3 className="line-clamp-2 text-lg font-semibold">
           <Link
@@ -200,7 +186,6 @@ function ProductCard({ article, onAdd }) {
         </div>
       </div>
 
-      {/* Glow on hover */}
       <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition">
         <div className="absolute -inset-px rounded-2xl bg-gradient-to-r from-white/10 via-transparent to-white/10" />
       </div>

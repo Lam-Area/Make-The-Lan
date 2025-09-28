@@ -1,4 +1,3 @@
-// resources/js/Components/Profil/Preference.jsx
 import React from 'react';
 import { usePage, router } from '@inertiajs/react';
 import { useTheme } from '@/Context/ThemeContext';
@@ -17,7 +16,6 @@ export default function Preference() {
 
   const handleToggle = () => setMode(!darkMode);
 
-  // utilitaire de style pour les deux boutons
   const btn = (active) =>
     active
       ? 'inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-3 py-1.5 text-sm font-medium hover:bg-emerald-700'
@@ -42,7 +40,6 @@ export default function Preference() {
             </p>
           </div>
 
-          {/* Switch animé */}
           <button
             role="switch"
             aria-checked={darkMode}
@@ -67,24 +64,22 @@ export default function Preference() {
           </button>
         </div>
 
-        {/* Actions rapides (désormais dynamiques) */}
         <div className="mt-4 flex flex-wrap items-center gap-2">
           <button
             onClick={() => setMode(false)}
-            className={btn(!darkMode)}     // actif si on est en clair
+            className={btn(!darkMode)}
           >
             <Moon size={16} /> Mode sombre
           </button>
           <button
             onClick={() => setMode(true)}
-            className={btn(darkMode)}       // actif si on est en sombre
+            className={btn(darkMode)}
           >
             <Sun size={16} /> Mode clair
           </button>
           <span className="ml-1 text-xs text-gray-400">— actuel : {darkMode ? 'Clair' : 'Sombre'}</span>
         </div>
 
-        {/* Aperçu */}
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <div className="rounded-xl border border-white/10 bg-white/5 p-4">
             <div className="mb-2 flex items-center justify-between">

@@ -1,4 +1,3 @@
-// resources/js/Context/WishlistContext.jsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const LOCAL_KEY = 'wishlist_items';

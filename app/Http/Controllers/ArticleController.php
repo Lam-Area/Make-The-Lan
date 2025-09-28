@@ -9,13 +9,6 @@ use Inertia\Inertia;
 
 class ArticleController extends Controller
 {
-    /**
-     * GET /articles
-     * Filtres:
-     * - ?category=router|switch|access_point
-     * - ?search=mot+clé   (alias: ?q=)
-     * - ?sort=recent|price_asc|price_desc|stock_desc
-     */
     public function index(Request $request)
     {
         $query   = Article::query();
@@ -23,12 +16,10 @@ class ArticleController extends Controller
         $category = $request->get('category');
         $sort     = $request->get('sort', 'recent');
 
-        // Catégorie
         if ($category) {
             $query->where('category', $category);
         }
 
-        // Recherche (titre, description, marque, modèle, SKU)
         if ($search !== '') {
             $query->where(function ($qq) use ($search) {
                 $like = "%{$search}%";
@@ -40,7 +31,6 @@ class ArticleController extends Controller
             });
         }
 
-        // Tri
         switch ($sort) {
             case 'price_asc':
                 $query->orderBy('price', 'asc');
@@ -85,18 +75,16 @@ class ArticleController extends Controller
             'sku'             => ['nullable', 'string', 'max:100', 'unique:articles,sku'],
             'stock_quantity'  => ['nullable', 'integer', 'min:0'],
             'main_image_url'  => ['nullable', 'string', 'max:255'],
-            'specs'           => ['nullable'], // array ou JSON string
+            'specs'           => ['nullable'],
             'vendeur_id'      => ['required', 'exists:users,id'],
         ]);
 
-        // Normalisation de l'image: on garde un chemin relatif (ex: product/xxx.jpg)
         if (!empty($validated['main_image_url'])) {
             $path = ltrim($validated['main_image_url'], '/');
-            $path = preg_replace('#^storage/#', '', $path); // retire "storage/" si donné
+            $path = preg_replace('#^storage/#', '', $path);
             $validated['main_image_url'] = $path;
         }
 
-        // specs JSON -> array si besoin
         if (isset($validated['specs']) && is_string($validated['specs'])) {
             $decoded = json_decode($validated['specs'], true);
             $validated['specs'] = is_array($decoded) ? $decoded : null;

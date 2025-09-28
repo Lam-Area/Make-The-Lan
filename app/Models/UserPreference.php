@@ -20,7 +20,6 @@ class UserPreference extends Model
         'updated_at' => 'datetime',
     ];
 
-    // pref du user
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -1,4 +1,3 @@
-// resources/js/Pages/Login.jsx
 import React from 'react';
 import { useForm, Head, Link } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
@@ -23,12 +22,9 @@ export default function Login() {
     <MainLayout>
       <Head title="Connexion" />
       <div className="min-h-screen text-white">
-        {/* This wrapper centers the content vertically in the body */}
         <div className="min-h-[calc(100vh-8rem)] flex items-center">
           <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-6 lg:py-0">
-            {/* Mobile: 1 col (pitch above form). Desktop: 2 cols side-by-side */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-              {/* Pitch (kept above the form on mobile) */}
               <div>
                 <h1 className="text-4xl font-semibold leading-tight text-emerald-400">
                   Heureux de te revoir
@@ -51,7 +47,6 @@ export default function Login() {
                 </div>
               </div>
 
-              {/* Glass card with form */}
               <div className="relative">
                 <div className="absolute -inset-0.5 rounded-[22px] bg-gradient-to-tr from-white/15 via-transparent to-white/15 blur-sm" />
                 <div className="relative rounded-[20px] border border-white/10 bg-white/5 p-6 sm:p-8 backdrop-blur">
@@ -70,7 +65,6 @@ export default function Login() {
                   )}
 
                   <form onSubmit={onSubmit} className="mt-6 space-y-4">
-                    {/* Email */}
                     <Field label="Email" icon={<Mail size={18} className="text-gray-400" />}>
                       <input
                         type="email"
@@ -82,7 +76,6 @@ export default function Login() {
                       />
                     </Field>
 
-                    {/* Password */}
                     <Field
                       label="Mot de passe"
                       icon={<Lock size={18} className="text-gray-400" />}
@@ -129,7 +122,6 @@ export default function Login() {
   );
 }
 
-/* Reusable field with glass + icon */
 function Field({ label, icon, trailing, children }) {
   return (
     <div>

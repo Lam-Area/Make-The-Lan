@@ -9,9 +9,8 @@ export default function Header() {
   const user = auth?.user;
   const [search, setSearch] = useState('');
 
-  // Drawer avec animation (montage/démontage + transition)
-  const [drawerVisible, setDrawerVisible] = useState(false); // monté dans le DOM
-  const [drawerOpen, setDrawerOpen] = useState(false);       // state d'animation (translate/opacity)
+  const [drawerVisible, setDrawerVisible] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);    
 
   const [userOpen, setUserOpen] = useState(false);
   const userMenuRef = useRef(null);
@@ -28,16 +27,13 @@ export default function Header() {
 
   const openDrawer = () => {
     setDrawerVisible(true);
-    // laisse React peindre, puis déclenche l'anim
     requestAnimationFrame(() => setDrawerOpen(true));
   };
   const closeDrawer = () => {
     setDrawerOpen(false);
-    // attend la fin de la transition CSS (250–300 ms)
     setTimeout(() => setDrawerVisible(false), 260);
   };
 
-  // Fermer le menu utilisateur en cliquant à l’extérieur
   useEffect(() => {
     function onDocClick(e) {
       if (!userMenuRef.current) return;
@@ -47,7 +43,6 @@ export default function Header() {
     return () => document.removeEventListener('mousedown', onDocClick);
   }, []);
 
-  // ESC pour fermer
   useEffect(() => {
     function onKey(e) {
       if (e.key === 'Escape') {
@@ -59,7 +54,6 @@ export default function Header() {
     return () => document.removeEventListener('keydown', onKey);
   }, []);
 
-  // Bloquer le scroll quand le drawer est visible
   useEffect(() => {
     const prev = document.body.style.overflow;
     if (drawerVisible) document.body.style.overflow = 'hidden';
@@ -69,7 +63,6 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0b0e10]/70 backdrop-blur">
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center gap-4 px-4 sm:px-6">
-        {/* Brand */}
         <div className="flex flex-1 items-center gap-3">
           <Link href="/" className="flex items-center gap-2">
             <img src="/images/logo.png" alt="Logo" className="h-9 w-9 rounded-lg object-contain" />
@@ -79,7 +72,6 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* Search (desktop) */}
         <form
           onSubmit={submitSearch}
           className="relative hidden min-w-[280px] max-w-md flex-1 items-center md:flex"
@@ -95,7 +87,6 @@ export default function Header() {
           />
         </form>
 
-        {/* Actions (desktop) */}
         <div className="hidden items-center gap-2 md:flex">
           {!user ? (
             <>
@@ -142,7 +133,6 @@ export default function Header() {
                 <ShoppingCart size={18} />
               </Link>
 
-              {/* User dropdown */}
               <div className="relative" ref={userMenuRef}>
                 <button
                   onClick={() => setUserOpen((v) => !v)}
@@ -206,7 +196,6 @@ export default function Header() {
           )}
         </div>
 
-        {/* Bouton mobile — une seule croix (pas de doublon) */}
         <button
           onClick={() => (drawerVisible ? closeDrawer() : openDrawer())}
           className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/5 p-2 hover:bg-white/10 md:hidden"
@@ -216,10 +205,8 @@ export default function Header() {
         </button>
       </div>
 
-      {/* Drawer mobile (monté en permanence seulement quand visible) */}
       {drawerVisible && (
         <>
-          {/* Overlay animé */}
           <div
             className={`fixed inset-x-0 top-16 bottom-0 z-[55] bg-black/40 transition-opacity duration-300 md:hidden ${
               drawerOpen ? 'opacity-100' : 'opacity-0'
@@ -228,7 +215,6 @@ export default function Header() {
             aria-hidden="true"
           />
 
-          {/* Panneau verre — moins haut + slide animé */}
           <div
             className={`
               fixed right-3 top-[4.75rem] z-[60] w-[72%] sm:w-[60%] max-w-[420px]
@@ -238,7 +224,7 @@ export default function Header() {
               ${drawerOpen ? 'translate-x-0' : 'translate-x-full'}
             `}
             style={{
-              maxHeight: '75dvh', // <= Hauteur dosée (~75% de la fenêtre)
+              maxHeight: '75dvh',
               paddingBottom: 'max(env(safe-area-inset-bottom),0.75rem)',
             }}
             role="dialog"
@@ -251,7 +237,6 @@ export default function Header() {
               </span>
             </div>
 
-            {/* Recherche (mobile) */}
             <form onSubmit={submitSearch} className="relative" role="search">
               <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-300" />
               <input
@@ -263,7 +248,6 @@ export default function Header() {
               />
             </form>
 
-            {/* Menu */}
             <nav className="mt-5 grid gap-2">
               {!user ? (
                 <>
