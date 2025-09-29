@@ -1,6 +1,7 @@
+// resources/js/Pages/Partials/UserLogs.jsx (ou où tu l’avais)
 import React, { useMemo, useState } from "react";
-import { Link } from "@inertiajs/react";
-import { Search, Filter, Trash2, Globe, Clock, Activity, User as UserIcon } from "lucide-react";
+import { router } from "@inertiajs/react";
+import { Search, Filter, Trash2, Globe, Clock, Activity } from "lucide-react";
 
 export default function UserLogs({ logs }) {
   const rows = Array.isArray(logs) ? logs : [];
@@ -33,6 +34,19 @@ export default function UserLogs({ logs }) {
   }, [rows, q, action]);
 
   const visible = filtered.slice(0, limit);
+
+  function handleDelete(id) {
+    if (!confirm("Supprimer ce log ?")) return;
+
+    router.delete(`/userlogs/${id}`, {
+      preserveScroll: true,
+      preserveState: true,
+      onSuccess: () => {
+        // recharge uniquement la prop 'logs' de /profile
+        router.reload({ only: ["logs"], preserveScroll: true });
+      },
+    });
+  }
 
   return (
     <div className="text-white">
@@ -147,17 +161,12 @@ export default function UserLogs({ logs }) {
                     </span>
                   </Td>
                   <Td>
-                    <Link
-                      href={`/userlogs/${log.id}`}
-                      method="delete"
-                      as="button"
+                    <button
+                      onClick={() => handleDelete(log.id)}
                       className="inline-flex items-center gap-1 rounded-lg bg-red-600/90 px-2.5 py-1.5 text-xs hover:bg-red-600"
-                      onClick={(e) => {
-                        if (!confirm("Supprimer ce log ?")) e.preventDefault();
-                      }}
                     >
                       <Trash2 size={14} /> Supprimer
-                    </Link>
+                    </button>
                   </Td>
                 </tr>
               ))

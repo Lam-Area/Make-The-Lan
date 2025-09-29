@@ -208,7 +208,7 @@ export default function Header() {
       {drawerVisible && (
         <>
           <div
-            className={`fixed inset-x-0 top-16 bottom-0 z-[55] bg-black/40 transition-opacity duration-300 md:hidden ${
+            className={`fixed inset-x-0 top-16 bottom-0 z-[55] bg-black/80 transition-opacity duration-300 md:hidden ${
               drawerOpen ? 'opacity-100' : 'opacity-0'
             }`}
             onClick={closeDrawer}

@@ -1,13 +1,7 @@
+// resources/js/Pages/Partials/UserList.jsx
 import React from "react";
-import { Link } from "@inertiajs/react";
-import {
-  Search,
-  ShieldCheck,
-  Pencil,
-  Trash2,
-  Mail,
-  User2,
-} from "lucide-react";
+import { Link, router } from "@inertiajs/react";
+import { Search, ShieldCheck, Pencil, Trash2, Mail, User2 } from "lucide-react";
 
 const roleBadge = (role) => {
   switch (role) {
@@ -50,9 +44,18 @@ export default function UserList({ users = [] }) {
           ? true
           : [u.name, u.email, u.role, String(u.id)]
               .filter(Boolean)
-              .some((v) => v.toLowerCase().includes(query))
+              .some((v) => String(v).toLowerCase().includes(query))
       );
   }, [users, q, role, isValid]);
+
+  function handleDelete(id) {
+    if (!confirm("Confirmer la suppression ?")) return;
+    router.delete(`/users/${id}`, {
+      preserveScroll: true,
+      preserveState: true,
+      onSuccess: () => router.reload({ only: ["users"], preserveScroll: true }),
+    });
+  }
 
   if (!isValid) {
     return (
@@ -67,12 +70,9 @@ export default function UserList({ users = [] }) {
     <section className="space-y-4">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 className="text-xl sm:text-2xl font-semibold">
-            Liste des utilisateurs
-          </h2>
+          <h2 className="text-xl sm:text-2xl font-semibold">Liste des utilisateurs</h2>
           <p className="text-sm text-gray-300">
-            {filtered.length} résultat{filtered.length > 1 ? "s" : ""} •{" "}
-            {users.length} au total
+            {filtered.length} résultat{filtered.length > 1 ? "s" : ""} • {users.length} au total
           </p>
         </div>
 
@@ -98,9 +98,7 @@ export default function UserList({ users = [] }) {
                 key={opt.v}
                 onClick={() => setRole(opt.v)}
                 className={`px-3 py-2 text-sm transition ${
-                  role === opt.v
-                    ? "bg-white/15 text-white"
-                    : "bg-white/5 text-gray-300 hover:bg-white/10"
+                  role === opt.v ? "bg-white/15 text-white" : "bg-white/5 text-gray-300 hover:bg-white/10"
                 }`}
               >
                 {opt.label}
@@ -111,6 +109,7 @@ export default function UserList({ users = [] }) {
       </div>
 
       <div className="rounded-2xl border border-white/10 bg-white/5 p-3 sm:p-4 backdrop-blur">
+        {/* Desktop */}
         <div className="hidden md:block overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead>
@@ -165,19 +164,13 @@ export default function UserList({ users = [] }) {
                           <Pencil size={14} />
                           Modifier
                         </Link>
-                        <Link
-                          href={`/users/${u.id}`}
-                          method="delete"
-                          as="button"
-                          onClick={(e) => {
-                            if (!confirm("Confirmer la suppression ?"))
-                              e.preventDefault();
-                          }}
+                        <button
+                          onClick={() => handleDelete(u.id)}
                           className="inline-flex items-center gap-1 rounded-lg bg-red-600/90 px-2.5 py-1.5 text-xs hover:bg-red-600"
                         >
                           <Trash2 size={14} />
                           Supprimer
-                        </Link>
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -187,6 +180,7 @@ export default function UserList({ users = [] }) {
           </table>
         </div>
 
+        {/* Mobile cards */}
         <div className="grid gap-3 md:hidden">
           {filtered.length === 0 ? (
             <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-center text-gray-300">
@@ -194,10 +188,7 @@ export default function UserList({ users = [] }) {
             </div>
           ) : (
             filtered.map((u) => (
-              <div
-                key={u.id}
-                className="rounded-xl border border-white/10 bg-white/5 p-3"
-              >
+              <div key={u.id} className="rounded-xl border border-white/10 bg-white/5 p-3">
                 <div className="flex items-center gap-3">
                   <Initials name={u.name} />
                   <div className="flex-1">
@@ -231,19 +222,13 @@ export default function UserList({ users = [] }) {
                     <Pencil size={14} />
                     Modifier
                   </Link>
-                  <Link
-                    href={`/users/${u.id}`}
-                    method="delete"
-                    as="button"
-                    onClick={(e) => {
-                      if (!confirm("Confirmer la suppression ?"))
-                        e.preventDefault();
-                    }}
+                  <button
+                    onClick={() => handleDelete(u.id)}
                     className="inline-flex items-center gap-1 rounded-lg bg-red-600/90 px-2.5 py-1.5 text-xs hover:bg-red-600"
                   >
                     <Trash2 size={14} />
                     Supprimer
-                  </Link>
+                  </button>
                 </div>
               </div>
             ))

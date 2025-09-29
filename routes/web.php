@@ -64,12 +64,6 @@ Route::middleware('auth')->group(function () {
             'users'    => $users,
             'logs'     => $logs,
             'orders'   => $orders,
-            'auth'     => [
-                'user'      => $user,
-                'isAdmin'   => $user->role === 'admin',
-                'isVendeur' => $user->role === 'vendeur',
-                'isUser'    => $user->role === 'user',
-            ],
         ]);
     })->name('profile');
 

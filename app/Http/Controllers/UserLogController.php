@@ -39,10 +39,10 @@ class UserLogController extends Controller
         return redirect()->route('userlogs.index')->with('success', 'Log enregistré.');
     }
 
-    public function destroy(UserLog $userLog)
+    public function destroy(\App\Models\UserLog $userlog)
     {
-        $userLog->delete();
+        $userlog->delete();
 
-        return redirect()->route('userlogs.index')->with('success', 'Log supprimé.');
+        return back(303);
     }
 }
